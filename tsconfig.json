@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "types": ["node", "jest"],
+    "declaration": true,
+    "newLine": "lf",
+    "outDir": "dist",
+    "sourceMap": true,
+    "allowJs": true,
+    "checkJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "es2021"
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", "**/*.spec.ts"]
+}

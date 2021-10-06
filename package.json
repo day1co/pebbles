@@ -1,0 +1,39 @@
+{
+  "name": "@day1co/pebbles",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/day1co/pebbles.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "rimraf ./dist & tsc",
+    "clean": "rimraf ./dist ./node_modules",
+    "lint": "eslint .",
+    "prebuild": "npm run lint",
+    "prepublishOnly": "npm run build",
+    "test": "jest --detectOpenHandles --forceExit ./src"
+  },
+  "type": "module",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "pino": "^6.13.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/pino": "^6.3.11",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "eslint": "^7.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.2.0",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.2"
+  }
+}
