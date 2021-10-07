@@ -8,7 +8,7 @@ describe('JsonWebToken', () => {
       t1: 't1',
       t2: 't2',
     };
-    const token = jwt.encodeJwtString(key, payload, options);
+    const token = jwt.createJwt(key, payload, options);
     const len = token.split('.').length;
 
     expect(typeof token).toBe('string');
@@ -20,8 +20,8 @@ describe('JsonWebToken', () => {
       t1: 't1',
       t2: 't2',
     };
-    const token = jwt.encodeJwtString(key, payload);
-    const result = jwt.verifyJwtString(token, key);
+    const token = jwt.createJwt(key, payload);
+    const result = jwt.verifyJwt(token, key);
 
     expect(result).toMatchObject(payload);
   });
@@ -33,8 +33,8 @@ describe('JsonWebToken', () => {
         t1: 't1',
         t2: 't2',
       };
-      const token = jwt.encodeJwtString(key, payload);
-      jwt.verifyJwtString(token, wrong_key);
+      const token = jwt.createJwt(key, payload);
+      jwt.verifyJwt(token, wrong_key);
     } catch (exception) {
       //ts v4.4 부터 exception object가 unknown type으로 정의
       if (exception instanceof Error) {
@@ -49,8 +49,8 @@ describe('JsonWebToken', () => {
       t1: 't1',
       t2: 't2',
     };
-    const token = jwt.encodeJwtString(key, payload);
-    const result = jwt.decodedJwtString(token);
+    const token = jwt.createJwt(key, payload);
+    const result = jwt.decodeJwt(token);
 
     expect(result!.header).toMatchObject(header);
     expect(result!.payload).toMatchObject(payload);
