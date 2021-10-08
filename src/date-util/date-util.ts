@@ -88,31 +88,64 @@ export namespace DateUtil {
     const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND;
 
     // move to policy
-    const ONE_YEAR_IN_SECOND = 60 * 60 * 24 * 365;
-    const ONE_MONTH_IN_SECOND = 60 * 60 * 24 * 30;
     const ONE_DAY_IN_SECOND = 60 * 60 * 24;
-
     const ONE_HOUR_IN_SECOND = 60 * 60;
     const ONE_MINUTE_IN_SECOND = 60;
 
+    let result = 0;
     switch (type) {
       case 'year':
-        return Math.floor(diffSeconds / ONE_YEAR_IN_SECOND);
+        result = diffMonth(since, until) / 12;
+        break;
       case 'month':
-        return Math.floor(diffSeconds / ONE_MONTH_IN_SECOND);
+        result = diffMonth(since, until);
+        break;
       case 'day':
-        return Math.floor(diffSeconds / ONE_DAY_IN_SECOND);
-
+        result = diffSeconds / ONE_DAY_IN_SECOND;
+        break;
       case 'hour':
-        return Math.floor(diffSeconds / ONE_HOUR_IN_SECOND);
+        result = diffSeconds / ONE_HOUR_IN_SECOND;
+        break;
       case 'minute':
-        return Math.floor(diffSeconds / ONE_MINUTE_IN_SECOND);
+        result = diffSeconds / ONE_MINUTE_IN_SECOND;
+        break;
       case 'second':
-        return Math.floor(diffSeconds);
-
+        result = diffSeconds;
+        break;
       default:
         const err: never = type;
-        return err;
+        break;
     }
+
+    return Math.floor(result);
+  }
+
+  export function diffMonth(since: string, until: string): number {
+    if (isNaN(Date.parse(since))) {
+      throw new Error(`BAD PARAM since > ${since}`);
+    }
+
+    if (isNaN(Date.parse(until))) {
+      throw new Error(`BAD PARAM until > ${until}`);
+    }
+
+    const sinceDate = new Date(since);
+    const untilDate = new Date(until);
+
+    const diffYear = untilDate.getFullYear() - sinceDate.getFullYear();
+    const diffMonth = diffYear * 12 + untilDate.getMonth() - sinceDate.getMonth();
+
+    const tempDate = new Date(since);
+    tempDate.setMonth(tempDate.getMonth() + diffMonth);
+
+    /*
+      since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
+      tempDate가 untilDate보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
+     */
+    if (tempDate > untilDate) {
+      return diffMonth - 1;
+    }
+
+    return diffMonth;
   }
 }
