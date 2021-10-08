@@ -110,4 +110,85 @@ describe('DateUtil', () => {
       expect(DateUtil.lastDayOfMonth('2021-12-01 00:00:00')).toEqual(new Date('2021-12-31 00:00:00'));
     });
   });
+
+  describe('isValidDate / toDate', () => {
+    describe('isValidDate', () => {
+      it('should check valueOf date is NaN', () => {
+        expect(isValidDate(new Date('2021-01-01 00:00:00'))).toBe(true);
+        expect(isValidDate(new Date('zzzzzzzzzzzzzzzzzzzz'))).toBe(false);
+      });
+    });
+
+    describe('toDate', () => {
+      const described_function = DateUtil.toDate;
+
+      const expectToEqual = (v: string | Date) => {
+        expect(described_function(v)).toEqual(new Date(v));
+      };
+
+      const expectToThrows = (v: string | Date) => {
+        const wrapper = () => {
+          described_function(v);
+        };
+
+        expect(wrapper).toThrow();
+      };
+
+      it('should return same value of date', () => {
+        expectToEqual('2020-01-01 00:00:00');
+        expectToEqual(new Date(2020, 15));
+        expectToEqual('1');
+      });
+
+      it('should throw error', () => {
+        expectToThrows('zzzzzzzzzzzzzz');
+        expectToThrows('2021-13-01 00:00:00');
+        expectToThrows(new Date('zzzzzzzzzzzzzz'));
+      });
+    });
+  });
+
+  describe('diff', () => {
+    test('should throw error', () => {
+      expect(() => DateUtil.diff('string', '2020-01-01- 10:00:00', 'year')).toThrow();
+      expect(() => DateUtil.diff('2020-01-01- 10:00:00', 'string', 'year')).toThrow();
+      expect(() => DateUtil.diff('', '', 'year')).toThrow();
+    });
+    test('get date diff', () => {
+      // year
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2021-02-08 15:00:00', 'year')).toBe(0);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2021-02-09 15:00:00', 'year')).toBe(1);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2022-02-09 15:00:00', 'year')).toBe(2);
+
+      // month
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-03-09 15:00:00', 'month')).toBe(0);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-03-10 15:00:00', 'month')).toBe(0);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-03-11 15:00:00', 'month')).toBe(1);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2021-02-09 15:00:00', 'month')).toBe(12);
+
+      // date
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:00:00', 'day')).toBe(0);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-11 15:00:00', 'day')).toBe(1);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-12 15:00:00', 'day')).toBe(2);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-03-10 15:00:00', 'day')).toBe(29);
+
+      // hour
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:59:59', 'hour')).toBe(0);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 16:00:00', 'hour')).toBe(1);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-11 15:00:00', 'hour')).toBe(24);
+
+      // minute
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:00:59', 'minute')).toBe(0);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:01:00', 'minute')).toBe(1);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:20:00', 'minute')).toBe(20);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 16:00:00', 'minute')).toBe(60);
+
+      // second
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:00:00.999', 'second')).toBe(0);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:00:01', 'second')).toBe(1);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:00:59', 'second')).toBe(59);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:01:00', 'second')).toBe(60);
+      expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 16:00:00', 'second')).toBe(3600);
+    });
+  });
 });
