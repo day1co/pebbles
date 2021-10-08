@@ -46,23 +46,34 @@ export namespace DateUtil {
   }
 
   export function beginOfMonth(date: string | Date = new Date()): Date {
-    if (typeof date == 'string') {
-      date = new Date(date);
-    }
+    date = toDate(date);
     return new Date(date.getFullYear(), date.getMonth(), 1);
   }
 
   export function endOfMonth(date: string | Date = new Date()): Date {
-    if (typeof date == 'string') {
-      date = new Date(date);
-    }
+    date = toDate(date);
     return new Date(new Date(date.getFullYear(), date.getMonth() + 1).valueOf() - INT_A_SEC_IN_MILLISEC);
   }
 
   export function lastDayOfMonth(date: string | Date = new Date()): Date {
-    if (typeof date == 'string') {
-      date = new Date(date);
-    }
+    date = toDate(date);
     return new Date(new Date(date.getFullYear(), date.getMonth() + 1).valueOf() - INT_A_DAY_IN_MILLISEC);
+  }
+
+  export function isValidDate(d: Date): boolean {
+    return !isNaN(d.valueOf());
+  }
+
+  export function toDate(d: string | Date): Date {
+    const originalD = d;
+    if (typeof d === 'string') {
+      d = new Date(d);
+    }
+
+    if (!isValidDate(d)) {
+      throw new Error(`Invalid Date: ${originalD.toString()}`);
+    }
+
+    return d;
   }
 }
