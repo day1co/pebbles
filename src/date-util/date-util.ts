@@ -41,4 +41,36 @@ export namespace DateUtil {
       throw err;
     }
   }
+
+  export function beginOfMonth(date: string | Date = new Date()): Date {
+    date = toDate(date);
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+
+  export function endOfMonth(date: string | Date = new Date()): Date {
+    date = toDate(date);
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+  }
+
+  export function lastDayOfMonth(date: string | Date = new Date()): Date {
+    date = toDate(date);
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  }
+
+  export function isValidDate(d: Date): boolean {
+    return !isNaN(d.valueOf());
+  }
+
+  export function toDate(d: string | Date): Date {
+    const originalD = d;
+    if (typeof d === 'string') {
+      d = new Date(d);
+    }
+
+    if (!isValidDate(d)) {
+      throw new Error(`Invalid Date: ${originalD.toString()}`);
+    }
+
+    return d;
+  }
 }
