@@ -4,9 +4,6 @@ const logger = LoggerFactory.getLogger('common-util:date-util');
 import { CalcDatetimeOpts } from './date-util.type';
 
 export namespace DateUtil {
-  const INT_A_DAY_IN_MILLISEC = 86400000;
-  const INT_A_SEC_IN_MILLISEC = 1000;
-
   export function calcDatetime(str: string, opts: CalcDatetimeOpts): Date {
     try {
       const date = new Date(str);
@@ -52,12 +49,12 @@ export namespace DateUtil {
 
   export function endOfMonth(date: string | Date = new Date()): Date {
     date = toDate(date);
-    return new Date(new Date(date.getFullYear(), date.getMonth() + 1).valueOf() - INT_A_SEC_IN_MILLISEC);
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
   }
 
   export function lastDayOfMonth(date: string | Date = new Date()): Date {
     date = toDate(date);
-    return new Date(new Date(date.getFullYear(), date.getMonth() + 1).valueOf() - INT_A_DAY_IN_MILLISEC);
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
   export function isValidDate(d: Date): boolean {
