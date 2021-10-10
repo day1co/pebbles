@@ -1,18 +1,33 @@
 import { JsonWebToken as jwt } from './json-web-token';
 
 describe('JsonWebToken', () => {
-  it('generate token', () => {
-    const key = 'key';
-    const options = { header: { alg: 'HS256', typ: 'JWT' } };
-    const payload = {
-      t1: 't1',
-      t2: 't2',
-    };
-    const token = jwt.createJwt(key, payload, options);
-    const len = token.split('.').length;
+  describe('generate token', () => {
+    it('should return token', () => {
+      const key = 'key';
+      const options = { header: { alg: 'HS256', typ: 'JWT' } };
+      const payload = {
+        t1: 't1',
+        t2: 't2',
+      };
+      const token = jwt.createJwt(key, payload, options);
+      const len = token.split('.').length;
 
-    expect(typeof token).toBe('string');
-    expect(len).toBe(3);
+      expect(typeof token).toBe('string');
+      expect(len).toBe(3);
+    });
+    it('should throw error for not a valid algorithm', () => {
+      const key = 'key';
+      const invalidAlgorithm = 'HS255';
+      const options = { header: { alg: invalidAlgorithm, typ: 'JWT' } };
+      const payload = {
+        t1: 't1',
+        t2: 't2',
+      };
+
+      expect(() => {
+        jwt.createJwt(key, payload, options);
+      }).toThrow();
+    });
   });
   describe('verify token', () => {
     it('should return payload for token', () => {
