@@ -1,4 +1,4 @@
-import { JsonWebToken as jwt } from './json-web-token';
+import { JsonWebToken } from './json-web-token';
 
 describe('JsonWebToken', () => {
   describe('generate token', () => {
@@ -9,7 +9,7 @@ describe('JsonWebToken', () => {
         t1: 't1',
         t2: 't2',
       };
-      const token = jwt.createJwt(key, payload, options);
+      const token = JsonWebToken.createJwt(key, payload, options);
       const len = token.split('.').length;
 
       expect(typeof token).toBe('string');
@@ -25,7 +25,7 @@ describe('JsonWebToken', () => {
       };
 
       expect(() => {
-        jwt.createJwt(key, payload, options);
+        JsonWebToken.createJwt(key, payload, options);
       }).toThrow();
     });
   });
@@ -36,8 +36,8 @@ describe('JsonWebToken', () => {
         t1: 't1',
         t2: 't2',
       };
-      const token = jwt.createJwt(key, payload);
-      const result = jwt.verifyJwt(token, key);
+      const token = JsonWebToken.createJwt(key, payload);
+      const result = JsonWebToken.verifyJwt(token, key);
 
       expect(result).toMatchObject(payload);
     });
@@ -49,8 +49,8 @@ describe('JsonWebToken', () => {
           t1: 't1',
           t2: 't2',
         };
-        const token = jwt.createJwt(key, payload);
-        jwt.verifyJwt(token, wrong_key);
+        const token = JsonWebToken.createJwt(key, payload);
+        JsonWebToken.verifyJwt(token, wrong_key);
       } catch (exception) {
         //ts v4.4 부터 exception object가 unknown type으로 정의
         if (exception instanceof Error) {
@@ -67,15 +67,15 @@ describe('JsonWebToken', () => {
         t1: 't1',
         t2: 't2',
       };
-      const token = jwt.createJwt(key, payload);
-      const result = jwt.decodeJwt(token);
+      const token = JsonWebToken.createJwt(key, payload);
+      const result = JsonWebToken.decodeJwt(token);
 
       expect(result!.header).toMatchObject(header);
       expect(result!.payload).toMatchObject(payload);
     });
     it('should return null for invalid', () => {
       const token = '__invalid__';
-      const result = jwt.decodeJwt(token);
+      const result = JsonWebToken.decodeJwt(token);
 
       expect(result).toBeNull();
     });
