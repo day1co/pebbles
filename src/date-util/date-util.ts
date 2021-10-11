@@ -4,6 +4,11 @@ const logger = LoggerFactory.getLogger('common-util:date-util');
 import type { CalcDatetimeOpts } from './date-util.interface';
 import type { DateType } from './date-util.type';
 
+const ONE_SECOND = 1000;
+const ONE_DAY_IN_SECOND = 60 * 60 * 24;
+const ONE_HOUR_IN_SECOND = 60 * 60;
+const ONE_MINUTE_IN_SECOND = 60;
+
 export namespace DateUtil {
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
     try {
@@ -72,33 +77,19 @@ export namespace DateUtil {
     return d;
   }
 
-  export function diff(since: string, until: string, type: DiffType): number {
-    if (isNaN(Date.parse(since))) {
-      throw new Error(`BAD PARAM since > ${since}`);
-    }
+  export function diff(since: DateType, until: DateType, type: DiffType): number {
+    const sinceDate = toDate(since);
+    const untilDate = toDate(until);
 
-    if (isNaN(Date.parse(until))) {
-      throw new Error(`BAD PARAM until > ${until}`);
-    }
-
-    const sinceDate = new Date(since);
-    const untilDate = new Date(until);
-
-    const ONE_SECOND = 1000;
     const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND;
-
-    // move to policy
-    const ONE_DAY_IN_SECOND = 60 * 60 * 24;
-    const ONE_HOUR_IN_SECOND = 60 * 60;
-    const ONE_MINUTE_IN_SECOND = 60;
 
     let result = 0;
     switch (type) {
       case 'year':
-        result = diffMonth(since, until) / 12;
+        result = diffMonth(sinceDate, untilDate) / 12;
         break;
       case 'month':
-        result = diffMonth(since, until);
+        result = diffMonth(sinceDate, untilDate);
         break;
       case 'day':
         result = diffSeconds / ONE_DAY_IN_SECOND;
@@ -114,35 +105,25 @@ export namespace DateUtil {
         break;
       default:
         const err: never = type;
-        break;
+        return err;
     }
 
     return Math.floor(result);
   }
 
-  export function diffMonth(since: string, until: string): number {
-    if (isNaN(Date.parse(since))) {
-      throw new Error(`BAD PARAM since > ${since}`);
-    }
-
-    if (isNaN(Date.parse(until))) {
-      throw new Error(`BAD PARAM until > ${until}`);
-    }
-
-    const sinceDate = new Date(since);
-    const untilDate = new Date(until);
-
-    const diffYear = untilDate.getFullYear() - sinceDate.getFullYear();
-    const diffMonth = diffYear * 12 + untilDate.getMonth() - sinceDate.getMonth();
+  /** @private */
+  function diffMonth(since: Date, until: Date): number {
+    const diffYear = until.getFullYear() - since.getFullYear();
+    const diffMonth = diffYear * 12 + until.getMonth() - since.getMonth();
 
     const tempDate = new Date(since);
     tempDate.setMonth(tempDate.getMonth() + diffMonth);
 
     /*
       since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
-      tempDate가 untilDate보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
+      tempDate가 until보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
      */
-    if (tempDate > untilDate) {
+    if (tempDate > until) {
       return diffMonth - 1;
     }
 
