@@ -1,4 +1,4 @@
-name: Lint-Check
+name: CI-Test
 
 on:
   pull_request:
@@ -39,8 +39,13 @@ jobs:
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-      - name: Lint Test
+      - name: Lint Check
         run: npm run lint
         env:
           NODE_ENV: dev
+          CI: true
+      - name: Test Code Check
+        run: npm run test
+        env:
+          NODE_ENV: test
           CI: true
