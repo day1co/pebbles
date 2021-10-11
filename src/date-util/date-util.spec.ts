@@ -173,5 +173,16 @@ describe('DateUtil', () => {
       expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 15:01:00', 'second')).toBe(60);
       expect(DateUtil.diff('2020-02-10 15:00:00', '2020-02-10 16:00:00', 'second')).toBe(3600);
     });
+
+    test('since가 until보다 큰 경우', () => {
+      const since1 = '2020-02-10 15:00:00';
+      const since2 = '2020-02-10 15:00:00';
+
+      const until1 = '2022-02-09 15:00:00';
+      const until2 = '2022-02-10 15:00:00';
+
+      expect(DateUtil.diff(since1, until1, 'year')).toBe(DateUtil.diff(until1, since1, 'year'));
+      expect(DateUtil.diff(since2, until2, 'year')).toBe(DateUtil.diff(until2, since2, 'year'));
+    });
   });
 });

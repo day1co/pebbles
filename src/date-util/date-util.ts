@@ -2,7 +2,7 @@ import { LoggerFactory } from '../logger';
 const logger = LoggerFactory.getLogger('common-util:date-util');
 
 import type { CalcDatetimeOpts } from './date-util.interface';
-import type { DateType } from './date-util.type';
+import type { DateType, DatePropertyType } from './date-util.type';
 
 const ONE_SECOND = 1000;
 const ONE_DAY_IN_SECOND = 60 * 60 * 24;
@@ -77,9 +77,13 @@ export namespace DateUtil {
     return d;
   }
 
-  export function diff(since: DateType, until: DateType, type: DiffType): number {
+  export function diff(since: DateType, until: DateType, type: DatePropertyType): number {
     const sinceDate = toDate(since);
     const untilDate = toDate(until);
+
+    if (untilDate < sinceDate) {
+      return diff(until, since, type);
+    }
 
     const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND;
 
