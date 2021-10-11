@@ -3,7 +3,7 @@ import isValidDate = DateUtil.isValidDate;
 
 describe('DateUtil', () => {
   describe('calcDatetime', () => {
-    test('should return fallback for error', () => {
+    test('should return error', () => {
       expect(() => {
         DateUtil.calcDatetime('string', { year: 3 });
       }).toThrow();
@@ -28,6 +28,16 @@ describe('DateUtil', () => {
       expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { hour: -1 })).toEqual(new Date('2020-02-19 23:00:00'));
       expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { minute: -1 })).toEqual(new Date('2020-02-19 23:59:00'));
       expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { second: -1 })).toEqual(new Date('2020-02-19 23:59:59'));
+    });
+
+    test('60이상의 숫자도 계산이 가능해야 함', () => {
+      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { hour: 100 })).toEqual(new Date('2020-02-24 04:00:00')); // 100시간 => 4일 4시간
+      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { minute: 100 })).toEqual(new Date('2020-02-20 01:40:00')); // 100분 => 1시간 40분
+      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { second: 100 })).toEqual(new Date('2020-02-20 00:01:40')); // 100초 => 1분 40초
+
+      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { hour: 100, minute: 100, second: 100 })).toEqual(
+        new Date('2020-02-24 05:41:40')
+      ); // 100시간 + 100분 + 100초 => 4일 5시간 41분 40초
     });
   });
 
