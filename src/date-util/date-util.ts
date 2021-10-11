@@ -2,7 +2,7 @@ import { LoggerFactory } from '../logger';
 const logger = LoggerFactory.getLogger('common-util:date-util');
 
 import type { CalcDatetimeOpts } from './date-util.interface';
-import type { DateType } from './date-util.type';
+import type { DateType, DatePropertyType } from './date-util.type';
 
 function isValidDate(d: Date): boolean {
   return !isNaN(d.valueOf());
@@ -77,9 +77,13 @@ export namespace DateUtil {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
-  export function diff(since: DateType, until: DateType, type: DiffType): number {
+  export function diff(since: DateType, until: DateType, type: DatePropertyType): number {
     const sinceDate = toDate(since);
     const untilDate = toDate(until);
+
+    if (untilDate < sinceDate) {
+      return diff(until, since, type);
+    }
 
     const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND;
 
