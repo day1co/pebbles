@@ -203,6 +203,32 @@ describe('DateUtil', () => {
 
       expect(DateUtil.diff(since1, until1, 'year')).toBe(DateUtil.diff(until1, since1, 'year'));
       expect(DateUtil.diff(since2, until2, 'year')).toBe(DateUtil.diff(until2, since2, 'year'));
+
+      expect(DateUtil.diff(since1, until1, 'month')).toBe(DateUtil.diff(until1, since1, 'month'));
+      expect(DateUtil.diff(since2, until2, 'month')).toBe(DateUtil.diff(until2, since2, 'month'));
+
+      expect(DateUtil.diff(since1, until1, 'day')).toBe(DateUtil.diff(until1, since1, 'day'));
+      expect(DateUtil.diff(since2, until2, 'day')).toBe(DateUtil.diff(until2, since2, 'day'));
+
+      expect(DateUtil.diff(since1, until1, 'hour')).toBe(DateUtil.diff(until1, since1, 'hour'));
+      expect(DateUtil.diff(since2, until2, 'hour')).toBe(DateUtil.diff(until2, since2, 'hour'));
+
+      expect(DateUtil.diff(since1, until1, 'minute')).toBe(DateUtil.diff(until1, since1, 'minute'));
+      expect(DateUtil.diff(since2, until2, 'minute')).toBe(DateUtil.diff(until2, since2, 'minute'));
+
+      expect(DateUtil.diff(since1, until1, 'second')).toBe(DateUtil.diff(until1, since1, 'second'));
+      expect(DateUtil.diff(since2, until2, 'second')).toBe(DateUtil.diff(until2, since2, 'second'));
+    });
+
+    test('since와 until이 같은 경우', () => {
+      const since = '2020-02-10 15:00:00';
+
+      expect(DateUtil.diff(since, since, 'year')).toBe(DateUtil.diff(since, since, 'year'));
+      expect(DateUtil.diff(since, since, 'month')).toBe(DateUtil.diff(since, since, 'month'));
+      expect(DateUtil.diff(since, since, 'day')).toBe(DateUtil.diff(since, since, 'day'));
+      expect(DateUtil.diff(since, since, 'hour')).toBe(DateUtil.diff(since, since, 'hour'));
+      expect(DateUtil.diff(since, since, 'minute')).toBe(DateUtil.diff(since, since, 'minute'));
+      expect(DateUtil.diff(since, since, 'second')).toBe(DateUtil.diff(since, since, 'second'));
     });
   });
 });
