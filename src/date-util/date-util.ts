@@ -1,15 +1,13 @@
 import { LoggerFactory } from '../logger';
 const logger = LoggerFactory.getLogger('common-util:date-util');
 
-import { CalcDatetimeOpts } from './date-util.type';
+import type { CalcDatetimeOpts } from './date-util.interface';
+import type { DateType } from './date-util.type';
 
 export namespace DateUtil {
-  export function calcDatetime(str: string, opts: CalcDatetimeOpts): Date {
+  export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
     try {
-      const date = new Date(str);
-      if (isNaN(Date.parse(str))) {
-        throw new Error(`BAD PARAM > ${str}`);
-      }
+      const date = toDate(d);
 
       if (opts.year) {
         date.setFullYear(date.getFullYear() + opts.year);
@@ -37,7 +35,7 @@ export namespace DateUtil {
 
       return date;
     } catch (err) {
-      logger.error('calcDatetime error:', err, str, opts);
+      logger.error('calcDatetime error:', err, d, opts);
       throw err;
     }
   }
@@ -61,9 +59,9 @@ export namespace DateUtil {
     return !isNaN(d.valueOf());
   }
 
-  export function toDate(d: string | Date): Date {
+  export function toDate(d: DateType): Date {
     const originalD = d;
-    if (typeof d === 'string') {
+    if (typeof d !== 'object') {
       d = new Date(d);
     }
 
