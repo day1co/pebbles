@@ -1,4 +1,4 @@
-import { Algorithm } from './json-web-token.type';
+import type { Algorithm } from './json-web-token.type';
 
 export interface IOptions {
   algorithm?: Algorithm;
