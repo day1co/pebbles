@@ -10,12 +10,8 @@ export interface IHeader {
   typ?: string;
 }
 
-export interface IPayload {
-  [key: string]: unknown;
-}
-
 export interface IJwt {
   readonly header: IHeader;
-  readonly payload: IPayload;
+  readonly payload: string | Record<string, unknown>;
   readonly signature: string;
 }
