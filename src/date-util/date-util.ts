@@ -108,8 +108,8 @@ export namespace DateUtil {
         result = diffSeconds;
         break;
       default:
-        const err: never = type;
-        return err;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const _: never = type;
     }
 
     return Math.floor(result);
