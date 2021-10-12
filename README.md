@@ -10,23 +10,23 @@ Signature
 ```ts
 const httpClient = new HttpClient();
 httpClient.baseUrl = 'baseUrl';
-httpClient.sendGetRequest<Type>(url: string, config?: IHttpReqConfig): Promise<IHttpRes<Type>>;
-httpClient.sendPostRequest<Type>(url: string, data: unknown, config?: IHttpReqConfig): Promise<IHttpRes<Type>>;
-httpClient.sendPutRequest<Type>(url: string, data: unknown, config?: IHttpReqConfig): Promise<IHttpRes<Type>>;
-httpClient.sendDeleteRequest<Type>(url: string, config?: IHttpReqConfig): Promise<IHttpRes<Type>>;
+httpClient.sendGetRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>>;
+httpClient.sendPostRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>>;
+httpClient.sendPutRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>>;
+httpClient.sendDeleteRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>>;
 ```
 
 Examples
 ```ts
 import { HttpClient } from "@day1co/common-util/http-client";
-import type { IHttpReqConfig, IHttpRes } from "@day1co/common-util/http-client";
+import type { HttpReqConfig, HttpRes } from "@day1co/common-util/http-client";
 
 const httpClient = new HttpClient();
-const config: IHttpReqConfig = {}; // Optional
+const config: HttpReqConfig = {}; // Optional
 httpClient.baseUrl = 'baseUrl';
 // The full url will be 'baseUrl' + 'url'
-const getResult: IHttpRes<ResType> = await httpClient.sendGetRequest<ResType>('url', config);
-const postResult: IHttpRes<ResType> = await httpClient.sendPostRequest<ResType>('url', data);
+const getResult: HttpRes<ResType> = await httpClient.sendGetRequest<ResType>('url', config);
+const postResult: HttpRes<ResType> = await httpClient.sendPostRequest<ResType>('url', data);
 ```
 
 ### Logger
