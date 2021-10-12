@@ -25,8 +25,8 @@ const httpClient = new HttpClient();
 const config: IHttpReqConfig = {}; // Optional
 httpClient.baseUrl = 'baseUrl';
 // The full url will be 'baseUrl' + 'url'
-const getResult: IHttpRes<ResType> = await httpClient.setGetRequest<ResType>('url', config);
-const postResult: IHttpRes<ResType> = await httpClient.setPostRequest<ResType>('url', data);
+const getResult: IHttpRes<ResType> = await httpClient.sendGetRequest<ResType>('url', config);
+const postResult: IHttpRes<ResType> = await httpClient.sendPostRequest<ResType>('url', data);
 ```
 
 ### Logger
