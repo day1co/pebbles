@@ -70,8 +70,8 @@ describe('JsonWebToken', () => {
       const token = JsonWebToken.createJwt(key, payload);
       const result = JsonWebToken.decodeJwt(token);
 
-      expect(result!.header).toMatchObject(header);
-      expect(result!.payload).toMatchObject(payload);
+      expect(result?.header).toMatchObject(header);
+      expect(result?.payload).toMatchObject(payload);
     });
     it('should return null for invalid', () => {
       const token = '__invalid__';
