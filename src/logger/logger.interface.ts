@@ -1,6 +1,6 @@
 import { LogLevel } from './logger.type';
 
-export interface ILogger {
+export interface AbstractLogger {
   set logLevel(level: LogLevel);
   debug(msgTemplate: string, ...args: unknown[]): void;
   info(msgTemplate: string, ...args: unknown[]): void;
