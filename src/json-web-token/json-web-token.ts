@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import type { IJwt, IOptions, IPayload } from './json-web-token.interface';
 
 export namespace JsonWebToken {
