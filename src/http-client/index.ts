@@ -1,2 +1,2 @@
 export { HttpClient } from './http-client';
-export type { IHttpReqConfig, IHttpRes } from './http-client.interface';
+export type { HttpReqConfig, HttpRes } from './http-client.interface';

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import type { IHttpReqConfig, IHttpRes } from './http-client.interface';
+import type { HttpReqConfig, HttpRes } from './http-client.interface';
 import { LoggerFactory } from '../logger';
-import type { ILogger } from '../logger';
+import type { AbstractLogger } from '../logger';
 
 export class HttpClient {
-  private readonly logger: ILogger;
+  private readonly logger: AbstractLogger;
   private _baseUrl = '';
 
   constructor() {
@@ -19,13 +19,13 @@ export class HttpClient {
     this._baseUrl = baseUrl;
   }
 
-  sendGetRequest<Type>(url: string, config?: IHttpReqConfig): Promise<IHttpRes<Type>> {
+  sendGetRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
     this.logger.debug(`getRequest to %s with config: %s`, fullUrl, JSON.stringify(config));
-    return axios.get<Type, IHttpRes<Type>>(fullUrl, config);
+    return axios.get<Type, HttpRes<Type>>(fullUrl, config);
   }
 
-  sendPostRequest<Type>(url: string, data: unknown, config?: IHttpReqConfig): Promise<IHttpRes<Type>> {
+  sendPostRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
     this.logger.debug(
       `postRequest to %s with data: %s, config: %s `,
@@ -33,10 +33,10 @@ export class HttpClient {
       JSON.stringify(data),
       JSON.stringify(config)
     );
-    return axios.post<Type, IHttpRes<Type>>(fullUrl, data, config);
+    return axios.post<Type, HttpRes<Type>>(fullUrl, data, config);
   }
 
-  sendPutRequest<Type>(url: string, data: unknown, config?: IHttpReqConfig): Promise<IHttpRes<Type>> {
+  sendPutRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
     this.logger.debug(
       `putRequest to %s with data: %s, config: %s`,
@@ -44,13 +44,13 @@ export class HttpClient {
       JSON.stringify(data),
       JSON.stringify(config)
     );
-    return axios.put<Type, IHttpRes<Type>>(fullUrl, data, config);
+    return axios.put<Type, HttpRes<Type>>(fullUrl, data, config);
   }
 
-  sendDeleteRequest<Type>(url: string, config?: IHttpReqConfig): Promise<IHttpRes<Type>> {
+  sendDeleteRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
     this.logger.debug(`deleteRequest to %s with config: %s`, fullUrl, JSON.stringify(config));
-    return axios.delete<Type, IHttpRes<Type>>(fullUrl, config);
+    return axios.delete<Type, HttpRes<Type>>(fullUrl, config);
   }
 
   private getFullUrl(url: string): string {

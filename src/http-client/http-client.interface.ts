@@ -1,4 +1,4 @@
-export interface IHttpReqConfig {
+export interface HttpReqConfig {
   headers?: unknown;
   params?: unknown;
   paramsSerializer?: (params: unknown) => string;
@@ -20,11 +20,11 @@ export interface IHttpReqConfig {
   decompress?: boolean;
 }
 
-export interface IHttpRes<Type> {
+export interface HttpRes<Type> {
   readonly data: Type;
   readonly status: number;
   readonly statusText: string;
   readonly headers: unknown;
-  readonly config: IHttpReqConfig;
+  readonly config: HttpReqConfig;
   readonly request?: unknown;
 }

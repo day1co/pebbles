@@ -1,8 +1,8 @@
 import pino from 'pino';
-import type { ILogger } from './logger.interface';
+import type { AbstractLogger } from './logger.interface';
 import { LogLevel } from './logger.type';
 
-export class Logger implements ILogger {
+export class Logger implements AbstractLogger {
   private readonly logger: pino.Logger;
 
   constructor(name: string) {
