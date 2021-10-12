@@ -66,7 +66,7 @@ export namespace DateUtil {
 
   export function endOfMonth(date: string | Date = new Date()): Date {
     date = toDate(date);
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
   }
 
   export function lastDayOfMonth(date: string | Date = new Date()): Date {
