@@ -1,13 +1,32 @@
 import { LoggerFactory } from '../logger';
 const logger = LoggerFactory.getLogger('common-util:date-util');
 
-import type { CalcDatetimeOpts } from './date-util.interface';
-import type { DateType } from './date-util.type';
+import { CalcDatetimeOpts } from './date-util.type';
+
+function isValidDate(d: Date): boolean {
+  return !isNaN(d.valueOf());
+}
+
+function toDate(d: string | Date): Date {
+  const originalD = d;
+  if (typeof d === 'string') {
+    d = new Date(d);
+  }
+
+  if (!isValidDate(d)) {
+    throw new Error(`Invalid Date: ${originalD.toString()}`);
+  }
+
+  return d;
+}
 
 export namespace DateUtil {
-  export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
+  export function calcDatetime(str: string, opts: CalcDatetimeOpts): Date {
     try {
-      const date = toDate(d);
+      const date = new Date(str);
+      if (isNaN(Date.parse(str))) {
+        throw new Error(`BAD PARAM > ${str}`);
+      }
 
       if (opts.year) {
         date.setFullYear(date.getFullYear() + opts.year);
@@ -35,7 +54,7 @@ export namespace DateUtil {
 
       return date;
     } catch (err) {
-      logger.error('calcDatetime error: %s, %s, %s', err, d, JSON.stringify(opts));
+      logger.error('calcDatetime error:', err, str, opts);
       throw err;
     }
   }
@@ -53,22 +72,5 @@ export namespace DateUtil {
   export function lastDayOfMonth(date: string | Date = new Date()): Date {
     date = toDate(date);
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  }
-
-  export function isValidDate(d: Date): boolean {
-    return !isNaN(d.valueOf());
-  }
-
-  export function toDate(d: DateType): Date {
-    const originalD = d;
-    if (typeof d !== 'object') {
-      d = new Date(d);
-    }
-
-    if (!isValidDate(d)) {
-      throw new Error(`Invalid Date: ${originalD.toString()}`);
-    }
-
-    return d;
   }
 }

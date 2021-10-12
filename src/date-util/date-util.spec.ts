@@ -1,5 +1,4 @@
 import { DateUtil } from './date-util';
-import isValidDate = DateUtil.isValidDate;
 
 describe('DateUtil', () => {
   describe('calcDatetime', () => {
@@ -42,6 +41,13 @@ describe('DateUtil', () => {
   });
 
   describe('beginOfMonth', () => {
+    it('should throw error when invalid Date given', () => {
+      const described_function = DateUtil.beginOfMonth;
+      expect(() => described_function('zzzzz')).toThrow();
+      expect(() => described_function('2021-13-01 00:00:00')).toThrow();
+      expect(() => described_function(new Date('zzzzz'))).toThrow();
+    });
+
     it('should accept Date object and return beginning of the month 00:00:00', () => {
       expect(DateUtil.beginOfMonth(new Date('2021-06-03 00:00:00'))).toEqual(new Date('2021-06-01 00:00:00'));
       expect(DateUtil.beginOfMonth(new Date('2021-07-23 00:00:00'))).toEqual(new Date('2021-07-01 00:00:00'));
@@ -56,6 +62,13 @@ describe('DateUtil', () => {
   });
 
   describe('endOfMonth', () => {
+    it('should throw error when invalid Date given', () => {
+      const described_function = DateUtil.endOfMonth;
+      expect(() => described_function('zzzzz')).toThrow();
+      expect(() => described_function('2021-13-01 00:00:00')).toThrow();
+      expect(() => described_function(new Date('zzzzz'))).toThrow();
+    });
+
     it('should accept Date object and return last day of the month 23:59:59', () => {
       expect(DateUtil.endOfMonth(new Date('2020-02-03 00:00:00'))).toEqual(new Date('2020-02-29 23:59:59'));
       expect(DateUtil.endOfMonth(new Date('2021-02-13 00:00:00'))).toEqual(new Date('2021-02-28 23:59:59'));
@@ -74,6 +87,13 @@ describe('DateUtil', () => {
   });
 
   describe('lastDayOfMonth', () => {
+    it('should throw error when invalid Date given', () => {
+      const described_function = DateUtil.lastDayOfMonth;
+      expect(() => described_function('zzzzz')).toThrow();
+      expect(() => described_function('2021-13-01 00:00:00')).toThrow();
+      expect(() => described_function(new Date('zzzzz'))).toThrow();
+    });
+
     it('should accept Date object and return last day of the month 00:00:00', () => {
       expect(DateUtil.lastDayOfMonth(new Date('2020-02-03 00:00:00'))).toEqual(new Date('2020-02-29 00:00:00'));
       expect(DateUtil.lastDayOfMonth(new Date('2021-02-13 00:00:00'))).toEqual(new Date('2021-02-28 00:00:00'));
@@ -88,43 +108,6 @@ describe('DateUtil', () => {
       expect(DateUtil.lastDayOfMonth('2021-08-31 00:00:00')).toEqual(new Date('2021-08-31 00:00:00'));
       expect(DateUtil.lastDayOfMonth('2021-09-12 00:00:00')).toEqual(new Date('2021-09-30 00:00:00'));
       expect(DateUtil.lastDayOfMonth('2021-12-01 00:00:00')).toEqual(new Date('2021-12-31 00:00:00'));
-    });
-  });
-
-  describe('isValidDate / toDate', () => {
-    describe('isValidDate', () => {
-      it('should check valueOf date is NaN', () => {
-        expect(isValidDate(new Date('2021-01-01 00:00:00'))).toBe(true);
-        expect(isValidDate(new Date('zzzzzzzzzzzzzzzzzzzz'))).toBe(false);
-      });
-    });
-
-    describe('toDate', () => {
-      const described_function = DateUtil.toDate;
-
-      const expectToEqual = (v: string | Date) => {
-        expect(described_function(v)).toEqual(new Date(v));
-      };
-
-      const expectToThrows = (v: string | Date) => {
-        const wrapper = () => {
-          described_function(v);
-        };
-
-        expect(wrapper).toThrow();
-      };
-
-      it('should return same value of date', () => {
-        expectToEqual('2020-01-01 00:00:00');
-        expectToEqual(new Date(2020, 15));
-        expectToEqual('1');
-      });
-
-      it('should throw error', () => {
-        expectToThrows('zzzzzzzzzzzzzz');
-        expectToThrows('2021-13-01 00:00:00');
-        expectToThrows(new Date('zzzzzzzzzzzzzz'));
-      });
     });
   });
 });
