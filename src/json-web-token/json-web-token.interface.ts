@@ -1,17 +1,17 @@
 import type { Algorithm } from './json-web-token.type';
 
-export interface IOptions {
+export interface Options {
   algorithm?: Algorithm;
-  header?: IHeader;
+  header?: Header;
 }
 
-export interface IHeader {
+export interface Header {
   alg: string | Algorithm;
   typ?: string;
 }
 
-export interface IJwt {
-  readonly header: IHeader;
+export interface Jwt {
+  readonly header: Header;
   readonly payload: string | Record<string, unknown>;
   readonly signature: string;
 }
