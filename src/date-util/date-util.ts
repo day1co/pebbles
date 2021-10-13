@@ -82,7 +82,7 @@ export namespace DateUtil {
     const untilDate = toDate(until);
 
     if (untilDate < sinceDate) {
-      return diff(until, since, type);
+      return -diff(until, since, type);
     }
 
     const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND;
