@@ -111,43 +111,6 @@ describe('DateUtil', () => {
     });
   });
 
-  describe('isValidDate / toDate', () => {
-    describe('isValidDate', () => {
-      it('should check valueOf date is NaN', () => {
-        expect(isValidDate(new Date('2021-01-01 00:00:00'))).toBe(true);
-        expect(isValidDate(new Date('zzzzzzzzzzzzzzzzzzzz'))).toBe(false);
-      });
-    });
-
-    describe('toDate', () => {
-      const described_function = DateUtil.toDate;
-
-      const expectToEqual = (v: string | Date) => {
-        expect(described_function(v)).toEqual(new Date(v));
-      };
-
-      const expectToThrows = (v: string | Date) => {
-        const wrapper = () => {
-          described_function(v);
-        };
-
-        expect(wrapper).toThrow();
-      };
-
-      it('should return same value of date', () => {
-        expectToEqual('2020-01-01 00:00:00');
-        expectToEqual(new Date(2020, 15));
-        expectToEqual('1');
-      });
-
-      it('should throw error', () => {
-        expectToThrows('zzzzzzzzzzzzzz');
-        expectToThrows('2021-13-01 00:00:00');
-        expectToThrows(new Date('zzzzzzzzzzzzzz'));
-      });
-    });
-  });
-
   describe('diff', () => {
     test('should throw error', () => {
       expect(() => DateUtil.diff('string', '2020-01-01- 10:00:00', 'year')).toThrow();
