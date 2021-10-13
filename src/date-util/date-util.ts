@@ -1,15 +1,16 @@
 import { LoggerFactory } from '../logger';
 const logger = LoggerFactory.getLogger('common-util:date-util');
 
-import { CalcDatetimeOpts } from './date-util.type';
+import type { CalcDatetimeOpts } from './date-util.interface';
+import type { DateType } from './date-util.type';
 
 function isValidDate(d: Date): boolean {
   return !isNaN(d.valueOf());
 }
 
-function toDate(d: string | Date): Date {
+function toDate(d: DateType): Date {
   const originalD = d;
-  if (typeof d === 'string') {
+  if (typeof d !== 'object') {
     d = new Date(d);
   }
 
@@ -21,12 +22,9 @@ function toDate(d: string | Date): Date {
 }
 
 export namespace DateUtil {
-  export function calcDatetime(str: string, opts: CalcDatetimeOpts): Date {
+  export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
     try {
-      const date = new Date(str);
-      if (isNaN(Date.parse(str))) {
-        throw new Error(`BAD PARAM > ${str}`);
-      }
+      const date = toDate(d);
 
       if (opts.year) {
         date.setFullYear(date.getFullYear() + opts.year);
@@ -54,22 +52,22 @@ export namespace DateUtil {
 
       return date;
     } catch (err) {
-      logger.error('calcDatetime error:', err, str, opts);
+      logger.error('calcDatetime error: %s, %s, %s', err, d, JSON.stringify(opts));
       throw err;
     }
   }
 
-  export function beginOfMonth(date: string | Date = new Date()): Date {
+  export function beginOfMonth(date: DateType = new Date()): Date {
     date = toDate(date);
     return new Date(date.getFullYear(), date.getMonth(), 1);
   }
 
-  export function endOfMonth(date: string | Date = new Date()): Date {
+  export function endOfMonth(date: DateType = new Date()): Date {
     date = toDate(date);
     return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
   }
 
-  export function lastDayOfMonth(date: string | Date = new Date()): Date {
+  export function lastDayOfMonth(date: DateType = new Date()): Date {
     date = toDate(date);
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
