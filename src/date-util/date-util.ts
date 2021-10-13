@@ -10,7 +10,7 @@ function isValidDate(d: Date): boolean {
 
 function toDate(d: DateType): Date {
   const originalD = d;
-  if (typeof d !== 'object') {
+  if (!(d instanceof Date)) {
     d = new Date(d);
   }
 
