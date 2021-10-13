@@ -181,23 +181,23 @@ describe('DateUtil', () => {
       const until1 = '2022-02-09 15:00:00';
       const until2 = '2022-02-10 15:00:00';
 
-      expect(DateUtil.diff(since1, until1, 'year')).toBe(DateUtil.diff(until1, since1, 'year'));
-      expect(DateUtil.diff(since2, until2, 'year')).toBe(DateUtil.diff(until2, since2, 'year'));
+      expect(DateUtil.diff(since1, until1, 'year')).toBe(-DateUtil.diff(until1, since1, 'year'));
+      expect(DateUtil.diff(since2, until2, 'year')).toBe(-DateUtil.diff(until2, since2, 'year'));
 
-      expect(DateUtil.diff(since1, until1, 'month')).toBe(DateUtil.diff(until1, since1, 'month'));
-      expect(DateUtil.diff(since2, until2, 'month')).toBe(DateUtil.diff(until2, since2, 'month'));
+      expect(DateUtil.diff(since1, until1, 'month')).toBe(-DateUtil.diff(until1, since1, 'month'));
+      expect(DateUtil.diff(since2, until2, 'month')).toBe(-DateUtil.diff(until2, since2, 'month'));
 
-      expect(DateUtil.diff(since1, until1, 'day')).toBe(DateUtil.diff(until1, since1, 'day'));
-      expect(DateUtil.diff(since2, until2, 'day')).toBe(DateUtil.diff(until2, since2, 'day'));
+      expect(DateUtil.diff(since1, until1, 'day')).toBe(-DateUtil.diff(until1, since1, 'day'));
+      expect(DateUtil.diff(since2, until2, 'day')).toBe(-DateUtil.diff(until2, since2, 'day'));
 
-      expect(DateUtil.diff(since1, until1, 'hour')).toBe(DateUtil.diff(until1, since1, 'hour'));
-      expect(DateUtil.diff(since2, until2, 'hour')).toBe(DateUtil.diff(until2, since2, 'hour'));
+      expect(DateUtil.diff(since1, until1, 'hour')).toBe(-DateUtil.diff(until1, since1, 'hour'));
+      expect(DateUtil.diff(since2, until2, 'hour')).toBe(-DateUtil.diff(until2, since2, 'hour'));
 
-      expect(DateUtil.diff(since1, until1, 'minute')).toBe(DateUtil.diff(until1, since1, 'minute'));
-      expect(DateUtil.diff(since2, until2, 'minute')).toBe(DateUtil.diff(until2, since2, 'minute'));
+      expect(DateUtil.diff(since1, until1, 'minute')).toBe(-DateUtil.diff(until1, since1, 'minute'));
+      expect(DateUtil.diff(since2, until2, 'minute')).toBe(-DateUtil.diff(until2, since2, 'minute'));
 
-      expect(DateUtil.diff(since1, until1, 'second')).toBe(DateUtil.diff(until1, since1, 'second'));
-      expect(DateUtil.diff(since2, until2, 'second')).toBe(DateUtil.diff(until2, since2, 'second'));
+      expect(DateUtil.diff(since1, until1, 'second')).toBe(-DateUtil.diff(until1, since1, 'second'));
+      expect(DateUtil.diff(since2, until2, 'second')).toBe(-DateUtil.diff(until2, since2, 'second'));
     });
 
     test('since와 until이 같은 경우', () => {
