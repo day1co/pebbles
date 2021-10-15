@@ -133,4 +133,8 @@ export namespace DateUtil {
 
     return diffMonth;
   }
+
+  export function minDate(...args: DateType[]): Date {
+    return args.map(toDate).sort()[0];
+  }
 }
