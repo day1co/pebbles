@@ -204,9 +204,9 @@ describe('DateUtil', () => {
     });
 
     it('should return former date', () => {
-      expect(DateUtil.minDate()).toBeUndefined();
       expect(DateUtil.minDate('2021-08-01 00:00:00', '2021-08-01 00:00:01')).toEqual(new Date('2021-08-01 00:00:00'));
       expect(DateUtil.minDate('2021-08-01 00:00:01', '2021-08-01 00:00:00')).toEqual(new Date('2021-08-01 00:00:00'));
+      expect(DateUtil.minDate('2999-12-31 00:00:01', '2999-12-31 00:00:00')).toEqual(new Date('2999-12-31 00:00:00'));
       expect(DateUtil.minDate(new Date('2021-08-01 00:00:00'), new Date('2021-08-01 00:00:01'))).toEqual(
         new Date('2021-08-01 00:00:00')
       );
