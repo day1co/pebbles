@@ -1,8 +1,13 @@
-import { LoggerFactory } from '../logger';
-const logger = LoggerFactory.getLogger('common-util:date-util');
-
 import type { CalcDatetimeOpts } from './date-util.interface';
 import type { DateType, DatePropertyType } from './date-util.type';
+import { LoggerFactory } from '../logger';
+
+const ONE_SECOND = 1000;
+const ONE_DAY_IN_SECOND = 60 * 60 * 24;
+const ONE_HOUR_IN_SECOND = 60 * 60;
+const ONE_MINUTE_IN_SECOND = 60;
+
+const logger = LoggerFactory.getLogger('common-util:date-util');
 
 function isValidDate(d: Date): boolean {
   return !isNaN(d.valueOf());
@@ -21,10 +26,23 @@ function toDate(d: DateType): Date {
   return d;
 }
 
-const ONE_SECOND = 1000;
-const ONE_DAY_IN_SECOND = 60 * 60 * 24;
-const ONE_HOUR_IN_SECOND = 60 * 60;
-const ONE_MINUTE_IN_SECOND = 60;
+function diffMonth(since: Date, until: Date): number {
+  const diffYear = until.getFullYear() - since.getFullYear();
+  const diffMonth = diffYear * 12 + until.getMonth() - since.getMonth();
+
+  const tempDate = new Date(since);
+  tempDate.setMonth(tempDate.getMonth() + diffMonth);
+
+  /*
+    since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
+    tempDate가 until보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
+   */
+  if (tempDate > until) {
+    return diffMonth - 1;
+  }
+
+  return diffMonth;
+}
 
 export namespace DateUtil {
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
@@ -113,25 +131,6 @@ export namespace DateUtil {
     }
 
     return Math.floor(result);
-  }
-
-  /** @private */
-  function diffMonth(since: Date, until: Date): number {
-    const diffYear = until.getFullYear() - since.getFullYear();
-    const diffMonth = diffYear * 12 + until.getMonth() - since.getMonth();
-
-    const tempDate = new Date(since);
-    tempDate.setMonth(tempDate.getMonth() + diffMonth);
-
-    /*
-      since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
-      tempDate가 until보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
-     */
-    if (tempDate > until) {
-      return diffMonth - 1;
-    }
-
-    return diffMonth;
   }
 
   export function minDate(first: DateType, ...rest: DateType[]): Date {
