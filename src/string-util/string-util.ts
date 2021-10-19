@@ -1,4 +1,4 @@
-export namespace StrUtil {
+export namespace StringUtil {
   export function compactTextMessage(fullText: string, textToBeTrimmed: string, maxByteLength = 90): string {
     if (getByteLength(fullText) <= maxByteLength) {
       return fullText;
