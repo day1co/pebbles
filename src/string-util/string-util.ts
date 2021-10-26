@@ -1,4 +1,26 @@
+import type { Tag } from './string-util.interface';
+
 export namespace StringUtil {
+  export function splitTags(str: string, seperator = ','): Tag[] {
+    const initialList: Tag[] = [];
+
+    return str.split(seperator).reduce((tags, tag) => {
+      const text = tag.trim();
+      if (text.length > 0) {
+        return tags.concat({ text });
+      }
+      return tags;
+    }, initialList);
+  }
+
+  export function joinTags(tags: Tag[], seperator = ','): string {
+    return tags
+      .map((tag) => {
+        return tag.text.trim();
+      })
+      .join(seperator);
+  }
+
   export function compactTextMessage(fullText: string, textToBeTrimmed: string, maxByteLength = 90): string {
     if (getStringByteInEUCKR(fullText) <= maxByteLength) {
       return fullText;
@@ -14,20 +36,20 @@ function getCharacterByteInEUCKR(character: string): number {
   return character.charCodeAt(0) > 127 ? 2 : 1;
 }
 
-function getStringByteInEUCKR(string: string): number {
+function getStringByteInEUCKR(str: string): number {
   let byte = 0;
 
-  for (let i = 0; i < string.length; i++) {
-    byte += getCharacterByteInEUCKR(string[i]);
+  for (let i = 0; i < str.length; i++) {
+    byte += getCharacterByteInEUCKR(str[i]);
   }
   return byte;
 }
 
-function substringByByteInEUCKR(string: string, byteLength: number): string {
+function substringByByteInEUCKR(str: string, byteLength: number): string {
   let i = 0;
 
   for (let byte = 0; byte <= byteLength; i++) {
-    byte += getCharacterByteInEUCKR(string[i]);
+    byte += getCharacterByteInEUCKR(str[i]);
   }
-  return string.substring(0, i - 1);
+  return str.substring(0, i - 1);
 }

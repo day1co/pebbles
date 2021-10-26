@@ -1,6 +1,40 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
+  describe('splitTags', () => {
+    it('should return array of tags', () => {
+      const string = 'one, two , ,  three , four  ,five six ';
+      expect(StringUtil.splitTags(string)).toEqual([
+        { text: 'one' },
+        { text: 'two' },
+        { text: 'three' },
+        { text: 'four' },
+        { text: 'five six' },
+      ]);
+    });
+    it('should return empty array when tags are invalid', () => {
+      const string = ' , , ';
+      expect(StringUtil.splitTags(string)).toEqual([]);
+    });
+    it('should return empty array when empty string is given', () => {
+      expect(StringUtil.splitTags('')).toEqual([]);
+    });
+  });
+
+  // ---------------------------------- //
+
+  describe('joinTags', () => {
+    it('should return tags in string', () => {
+      const tags = [{ text: 'one' }, { text: 'two' }, { text: 'three' }, { text: 'four' }, { text: 'five six' }];
+      expect(StringUtil.joinTags(tags)).toBe('one,two,three,four,five six');
+    });
+    it(`should return '' when empty array is given`, () => {
+      expect(StringUtil.joinTags([])).toBe('');
+    });
+  });
+
+  // ---------------------------------- //
+
   describe('compactTextMessage', () => {
     it('should allow korean text at maximum 43', () => {
       const fullText =
