@@ -1,6 +1,26 @@
 import { DateUtil } from './date-util';
 
 describe('DateUtil', () => {
+  describe('toDate', () => {
+    test('invalid date input throws error', () => {
+      expect(() => {
+        DateUtil.toDate('');
+      }).toThrow();
+      expect(() => {
+        DateUtil.toDate('abc');
+      }).toThrow();
+      expect(() => {
+        DateUtil.toDate('3월 9일');
+      }).toThrow();
+    });
+    test('valid date input returns instance of Date', () => {
+      const testDate = new Date();
+      expect(DateUtil.toDate(testDate).getTime()).toEqual(testDate.getTime());
+      expect(DateUtil.toDate('2021-01-01T01:01:01Z').getTime()).toBe(new Date('2021-01-01T01:01:01Z').getTime());
+      expect(DateUtil.toDate('2021-10-10').getTime()).toEqual(new Date('2021-10-10').getTime());
+    });
+  });
+
   describe('calcDatetime', () => {
     test('should return error', () => {
       expect(() => {

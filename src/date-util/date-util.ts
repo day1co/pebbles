@@ -13,19 +13,6 @@ function isValidDate(d: Date): boolean {
   return !isNaN(d.valueOf());
 }
 
-function toDate(d: DateType): Date {
-  const originalD = d;
-  if (!(d instanceof Date)) {
-    d = new Date(d);
-  }
-
-  if (!isValidDate(d)) {
-    throw new Error(`Invalid Date: ${originalD.toString()}`);
-  }
-
-  return d;
-}
-
 function diffMonth(since: Date, until: Date): number {
   const diffYear = until.getFullYear() - since.getFullYear();
   const diffMonth = diffYear * 12 + until.getMonth() - since.getMonth();
@@ -45,6 +32,19 @@ function diffMonth(since: Date, until: Date): number {
 }
 
 export namespace DateUtil {
+  export function toDate(d: DateType): Date {
+    const originalD = d;
+    if (!(d instanceof Date)) {
+      d = new Date(d);
+    }
+
+    if (!isValidDate(d)) {
+      throw new Error(`Invalid Date: ${originalD.toString()}`);
+    }
+
+    return d;
+  }
+
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
     try {
       const date = toDate(d);
