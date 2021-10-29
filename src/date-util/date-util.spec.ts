@@ -241,25 +241,14 @@ describe('DateUtil', () => {
 
   describe('parseTimestamp', () => {
     it('should throw error when invalid arguments given', () => {
-      expect(() => DateUtil.parseTimestamp('20210131', 'YYYYM')).toThrow();
-      expect(() => DateUtil.parseTimestamp('20210131', 'YYYYMMDDHHmmssSSSS')).not.toThrow();
+      expect(() => DateUtil.parseTimestamp('20210131')).not.toThrow();
+      expect(() => DateUtil.parseTimestamp('2021013111223344112233')).toThrow();
     });
 
     it('should return valid date', () => {
-      expect(DateUtil.parseTimestamp('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseTimestamp('20210821001122', 'YYYYMMDDHHmmssSSS')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseTimestamp('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseTimestamp('08202121001122', 'MMYYYYDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseTimestamp('24/12/2019 11:15:00', 'DD/MM/YYYY HH:mm:ss')).toEqual(
-        new Date('2019-12-24 11:15:00')
-      );
-      expect(DateUtil.parseTimestamp('21 24/12/2019 11:15:00', 'DD DD/MM/YYYY HH:mm:ss')).toEqual(
-        new Date('2019-12-24 11:15:00')
-      );
-      expect(DateUtil.parseTimestamp('20210821111122.123456', 'YYYYMMDDHHmmss.SSSSSS')).toEqual(
-        new Date('2021-08-21 11:11:22.123')
-      );
-      expect(DateUtil.parseTimestamp('2021/8/1 3:9:1', 'YYYY/M/D H:m:s')).toEqual(new Date('2021-08-01 03:09:01'));
+      expect(DateUtil.parseTimestamp('20210821')).toEqual(new Date('2021-08-21 00:00:00'));
+      expect(DateUtil.parseTimestamp('20210821001122')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseTimestamp('20210821001122123')).toEqual(new Date('2021-08-21 00:11:22.123'));
     });
   });
 });

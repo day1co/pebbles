@@ -121,7 +121,9 @@ export namespace DateUtil {
     return min;
   }
 
-  export function parseTimestamp(str: string, fmt = 'YYYYMMDDHHmmssSSS'): Date {
+  export function parseTimestamp(str: string): Date {
+    const fmt = 'YYYYMMDDHHmmssSSS';
+
     if (str.length > fmt.length) {
       throw new Error(`Invalid Arguments: str and fmt are not matched. str: ${str}, fmt: ${fmt}`);
     }
@@ -183,9 +185,9 @@ export namespace DateUtil {
         },
       ],
       [
-        'S{1,9}',
+        'S?S?S',
         (match, date) => {
-          date.setMilliseconds(parseInt(substrByMatch(match)) / 1000);
+          date.setMilliseconds(parseInt(substrByMatch(match)));
           return date;
         },
       ],
