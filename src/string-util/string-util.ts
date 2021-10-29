@@ -2,23 +2,34 @@ import type { Tag } from './string-util.interface';
 
 export namespace StringUtil {
   export function splitTags(str: string, separator = ','): Tag[] {
-    const initialList: Tag[] = [];
-
-    return str.split(separator).reduce((tags, tag) => {
+    return str.split(separator).reduce((tags: Tag[], tag) => {
       const text = tag.trim();
       if (text.length > 0) {
         tags.push({ text });
       }
       return tags;
-    }, initialList);
+    }, []);
   }
 
-  export function joinTags(tags: Tag[], separator = ','): string {
-    return tags.reduce((joinedTags, tag) => {
-      if (joinedTags) {
-        joinedTags += separator;
+  export function split(str: string, separator = ','): string[] {
+    return str.split(separator).reduce((textList: string[], text) => {
+      text = text.trim();
+      if (text.length > 0) {
+        textList.push(text);
       }
-      return joinedTags + tag.text.trim();
+      return textList;
+    }, []);
+  }
+
+  export function join(textList: Array<Tag | string>, separator = ','): string {
+    return textList.reduce((joinedText: string, text) => {
+      if (joinedText) {
+        joinedText += separator;
+      }
+      if (typeof text !== 'string') {
+        return joinedText + text.text.trim();
+      }
+      return joinedText + text.trim();
     }, '');
   }
 
