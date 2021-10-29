@@ -131,13 +131,9 @@ export namespace DateUtil {
     }
 
     function substrByMatch(match: RegExpMatchArray): string {
-      if (match.index !== undefined) {
-        const val = str.substr(match.index, match[0].length);
-        if (val.length > 0) {
-          return val;
-        } else {
-          return '0';
-        }
+      const val = str.substr(<number>match.index, match[0].length);
+      if (val.length > 0) {
+        return val;
       } else {
         return '0';
       }
