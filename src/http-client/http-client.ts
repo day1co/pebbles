@@ -1,10 +1,10 @@
 import axios from 'axios';
 import type { HttpReqConfig, HttpRes } from './http-client.interface';
 import { LoggerFactory } from '../logger';
-import type { AbstractLogger } from '../logger';
+import type { Logger } from '../logger';
 
 export class HttpClient {
-  private readonly logger: AbstractLogger;
+  private readonly logger: Logger;
   private _baseUrl = '';
 
   constructor() {

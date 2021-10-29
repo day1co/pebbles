@@ -1,23 +1,23 @@
-import type { AbstractLogger } from './logger.interface';
-import { Logger } from './logger';
+import type { Logger } from './logger.interface';
+import { PinoLogger } from './pino-logger';
 
 export class LoggerFactory {
-  private readonly loggerMap: Map<string, AbstractLogger>;
+  private readonly loggerMap: Map<string, Logger>;
   private static instance: LoggerFactory;
 
   private constructor() {
     this.loggerMap = new Map();
   }
 
-  static getLogger(name: string): AbstractLogger {
+  static getLogger(name: string): Logger {
     if (!this.instance) {
       this.instance = new LoggerFactory();
     }
 
-    let result: AbstractLogger | undefined = this.instance.loggerMap.get(name);
+    let result: Logger | undefined = this.instance.loggerMap.get(name);
 
     if (!result) {
-      result = new Logger(name);
+      result = new PinoLogger(name);
       this.instance.loggerMap.set(name, result);
     }
 

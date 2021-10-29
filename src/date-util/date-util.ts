@@ -9,28 +9,6 @@ const ONE_MINUTE_IN_SECOND = 60;
 
 const logger = LoggerFactory.getLogger('common-util:date-util');
 
-function isValidDate(d: Date): boolean {
-  return !isNaN(d.valueOf());
-}
-
-function diffMonth(since: Date, until: Date): number {
-  const diffYear = until.getFullYear() - since.getFullYear();
-  const diffMonth = diffYear * 12 + until.getMonth() - since.getMonth();
-
-  const tempDate = new Date(since);
-  tempDate.setMonth(tempDate.getMonth() + diffMonth);
-
-  /*
-    since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
-    tempDate가 until보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
-   */
-  if (tempDate > until) {
-    return diffMonth - 1;
-  }
-
-  return diffMonth;
-}
-
 export namespace DateUtil {
   export function toDate(d: DateType): Date {
     const originalD = d;
@@ -142,4 +120,26 @@ export namespace DateUtil {
     }
     return min;
   }
+}
+
+function isValidDate(d: Date): boolean {
+  return !isNaN(d.valueOf());
+}
+
+function diffMonth(since: Date, until: Date): number {
+  const diffYear = until.getFullYear() - since.getFullYear();
+  const diffMonth = diffYear * 12 + until.getMonth() - since.getMonth();
+
+  const tempDate = new Date(since);
+  tempDate.setMonth(tempDate.getMonth() + diffMonth);
+
+  /*
+    since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
+    tempDate가 until보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
+   */
+  if (tempDate > until) {
+    return diffMonth - 1;
+  }
+
+  return diffMonth;
 }
