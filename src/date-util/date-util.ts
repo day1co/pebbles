@@ -144,7 +144,7 @@ export namespace DateUtil {
   }
 
   export function parseTimestamp(str: string, fmt = 'YYYYMMDDHHmmssSSS'): Date {
-    if (str.length !== fmt.length) {
+    if (str.length > fmt.length) {
       throw new Error(`Invalid Arguments: str and fmt are not matched. str: ${str}, fmt: ${fmt}`);
     }
 
@@ -154,9 +154,14 @@ export namespace DateUtil {
 
     function substrByMatch(match: RegExpMatchArray): string {
       if (match.index !== undefined) {
-        return str.substr(match.index, match[0].length);
+        const val = str.substr(match.index, match[0].length);
+        if (val.length > 0) {
+          return val;
+        } else {
+          return '0';
+        }
       } else {
-        return '';
+        return '0';
       }
     }
 
