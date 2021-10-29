@@ -120,6 +120,87 @@ export namespace DateUtil {
     }
     return min;
   }
+
+  export function parseTimestamp(str: string, fmt = 'YYYYMMDDHHmmssSSS'): Date {
+    if (str.length !== fmt.length) {
+      throw new Error(`Invalid Arguments: str and fmt are not matched. str: ${str}, fmt: ${fmt}`);
+    }
+
+    interface Callback {
+      (matched: RegExpMatchArray, date: Date): Date;
+    }
+
+    function substrByMatch(match: RegExpMatchArray): string {
+      if (match.index !== undefined) {
+        return str.substr(match.index, match[0].length);
+      } else {
+        return '';
+      }
+    }
+
+    const tokenCallbackMap = new Map<string, Callback>([
+      [
+        'YYYY',
+        (match, date) => {
+          date.setFullYear(parseInt(substrByMatch(match)));
+          return date;
+        },
+      ],
+      [
+        'M?M',
+        (match, date) => {
+          date.setMonth(parseInt(substrByMatch(match)) - 1);
+          return date;
+        },
+      ],
+      [
+        'D?D',
+        (match, date) => {
+          date.setDate(parseInt(substrByMatch(match)));
+          return date;
+        },
+      ],
+      [
+        'H?H',
+        (match, date) => {
+          date.setHours(parseInt(substrByMatch(match)));
+          return date;
+        },
+      ],
+      [
+        'm?m',
+        (match, date) => {
+          date.setMinutes(parseInt(substrByMatch(match)));
+          return date;
+        },
+      ],
+      [
+        's?s',
+        (match, date) => {
+          date.setSeconds(parseInt(substrByMatch(match)));
+          return date;
+        },
+      ],
+      [
+        'S{1,9}',
+        (match, date) => {
+          date.setMilliseconds(parseInt(substrByMatch(match)) / 1000);
+          return date;
+        },
+      ],
+    ]);
+
+    let retDate = new Date(0);
+    for (const [token, callback] of tokenCallbackMap.entries()) {
+      const pattern = new RegExp(token, 'g');
+
+      for (const match of fmt.matchAll(pattern)) {
+        retDate = callback(match, retDate);
+      }
+    }
+
+    return retDate;
+  }
 }
 
 function isValidDate(d: Date): boolean {
