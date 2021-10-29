@@ -1,24 +1,25 @@
 import type { Tag } from './string-util.interface';
 
 export namespace StringUtil {
-  export function splitTags(str: string, seperator = ','): Tag[] {
+  export function splitTags(str: string, separator = ','): Tag[] {
     const initialList: Tag[] = [];
 
-    return str.split(seperator).reduce((tags, tag) => {
+    return str.split(separator).reduce((tags, tag) => {
       const text = tag.trim();
       if (text.length > 0) {
-        return tags.concat({ text });
+        tags.push({ text });
       }
       return tags;
     }, initialList);
   }
 
-  export function joinTags(tags: Tag[], seperator = ','): string {
-    return tags
-      .map((tag) => {
-        return tag.text.trim();
-      })
-      .join(seperator);
+  export function joinTags(tags: Tag[], separator = ','): string {
+    return tags.reduce((joinedTags, tag) => {
+      if (joinedTags) {
+        joinedTags += separator;
+      }
+      return joinedTags + tag.text.trim();
+    }, '');
   }
 
   export function compactTextMessage(fullText: string, textToBeTrimmed: string, maxByteLength = 90): string {
