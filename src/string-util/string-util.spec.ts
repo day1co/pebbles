@@ -23,13 +23,33 @@ describe('StringUtil', () => {
 
   // ---------------------------------- //
 
-  describe('joinTags', () => {
-    it('should return tags in string', () => {
+  describe('split', () => {
+    it('should return array of text', () => {
+      const str = 'one, two , ,  three , four  ,five six ';
+      expect(StringUtil.split(str)).toEqual(['one', 'two', 'three', 'four', 'five six']);
+    });
+    it('should return empty array when tags are invalid', () => {
+      const str = ' , , ';
+      expect(StringUtil.split(str)).toEqual([]);
+    });
+    it('should return empty array when empty string is given', () => {
+      expect(StringUtil.split('')).toEqual([]);
+    });
+  });
+
+  // ---------------------------------- //
+
+  describe('join', () => {
+    it('should return tags in string when a list of tags is given', () => {
       const tags = [{ text: 'one' }, { text: 'two' }, { text: 'three' }, { text: 'four' }, { text: 'five six' }];
-      expect(StringUtil.joinTags(tags)).toBe('one,two,three,four,five six');
+      expect(StringUtil.join(tags)).toBe('one,two,three,four,five six');
+    });
+    it('should return string when a list of text is given', () => {
+      const textList = ['one ', ' two', ' three ', 'four', 'five six'];
+      expect(StringUtil.join(textList)).toBe('one,two,three,four,five six');
     });
     it(`should return '' when empty array is given`, () => {
-      expect(StringUtil.joinTags([])).toBe('');
+      expect(StringUtil.join([])).toBe('');
     });
   });
 
