@@ -3,8 +3,8 @@ import { StringUtil } from './string-util';
 describe('StringUtil', () => {
   describe('splitTags', () => {
     it('should return array of tags', () => {
-      const string = 'one, two , ,  three , four  ,five six ';
-      expect(StringUtil.splitTags(string)).toEqual([
+      const str = 'one, two , ,  three , four  ,five six ';
+      expect(StringUtil.splitTags(str)).toEqual([
         { text: 'one' },
         { text: 'two' },
         { text: 'three' },
@@ -13,8 +13,8 @@ describe('StringUtil', () => {
       ]);
     });
     it('should return empty array when tags are invalid', () => {
-      const string = ' , , ';
-      expect(StringUtil.splitTags(string)).toEqual([]);
+      const str = ' , , ';
+      expect(StringUtil.splitTags(str)).toEqual([]);
     });
     it('should return empty array when empty string is given', () => {
       expect(StringUtil.splitTags('')).toEqual([]);
