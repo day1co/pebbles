@@ -2,13 +2,9 @@ import type { Tag } from './string-util.interface';
 
 export namespace StringUtil {
   export function splitTags(str: string, separator = ','): Tag[] {
-    return str.split(separator).reduce((tags: Tag[], tag) => {
-      const text = tag.trim();
-      if (text.length > 0) {
-        tags.push({ text });
-      }
-      return tags;
-    }, []);
+    return split(str, separator).map((text) => {
+      return { text };
+    });
   }
 
   export function split(str: string, separator = ','): string[] {
