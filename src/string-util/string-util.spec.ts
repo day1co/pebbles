@@ -21,8 +21,6 @@ describe('StringUtil', () => {
     });
   });
 
-  // ---------------------------------- //
-
   describe('split', () => {
     it('should return array of text', () => {
       const str = 'one, two , ,  three , four  ,five six ';
@@ -37,23 +35,31 @@ describe('StringUtil', () => {
     });
   });
 
-  // ---------------------------------- //
+  describe('joinTags', () => {
+    it('should return string of tags', () => {
+      const tags = [{ text: 'one ' }, { text: ' two' }, { text: ' three ' }, { text: 'four' }, { text: 'five six' }];
+      expect(StringUtil.joinTags(tags)).toEqual('one,two,three,four,five six');
+    });
+    it('should return empty string when tags are invalid', () => {
+      expect(StringUtil.joinTags([{ text: ' ' }, { text: '' }])).toEqual('');
+    });
+    it('should return empty string when empty string is given', () => {
+      expect(StringUtil.joinTags([])).toEqual('');
+    });
+  });
 
   describe('join', () => {
-    it('should return tags in string when a list of tags is given', () => {
-      const tags = [{ text: 'one' }, { text: 'two' }, { text: 'three' }, { text: 'four' }, { text: 'five six' }];
-      expect(StringUtil.join(tags)).toBe('one,two,three,four,five six');
-    });
     it('should return string when a list of text is given', () => {
       const textList = ['one ', ' two', ' three ', 'four', 'five six'];
       expect(StringUtil.join(textList)).toBe('one,two,three,four,five six');
+    });
+    it('should return empty string when only empty strings are given', () => {
+      expect(StringUtil.join([' ', '  '])).toBe('');
     });
     it(`should return '' when empty array is given`, () => {
       expect(StringUtil.join([])).toBe('');
     });
   });
-
-  // ---------------------------------- //
 
   describe('compactTextMessage', () => {
     it('should allow korean text at maximum 43', () => {
