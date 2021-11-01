@@ -17,13 +17,17 @@ export namespace StringUtil {
     }, []);
   }
 
-  export function join(textList: Array<Tag | string>, separator = ','): string {
+  export function joinTags(tags: Tag[], separator = ','): string {
+    const textList = tags.map((tag) => {
+      return tag.text;
+    });
+    return join(textList, separator);
+  }
+
+  export function join(textList: string[], separator = ','): string {
     return textList.reduce((joinedText: string, text) => {
       if (joinedText) {
         joinedText += separator;
-      }
-      if (typeof text !== 'string') {
-        return joinedText + text.text.trim();
       }
       return joinedText + text.trim();
     }, '');
