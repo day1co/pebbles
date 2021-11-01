@@ -1,6 +1,68 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
+  describe('toInt', () => {
+    it('should return null with incompatible input', () => {
+      expect(StringUtil.toInt('abc')).toEqual(null);
+      expect(StringUtil.toInt('4.5a')).toEqual(null);
+      expect(StringUtil.toInt('1.2')).toEqual(null);
+      expect(StringUtil.toInt(1.2)).toEqual(null);
+      expect(StringUtil.toNumber('1.2.3')).toBe(null);
+      expect(StringUtil.toInt('')).toEqual(null);
+    });
+    it('should return parameter in integer type', () => {
+      expect(StringUtil.toInt(1)).toEqual(1);
+      expect(StringUtil.toInt('1')).toEqual(1);
+      expect(StringUtil.toInt(-1)).toEqual(-1);
+      expect(StringUtil.toInt('-1')).toEqual(-1);
+      expect(StringUtil.toInt(0)).toEqual(0);
+      expect(StringUtil.toInt('0')).toEqual(0);
+    });
+  });
+
+  describe('toNumber', () => {
+    it('should return null with incompatible input', () => {
+      expect(StringUtil.toNumber('abc')).toEqual(null);
+      expect(StringUtil.toNumber('4a')).toBe(null);
+      expect(StringUtil.toNumber('1.2.3')).toBe(null);
+      expect(StringUtil.toNumber(Infinity)).toBe(null);
+      expect(StringUtil.toNumber('')).toBe(null);
+    });
+    it('should return parameter in number type', () => {
+      expect(StringUtil.toNumber(1)).toEqual(1);
+      expect(StringUtil.toNumber('-1')).toEqual(-1);
+      expect(StringUtil.toNumber('0')).toEqual(0);
+      expect(StringUtil.toNumber(1.2)).toEqual(1.2);
+      expect(StringUtil.toNumber('1.2')).toEqual(1.2);
+      expect(StringUtil.toNumber(-1.2)).toEqual(-1.2);
+      expect(StringUtil.toNumber('-1.2')).toEqual(-1.2);
+    });
+  });
+
+  describe('toBoolean', () => {
+    it('should return null with incompatible input', () => {
+      expect(StringUtil.toBoolean('abc')).toEqual(null);
+      expect(StringUtil.toBoolean('1111')).toBe(null);
+      expect(StringUtil.toBoolean('')).toBe(null);
+      expect(StringUtil.toBoolean('nay')).toBe(null);
+    });
+    it('should return parameter in boolean type', () => {
+      expect(StringUtil.toBoolean(true)).toEqual(true);
+      expect(StringUtil.toBoolean('true')).toEqual(true);
+      expect(StringUtil.toBoolean(false)).toEqual(false);
+      expect(StringUtil.toBoolean('false')).toEqual(false);
+      expect(StringUtil.toBoolean('1')).toEqual(true);
+      expect(StringUtil.toBoolean('0')).toEqual(false);
+      expect(StringUtil.toBoolean('yes')).toEqual(true);
+      expect(StringUtil.toBoolean('no')).toEqual(false);
+      expect(StringUtil.toBoolean('Y')).toEqual(true);
+      expect(StringUtil.toBoolean('N')).toEqual(false);
+      expect(StringUtil.toBoolean('On')).toEqual(true);
+      expect(StringUtil.toBoolean('Off')).toEqual(false);
+      expect(StringUtil.toBoolean('TRUE')).toEqual(true);
+      expect(StringUtil.toBoolean('FALSE')).toEqual(false);
+    });
+  });
   describe('splitTags', () => {
     it('should return array of tags', () => {
       const str = 'one, two , ,  three , four  ,five six ';
