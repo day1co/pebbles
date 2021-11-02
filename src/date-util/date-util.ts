@@ -206,6 +206,21 @@ export namespace DateUtil {
   export function parseTimestamp(str: string): Date {
     return parseByFormat(str, 'YYYYMMDDHHmmssSSS');
   }
+
+  export function secondsToTimeFormat(seconds: number): string {
+    if (seconds < 0) {
+      throw new Error('Invalid number');
+    }
+
+    const hh = Math.floor(seconds / 3600)
+      .toString()
+      .padStart(2, '0');
+    const mm = Math.floor((seconds % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const ss = (seconds % 60).toString().padStart(2, '0');
+    return `${hh}:${mm}:${ss}`;
+  }
 }
 
 function isValidDate(d: Date): boolean {
