@@ -42,6 +42,14 @@ export namespace StringUtil {
     const trimmedText = substringByByteInEUCKR(textToBeTrimmed, maxByteLength - minByteLength);
     return fullText.replace(textToBeTrimmed, trimmedText + '...');
   }
+
+  export function padStart(str: string, targetLength: number, padString: string): string {
+    if (str.length >= targetLength) {
+      return str;
+    }
+
+    return new Array(targetLength - str.length + 1).join(padString) + str;
+  }
 }
 
 function getCharacterByteInEUCKR(character: string): number {

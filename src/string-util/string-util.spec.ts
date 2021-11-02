@@ -95,4 +95,14 @@ describe('StringUtil', () => {
       expect(trimmedText).toBe(fullText);
     });
   });
+
+  describe('padStart', () => {
+    it('padStart 의 정상 동작 확인', () => {
+      expect(StringUtil.padStart('123', 1, '0')).toBe('123');
+      expect(StringUtil.padStart('123', 2, '0')).toBe('123');
+      expect(StringUtil.padStart('123', 3, '0')).toBe('123');
+      expect(StringUtil.padStart('123', 4, '0')).toBe('0123');
+      expect(StringUtil.padStart('123', 5, '0')).toBe('00123');
+    });
+  });
 });
