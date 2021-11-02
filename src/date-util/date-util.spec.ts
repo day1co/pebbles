@@ -284,4 +284,19 @@ describe('DateUtil', () => {
       expect(DateUtil.parseTimestamp('20210821001122123')).toEqual(new Date('2021-08-21 00:11:22.123'));
     });
   });
+
+  describe('secondsToTimeFormat', () => {
+    it('음수를 넣으면 throw가 발생한다', () => {
+      expect(() => DateUtil.secondsToTimeFormat(-5)).toThrow();
+    });
+
+    it('정상적인 값이 리턴되어야 한다', () => {
+      expect(DateUtil.secondsToTimeFormat(0)).toEqual('00:00:00');
+      expect(DateUtil.secondsToTimeFormat(10)).toEqual('00:00:10'); // 10초
+      expect(DateUtil.secondsToTimeFormat(100)).toEqual('00:01:40'); // 100초 => 1분 40초
+      expect(DateUtil.secondsToTimeFormat(1_000)).toEqual('00:16:40'); // 1,000초 => 16분 40초
+      expect(DateUtil.secondsToTimeFormat(10_000)).toEqual('02:46:40'); // 10,000초 => 2시간 46분 40초
+      expect(DateUtil.secondsToTimeFormat(100_000)).toEqual('27:46:40'); // 100,000초 => 27시간 46분 40초
+    });
+  });
 });
