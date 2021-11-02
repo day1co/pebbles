@@ -7,38 +7,6 @@ const FALSE_REGEXP = /^(f(alse)?|n(o)?|off|0)$/i;
 const logger = LoggerFactory.getLogger('common-util:string-util');
 
 export namespace StringUtil {
-  export function toInt(numStr: string | number): number | null {
-    let result: number | null;
-
-    if (typeof numStr === 'number') {
-      result = numStr;
-    } else {
-      result = isNumeric(numStr) ? parseFloat(numStr) : null;
-    }
-
-    if (!Number.isInteger(result)) {
-      logger.warn('incompatible parmeter with integer type "%s" caught at toInt', numStr);
-      result = null;
-    }
-    return result;
-  }
-
-  export function toNumber(numStr: string | number): number | null {
-    let result: number | null;
-
-    if (typeof numStr === 'number') {
-      result = numStr;
-    } else {
-      result = isNumeric(numStr) ? Number(numStr) : null;
-    }
-
-    if (!Number.isFinite(result)) {
-      logger.warn('incompatible parmeter with number type "%s" caught at toNumber', numStr);
-      result = null;
-    }
-    return result;
-  }
-
   export function toBoolean(boolStr: string | boolean): boolean | null {
     if (typeof boolStr === 'boolean') {
       return boolStr;

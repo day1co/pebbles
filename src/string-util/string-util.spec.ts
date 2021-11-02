@@ -1,44 +1,6 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
-  describe('toInt', () => {
-    it('should return null with incompatible input', () => {
-      expect(StringUtil.toInt('abc')).toEqual(null);
-      expect(StringUtil.toInt('4.5a')).toEqual(null);
-      expect(StringUtil.toInt('1.2')).toEqual(null);
-      expect(StringUtil.toInt(1.2)).toEqual(null);
-      expect(StringUtil.toNumber('1.2.3')).toBe(null);
-      expect(StringUtil.toInt('')).toEqual(null);
-    });
-    it('should return parameter in integer type', () => {
-      expect(StringUtil.toInt(1)).toEqual(1);
-      expect(StringUtil.toInt('1')).toEqual(1);
-      expect(StringUtil.toInt(-1)).toEqual(-1);
-      expect(StringUtil.toInt('-1')).toEqual(-1);
-      expect(StringUtil.toInt(0)).toEqual(0);
-      expect(StringUtil.toInt('0')).toEqual(0);
-    });
-  });
-
-  describe('toNumber', () => {
-    it('should return null with incompatible input', () => {
-      expect(StringUtil.toNumber('abc')).toEqual(null);
-      expect(StringUtil.toNumber('4a')).toBe(null);
-      expect(StringUtil.toNumber('1.2.3')).toBe(null);
-      expect(StringUtil.toNumber(Infinity)).toBe(null);
-      expect(StringUtil.toNumber('')).toBe(null);
-    });
-    it('should return parameter in number type', () => {
-      expect(StringUtil.toNumber(1)).toEqual(1);
-      expect(StringUtil.toNumber('-1')).toEqual(-1);
-      expect(StringUtil.toNumber('0')).toEqual(0);
-      expect(StringUtil.toNumber(1.2)).toEqual(1.2);
-      expect(StringUtil.toNumber('1.2')).toEqual(1.2);
-      expect(StringUtil.toNumber(-1.2)).toEqual(-1.2);
-      expect(StringUtil.toNumber('-1.2')).toEqual(-1.2);
-    });
-  });
-
   describe('toBoolean', () => {
     it('should return null with incompatible input', () => {
       expect(StringUtil.toBoolean('abc')).toEqual(null);
