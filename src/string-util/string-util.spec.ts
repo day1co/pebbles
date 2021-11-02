@@ -2,11 +2,19 @@ import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
   describe('toBoolean', () => {
-    it('should return null with incompatible input', () => {
-      expect(StringUtil.toBoolean('abc')).toEqual(null);
-      expect(StringUtil.toBoolean('1111')).toBe(null);
-      expect(StringUtil.toBoolean('')).toBe(null);
-      expect(StringUtil.toBoolean('nay')).toBe(null);
+    it('should throw with incompatible input', () => {
+      expect(() => {
+        StringUtil.toBoolean('abc');
+      }).toThrow();
+      expect(() => {
+        StringUtil.toBoolean('1111');
+      }).toThrow();
+      expect(() => {
+        StringUtil.toBoolean('');
+      }).toThrow();
+      expect(() => {
+        StringUtil.toBoolean('nay');
+      }).toThrow();
     });
     it('should return parameter in boolean type', () => {
       expect(StringUtil.toBoolean(true)).toEqual(true);

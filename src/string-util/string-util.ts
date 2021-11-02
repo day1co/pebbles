@@ -1,10 +1,7 @@
 import type { Tag } from './string-util.interface';
-import { LoggerFactory } from '../logger';
 
 const TRUE_REGEXP = /^(t(rue)?|y(es)?|on|1)$/i;
 const FALSE_REGEXP = /^(f(alse)?|n(o)?|off|0)$/i;
-
-const logger = LoggerFactory.getLogger('common-util:string-util');
 
 export namespace StringUtil {
   export function toBoolean(boolStr: string | boolean): boolean | null {
@@ -17,8 +14,7 @@ export namespace StringUtil {
     if (FALSE_REGEXP.test(boolStr.toLowerCase())) {
       return false;
     }
-    logger.warn('incompatible parmeter with boolean type "%s" caught at toBoolean', boolStr);
-    return null;
+    throw new Error(`${boolStr} is incompatible with boolean type`);
   }
 
   export function splitTags(str: string, separator = ','): Tag[] {
@@ -84,8 +80,4 @@ function substringByByteInEUCKR(str: string, byteLength: number): string {
     byte += getCharacterByteInEUCKR(str[i]);
   }
   return str.substring(0, i - 1);
-}
-
-function isNumeric(str: string): boolean {
-  return !Number.isNaN(Number(str)) && !Number.isNaN(parseInt(str));
 }
