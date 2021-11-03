@@ -143,9 +143,7 @@ export namespace DateUtil {
     return min;
   }
 
-  export function parseTimestamp(str: string): Date {
-    const fmt = 'YYYYMMDDHHmmssSSS';
-
+  export function parseByFormat(str: string, fmt: string): Date {
     if (str.length > fmt.length) {
       throw new Error(`Invalid Arguments: str and fmt are not matched. str: ${str}, fmt: ${fmt}`);
     }
@@ -225,5 +223,9 @@ export namespace DateUtil {
     }
 
     return retDate;
+  }
+
+  export function parseTimestamp(str: string): Date {
+    return parseByFormat(str, 'YYYYMMDDHHmmssSSS');
   }
 }

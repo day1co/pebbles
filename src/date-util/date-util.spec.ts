@@ -219,6 +219,39 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('parseByFormat', () => {
+    it('should throw error when invalid arguments given', () => {
+      expect(() => DateUtil.parseByFormat('20210131', 'YYYYM')).toThrow();
+      expect(() => DateUtil.parseByFormat('20210131', 'YYYYMMDDHHmmssSSSS')).not.toThrow();
+    });
+
+    it('should return valid date', () => {
+      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmssSSS')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('08202121001122', 'MMYYYYDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('24/12/2019 11:15:00', 'DD/MM/YYYY HH:mm:ss')).toEqual(
+        new Date('2019-12-24 11:15:00')
+      );
+    });
+  });
+  describe('parseByFormat', () => {
+    it('should throw error when invalid arguments given', () => {
+      expect(() => DateUtil.parseByFormat('20210131', 'YYYYM')).toThrow();
+      expect(() => DateUtil.parseByFormat('20210131', 'YYYYMMDDHHmmssSSSS')).not.toThrow();
+    });
+
+    it('should return valid date', () => {
+      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmssSSS')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('08202121001122', 'MMYYYYDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
+      expect(DateUtil.parseByFormat('24/12/2019 11:15:00', 'DD/MM/YYYY HH:mm:ss')).toEqual(
+        new Date('2019-12-24 11:15:00')
+      );
+    });
+  });
+
   describe('parseTimestamp', () => {
     it('should throw error when invalid arguments given', () => {
       expect(() => DateUtil.parseTimestamp('20210131')).not.toThrow();
