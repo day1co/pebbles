@@ -1,25 +1,17 @@
 export namespace NumberUtil {
-  export function intValueOf(numStr: number | string): number {
-    let result = numStr;
+  export function intValueOf(numStr: string): number {
+    const result = isNumeric(numStr) ? Number(numStr) : NaN;
 
-    if (typeof numStr !== 'number' && isNumeric(numStr)) {
-      result = parseFloat(numStr);
-    }
-
-    if (!Number.isInteger(result) || typeof result === 'string') {
+    if (Number.isNaN(result) || !Number.isInteger(result)) {
       throw new Error(`unable to convert "${numStr}" to integer type`);
     }
     return result;
   }
 
-  export function valueOf(numStr: number | string): number {
-    let result = numStr;
+  export function valueOf(numStr: string): number {
+    const result = isNumeric(numStr) ? Number(numStr) : NaN;
 
-    if (typeof numStr !== 'number' && isNumeric(numStr)) {
-      result = Number(numStr);
-    }
-
-    if (!Number.isFinite(result) || typeof result === 'string') {
+    if (Number.isNaN(result) || !Number.isFinite(result)) {
       throw new Error(`unable to convert "${numStr}" to integer type`);
     }
     return result;
