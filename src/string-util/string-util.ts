@@ -1,6 +1,26 @@
 import type { Tag } from './string-util.interface';
 
+const DOMESTIC_PHONE_NUMBER_REGEXP = /^0[1,7]\d{9}$/;
+
 export namespace StringUtil {
+  export function normalizePhoneNumber(str: string): string {
+    if (DOMESTIC_PHONE_NUMBER_REGEXP.test(str)) {
+      return str;
+    }
+
+    const NATIONAL_PHONE_NUMBER_REGEXP = /^0?820?[1,7]\d{9}$/;
+    const trimmedPhoneNumber = str.split(/\D/).join('');
+
+    if (NATIONAL_PHONE_NUMBER_REGEXP.test(trimmedPhoneNumber)) {
+      return '0' + trimmedPhoneNumber.slice(-10);
+    }
+    return trimmedPhoneNumber;
+  }
+
+  export function validatePhoneNumber(str: string): boolean {
+    return DOMESTIC_PHONE_NUMBER_REGEXP.test(str);
+  }
+
   export function splitTags(str: string, separator = ','): Tag[] {
     return split(str, separator).map((text) => {
       return { text };

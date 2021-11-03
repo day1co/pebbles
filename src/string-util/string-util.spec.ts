@@ -1,6 +1,93 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
+  describe('normalizePhoneNumber', () => {
+    it('should normalize phone number starting with 010 or 070', () => {
+      expect(StringUtil.normalizePhoneNumber('01012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('010-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('010 1234 5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('07012345678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('070-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('070.1234.5678')).toBe('07012345678');
+    });
+
+    it('should normalize phone number starting with +82 or +082', () => {
+      // 010
+      expect(StringUtil.normalizePhoneNumber('+0821012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+08201012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+082-10-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+082-010-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+082--10 1234 5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+082 010 1234 5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+8201012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+821012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+82-010-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+82-10-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('+82 10 1234 5678')).toBe('01012345678');
+
+      // 070
+      expect(StringUtil.normalizePhoneNumber('+0827012345678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+08207012345678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+082 070 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+082-070-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+082 70 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+082-70-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+82 070 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+82-070-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+827012345678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+8207012345678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+82 70 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('+82-70-1234-5678')).toBe('07012345678');
+    });
+
+    it('should normalize phone number starting with 82 or 082', () => {
+      // 010
+      expect(StringUtil.normalizePhoneNumber('08201012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('0821012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('082 10 1234 5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('082 010 1234 5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('082-10-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('082-010-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('821012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('8201012345678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('82-10-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('82-010-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('82 10 1234 5678')).toBe('01012345678');
+      expect(StringUtil.normalizePhoneNumber('82 010 1234 5678')).toBe('01012345678');
+
+      // 070
+      expect(StringUtil.normalizePhoneNumber('082 70 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('082-70-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('082 070 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('082-070-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('082 70 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('082-70-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('82 070 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('82-070-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('827012345678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('8207012345678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('82 70 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizePhoneNumber('82-70-1234-5678')).toBe('07012345678');
+    });
+
+    it('should normalize phone number even if it does not belong to domestic number type', () => {
+      expect(StringUtil.normalizePhoneNumber('+1-123-456-8900')).toBe('11234568900');
+      expect(StringUtil.normalizePhoneNumber('88123456789')).toBe('88123456789');
+      expect(StringUtil.normalizePhoneNumber('83-1234-5678')).toBe('8312345678');
+      expect(StringUtil.normalizePhoneNumber('+49 1234 56789')).toBe('49123456789');
+    });
+  });
+
+  describe('validatePhoneNumber', () => {
+    it('should validate phone number', () => {
+      expect(StringUtil.validatePhoneNumber('01012345678')).toBe(true);
+      expect(StringUtil.validatePhoneNumber('07012345678')).toBe(true);
+      expect(StringUtil.validatePhoneNumber('1012345678')).toBe(false);
+      expect(StringUtil.validatePhoneNumber('04412345678')).toBe(false);
+      expect(StringUtil.validatePhoneNumber('010123456789')).toBe(false);
+    });
+  });
+
   describe('splitTags', () => {
     it('should return array of tags', () => {
       const str = 'one, two , ,  three , four  ,five six ';
