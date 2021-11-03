@@ -9,6 +9,6 @@ export namespace BooleanUtil {
     if (FALSE_REGEXP.test(boolStr.toLowerCase())) {
       return false;
     }
-    throw new Error(`unable to convert "${boolStr}" to integer type`);
+    throw new Error(`unable to convert "${boolStr}" to boolean type`);
   }
 }
