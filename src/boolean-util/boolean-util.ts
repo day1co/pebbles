@@ -6,9 +6,9 @@ export namespace BooleanUtil {
     if (TRUE_REGEXP.test(boolStr.toLowerCase())) {
       return true;
     }
-    if (FALSE_REGEXP.test(boolStr.toLowerCase())) {
-      return false;
+    if (!FALSE_REGEXP.test(boolStr.toLowerCase())) {
+      throw new Error(`unable to convert "${boolStr}" to boolean type`);
     }
-    throw new Error(`unable to convert "${boolStr}" to boolean type`);
+    return false;
   }
 }
