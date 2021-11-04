@@ -10,7 +10,7 @@ const ONE_MINUTE_IN_SECOND = 60;
 const logger = LoggerFactory.getLogger('common-util:date-util');
 
 export namespace DateUtil {
-  export function toDate(d: DateType): Date {
+  export function parse(d: DateType): Date {
     const originalD = d;
     if (!(d instanceof Date)) {
       d = new Date(d);
@@ -25,7 +25,7 @@ export namespace DateUtil {
 
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
     try {
-      const date = toDate(d);
+      const date = parse(d);
 
       if (opts.year) {
         date.setFullYear(date.getFullYear() + opts.year);
@@ -59,23 +59,23 @@ export namespace DateUtil {
   }
 
   export function beginOfMonth(date: DateType = new Date()): Date {
-    date = toDate(date);
+    date = parse(date);
     return new Date(date.getFullYear(), date.getMonth(), 1);
   }
 
   export function endOfMonth(date: DateType = new Date()): Date {
-    date = toDate(date);
+    date = parse(date);
     return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
   }
 
   export function lastDayOfMonth(date: DateType = new Date()): Date {
-    date = toDate(date);
+    date = parse(date);
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
   export function diff(since: DateType, until: DateType, type: DatePropertyType): number {
-    const sinceDate = toDate(since);
-    const untilDate = toDate(until);
+    const sinceDate = parse(since);
+    const untilDate = parse(until);
 
     if (untilDate < sinceDate) {
       return -diff(until, since, type);
@@ -112,10 +112,10 @@ export namespace DateUtil {
   }
 
   export function minDate(first: DateType, ...rest: DateType[]): Date {
-    let min = toDate(first);
+    let min = parse(first);
 
     for (let item of rest) {
-      item = toDate(item);
+      item = parse(item);
       min = item < min ? item : min;
     }
     return min;
