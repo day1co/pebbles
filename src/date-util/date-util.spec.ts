@@ -4,20 +4,20 @@ describe('DateUtil', () => {
   describe('toDate', () => {
     test('invalid date input throws error', () => {
       expect(() => {
-        DateUtil.toDate('');
+        DateUtil.parse('');
       }).toThrow();
       expect(() => {
-        DateUtil.toDate('abc');
+        DateUtil.parse('abc');
       }).toThrow();
       expect(() => {
-        DateUtil.toDate('3월 9일');
+        DateUtil.parse('3월 9일');
       }).toThrow();
     });
     test('valid date input returns instance of Date', () => {
       const testDate = new Date();
-      expect(DateUtil.toDate(testDate).getTime()).toEqual(testDate.getTime());
-      expect(DateUtil.toDate('2021-01-01T01:01:01Z').getTime()).toBe(new Date('2021-01-01T01:01:01Z').getTime());
-      expect(DateUtil.toDate('2021-10-10').getTime()).toEqual(new Date('2021-10-10').getTime());
+      expect(DateUtil.parse(testDate).getTime()).toEqual(testDate.getTime());
+      expect(DateUtil.parse('2021-01-01T01:01:01Z').getTime()).toBe(new Date('2021-01-01T01:01:01Z').getTime());
+      expect(DateUtil.parse('2021-10-10').getTime()).toEqual(new Date('2021-10-10').getTime());
     });
   });
 
