@@ -88,6 +88,50 @@ describe('StringUtil', () => {
     });
   });
 
+  describe('validateEmail', () => {
+    it('should return fail for invalid email address', () => {
+      const falseEmail_1 = '';
+      const falseEmail_2 = 'test@test';
+      const falseEmail_3 = '@test.com';
+      const falseEmail_4 = 'test@test,com';
+      const falseEmail_5 = 'test@test@test';
+      const falseEmail_6 = '.!#$%&@123123123123.com';
+      const falseEmail_7 = 'test@,!#$%&.com';
+      const falseEmail_8 = '<>@test.com';
+      const falseEmail_9 = 'test @test.com';
+      const falseEmail_10 = 'test@test.c';
+
+      expect(StringUtil.validateEmail(falseEmail_1)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_2)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_3)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_4)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_5)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_6)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_7)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_8)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_9)).toBe(false);
+      expect(StringUtil.validateEmail(falseEmail_10)).toBe(false);
+    });
+
+    it('should return true for valid email address', () => {
+      const trueEmail_1 = 'test@test.com';
+      const trueEmail_2 = 'TEST@TEST.com';
+      const trueEmail_3 = 'test.test@test.com';
+      const trueEmail_4 = 'test_##_!@test123.com';
+      const trueEmail_5 = 'test@123123123.com';
+      const trueEmail_6 = '9393933@131313.com';
+      const trueEmail_7 = '?!☺️/test/☺️!?@test.com';
+
+      expect(StringUtil.validateEmail(trueEmail_1)).toBe(true);
+      expect(StringUtil.validateEmail(trueEmail_2)).toBe(true);
+      expect(StringUtil.validateEmail(trueEmail_3)).toBe(true);
+      expect(StringUtil.validateEmail(trueEmail_4)).toBe(true);
+      expect(StringUtil.validateEmail(trueEmail_5)).toBe(true);
+      expect(StringUtil.validateEmail(trueEmail_6)).toBe(true);
+      expect(StringUtil.validateEmail(trueEmail_7)).toBe(true);
+    });
+  });
+
   describe('splitTags', () => {
     it('should return array of tags', () => {
       const str = 'one, two , ,  three , four  ,five six ';
