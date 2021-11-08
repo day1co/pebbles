@@ -80,11 +80,11 @@ describe('StringUtil', () => {
 
   describe('validatePhoneNumber', () => {
     it('should validate phone number', () => {
-      expect(StringUtil.validatePhoneNumber('01012345678')).toBe(true);
-      expect(StringUtil.validatePhoneNumber('07012345678')).toBe(true);
-      expect(StringUtil.validatePhoneNumber('1012345678')).toBe(false);
-      expect(StringUtil.validatePhoneNumber('04412345678')).toBe(false);
-      expect(StringUtil.validatePhoneNumber('010123456789')).toBe(false);
+      expect(StringUtil.isValidPhoneNumber('01012345678')).toBe(true);
+      expect(StringUtil.isValidPhoneNumber('07012345678')).toBe(true);
+      expect(StringUtil.isValidPhoneNumber('1012345678')).toBe(false);
+      expect(StringUtil.isValidPhoneNumber('04412345678')).toBe(false);
+      expect(StringUtil.isValidPhoneNumber('010123456789')).toBe(false);
     });
   });
 
@@ -101,16 +101,16 @@ describe('StringUtil', () => {
       const falseEmail_9 = 'test @test.com';
       const falseEmail_10 = 'test@test.c';
 
-      expect(StringUtil.validateEmail(falseEmail_1)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_2)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_3)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_4)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_5)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_6)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_7)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_8)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_9)).toBe(false);
-      expect(StringUtil.validateEmail(falseEmail_10)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_1)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_2)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_3)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_4)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_5)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_6)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_7)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_8)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_9)).toBe(false);
+      expect(StringUtil.isValidEmail(falseEmail_10)).toBe(false);
     });
 
     it('should return true for valid email address', () => {
@@ -122,13 +122,13 @@ describe('StringUtil', () => {
       const trueEmail_6 = '9393933@131313.com';
       const trueEmail_7 = '?!☺️/test/☺️!?@test.com';
 
-      expect(StringUtil.validateEmail(trueEmail_1)).toBe(true);
-      expect(StringUtil.validateEmail(trueEmail_2)).toBe(true);
-      expect(StringUtil.validateEmail(trueEmail_3)).toBe(true);
-      expect(StringUtil.validateEmail(trueEmail_4)).toBe(true);
-      expect(StringUtil.validateEmail(trueEmail_5)).toBe(true);
-      expect(StringUtil.validateEmail(trueEmail_6)).toBe(true);
-      expect(StringUtil.validateEmail(trueEmail_7)).toBe(true);
+      expect(StringUtil.isValidEmail(trueEmail_1)).toBe(true);
+      expect(StringUtil.isValidEmail(trueEmail_2)).toBe(true);
+      expect(StringUtil.isValidEmail(trueEmail_3)).toBe(true);
+      expect(StringUtil.isValidEmail(trueEmail_4)).toBe(true);
+      expect(StringUtil.isValidEmail(trueEmail_5)).toBe(true);
+      expect(StringUtil.isValidEmail(trueEmail_6)).toBe(true);
+      expect(StringUtil.isValidEmail(trueEmail_7)).toBe(true);
     });
   });
 
