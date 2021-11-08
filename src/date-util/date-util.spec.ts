@@ -285,6 +285,32 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('format', () => {
+    it('should throw with invalid format string', () => {
+      expect(() => DateUtil.format(new Date(), 'y년 m월 d일')).toThrow();
+      expect(() => DateUtil.format(new Date(), 'yyyy-mm-dd')).toThrow();
+      expect(() => DateUtil.format(new Date(), 'YYYY-MM-DD h')).toThrow();
+      expect(() => DateUtil.format(new Date(), 'YYYY년 MM월 d일')).toThrow();
+    });
+    it('should format date to string with specific format rule', () => {
+      const testDate1 = new Date('2020-01-01 01:01:01:111');
+      expect(DateUtil.format(testDate1, 'YYYY-MM-DD HH:mm:ss')).toEqual('2020-01-01 01:01:01');
+      expect(DateUtil.format(testDate1, 'YYYY-MM-DD HH:mm:ss.SSS')).toEqual('2020-01-01 01:01:01.111');
+      expect(DateUtil.format(testDate1, 'YYYY년 MM월 DD일')).toEqual('2020년 01월 01일');
+      expect(DateUtil.format(testDate1, 'YYYY년 M월 D일 H시 m분 s초')).toEqual('2020년 1월 1일 1시 1분 1초');
+      expect(DateUtil.format(testDate1, 'M/D')).toEqual('1/1');
+      expect(DateUtil.format(testDate1, 'MM월 DD일')).toEqual('01월 01일');
+
+      const testDate2 = new Date('2020-11-11 23:23:23:999');
+      expect(DateUtil.format(testDate2, 'YYYY-MM-DD HH:mm:ss')).toEqual('2020-11-11 23:23:23');
+      expect(DateUtil.format(testDate2, 'YYYY-MM-DD HH:mm:ss.SSS')).toEqual('2020-11-11 23:23:23.999');
+      expect(DateUtil.format(testDate2, 'YYYY년 MM월 DD일')).toEqual('2020년 11월 11일');
+      expect(DateUtil.format(testDate2, 'YYYY년 M월 D일 H시 m분 s초')).toEqual('2020년 11월 11일 23시 23분 23초');
+      expect(DateUtil.format(testDate2, 'M/D')).toEqual('11/11');
+      expect(DateUtil.format(testDate2, 'MM월 DD일')).toEqual('11월 11일');
+    });
+  });
+
   describe('secondsToTimeFormat', () => {
     it('음수를 넣으면 throw가 발생한다', () => {
       expect(() => DateUtil.secondsToTimeFormat(-5)).toThrow();
