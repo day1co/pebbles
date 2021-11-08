@@ -1,7 +1,7 @@
 import { DateUtil } from './date-util';
 
 describe('DateUtil', () => {
-  describe('toDate', () => {
+  describe('parse', () => {
     test('invalid date input throws error', () => {
       expect(() => {
         DateUtil.parse('');
