@@ -207,6 +207,68 @@ export namespace DateUtil {
     return parseByFormat(str, 'YYYYMMDDHHmmssSSS');
   }
 
+  export function format(d: Date, format: string): string {
+    const year = d.getFullYear();
+    const month = d.getMonth() + 1;
+    const day = d.getDate();
+    const hour = d.getHours();
+    const minute = d.getMinutes();
+    const second = d.getSeconds();
+    const millisecond = d.getMilliseconds();
+
+    const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
+
+    const formattedDate = format.replace(FORMAT_RULE_REGEXP, (match) => {
+      switch (match) {
+        case 'YYYY':
+          return `${year}`;
+        case 'YY':
+          return `${year % 100}`;
+
+        case 'MM':
+          return `${month}`.padStart(2, '0');
+        case 'M':
+          return `${month}`;
+
+        case 'DD':
+          return `${day}`.padStart(2, '0');
+        case 'D':
+          return `${day}`;
+
+        case 'HH':
+          return `${hour}`.padStart(2, '0');
+        case 'H':
+          return `${hour}`;
+
+        case 'mm':
+          return `${minute}`.padStart(2, '0');
+        case 'm':
+          return `${minute}`;
+
+        case 'ss':
+          return `${second}`.padStart(2, '0');
+        case 's':
+          return `${second}`;
+
+        case 'SSS':
+          return `${millisecond}`.padStart(3, '0');
+        case 'SS':
+          return `${millisecond}`.padStart(2, '0');
+        case 'S':
+          return `${millisecond}`;
+
+        default:
+          return match;
+      }
+    });
+
+    if (FORMAT_RULE_REGEXP.test(formattedDate)) {
+      throw new Error(`Invalid format: ${formattedDate}`);
+    }
+
+    return formattedDate;
+  }
+
   export function secondsToTimeFormat(seconds: number): string {
     if (seconds < 0) {
       throw new Error('Invalid number');
