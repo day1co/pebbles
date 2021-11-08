@@ -1,6 +1,31 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
+  describe('getNonce', () => {
+    it('should return a random string', () => {
+      const nonce1 = StringUtil.getNonce(8, 16);
+      const nonce2 = StringUtil.getNonce(8, 16);
+      const nonce3 = StringUtil.getNonce(8, 16);
+      const nonce4 = StringUtil.getNonce(10, 36);
+      const nonce5 = StringUtil.getNonce(10, 36);
+      const nonce6 = StringUtil.getNonce(10, 36);
+
+      expect(nonce1).toHaveLength(8);
+      expect(nonce2).toHaveLength(8);
+      expect(nonce3).toHaveLength(8);
+      expect(nonce4).toHaveLength(10);
+      expect(nonce5).toHaveLength(10);
+      expect(nonce6).toHaveLength(10);
+
+      expect(nonce1).not.toEqual(nonce2);
+      expect(nonce1).not.toEqual(nonce3);
+      expect(nonce2).not.toEqual(nonce3);
+      expect(nonce4).not.toEqual(nonce5);
+      expect(nonce4).not.toEqual(nonce6);
+      expect(nonce5).not.toEqual(nonce6);
+    });
+  });
+
   describe('normalizePhoneNumber', () => {
     it('should normalize phone number starting with 010 or 070', () => {
       expect(StringUtil.normalizePhoneNumber('01012345678')).toBe('01012345678');
