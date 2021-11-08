@@ -17,11 +17,11 @@ export namespace StringUtil {
     return trimmedPhoneNumber;
   }
 
-  export function validatePhoneNumber(str: string): boolean {
+  export function isValidPhoneNumber(str: string): boolean {
     return DOMESTIC_PHONE_NUMBER_REGEXP.test(str);
   }
 
-  export function validateEmail(str: string): boolean {
+  export function isValidEmail(str: string): boolean {
     const EMAIL_REGEXP =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return EMAIL_REGEXP.test(str);
