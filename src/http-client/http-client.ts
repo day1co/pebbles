@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { HttpReqConfig, HttpRes } from './http-client.interface';
-import { LoggerFactory } from '../../logger';
-import type { Logger } from '../../logger';
+import { LoggerFactory } from '../logger';
+import type { Logger } from '../logger';
 
 export class HttpClient {
   private readonly logger: Logger;
