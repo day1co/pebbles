@@ -1,4 +1,5 @@
 import { DateUtil } from './date-util';
+import { ISO8601Format } from './date-util.enum';
 
 describe('DateUtil', () => {
   describe('parse', () => {
@@ -308,6 +309,28 @@ describe('DateUtil', () => {
       expect(DateUtil.format(testDate2, 'YYYY년 M월 D일 H시 m분 s초')).toEqual('2020년 11월 11일 23시 23분 23초');
       expect(DateUtil.format(testDate2, 'M/D')).toEqual('11/11');
       expect(DateUtil.format(testDate2, 'MM월 DD일')).toEqual('11월 11일');
+    });
+  });
+
+  describe('formatToISOString', () => {
+    it('should return date to ISO format string', () => {
+      const testDate1 = new Date('2020-01-01 01:01:01:111');
+      expect(DateUtil.formatToISOString(testDate1, ISO8601Format['YYYY-MM-DD'])).toEqual('2020-01-01');
+      expect(DateUtil.formatToISOString(testDate1, ISO8601Format['YYYY-MM-DDTHH:mm:ss.SSS'])).toEqual(
+        '2020-01-01T01:01:01.111'
+      );
+      expect(DateUtil.formatToISOString(testDate1, ISO8601Format['YYYY-MM-DDTHH:mm:ss'])).toEqual(
+        '2020-01-01T01:01:01'
+      );
+
+      const testDate2 = new Date('2020-11-11 23:23:23:999');
+      expect(DateUtil.formatToISOString(testDate2, ISO8601Format['YYYY-MM-DD'])).toEqual('2020-11-11');
+      expect(DateUtil.formatToISOString(testDate2, ISO8601Format['YYYY-MM-DDTHH:mm:ss.SSS'])).toEqual(
+        '2020-11-11T23:23:23.999'
+      );
+      expect(DateUtil.formatToISOString(testDate2, ISO8601Format['YYYY-MM-DDTHH:mm:ss'])).toEqual(
+        '2020-11-11T23:23:23'
+      );
     });
   });
 

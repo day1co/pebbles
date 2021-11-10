@@ -1,4 +1,4 @@
-export enum ISOFormat {
+export enum ISO8601Format {
   'YYYY' = 'YYYY',
   'YYYYMMDD' = 'YYYYMMDD',
   'YYYY-MM' = 'YYYY-MM',
