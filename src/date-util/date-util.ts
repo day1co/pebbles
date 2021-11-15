@@ -1,6 +1,5 @@
 import type { CalcDatetimeOpts } from './date-util.interface';
-import type { DateType, DatePropertyType } from './date-util.type';
-import { ISO8601Format } from './date-util.enum';
+import type { DateType, DatePropertyType, ISO8601FormatType } from './date-util.type';
 import { LoggerFactory } from '../logger';
 
 const ONE_SECOND = 1000;
@@ -270,7 +269,7 @@ export namespace DateUtil {
     return formattedDate;
   }
 
-  export function formatToISOString(d: Date, ISOFormat: ISO8601Format): string {
+  export function formatToISOString(d: Date, ISOFormat: ISO8601FormatType): string {
     return format(d, ISOFormat);
   }
 
