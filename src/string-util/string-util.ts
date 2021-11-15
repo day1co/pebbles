@@ -4,9 +4,9 @@ const DOMESTIC_PHONE_NUMBER_REGEXP = /^0[1,7]\d{9}$/;
 
 export namespace StringUtil {
   export function getNonce(nonceLength: number, nonceEncoding: number): string {
-    const substringStartAt = -Math.abs(nonceLength);
-    return Math.random().toString(nonceEncoding).substr(substringStartAt);
+    return Math.random().toString(nonceEncoding).substr(-nonceLength);
   }
+
   export function normalizePhoneNumber(str: string): string {
     if (DOMESTIC_PHONE_NUMBER_REGEXP.test(str)) {
       return str;
