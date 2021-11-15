@@ -1,6 +1,6 @@
 import { constants } from 'http2';
 
-export enum HttpStateCode {
+export enum HttpState {
   // 100
   CONTINUE = constants.HTTP_STATUS_CONTINUE,
   SWITCHING_PROTOCOLS = constants.HTTP_STATUS_SWITCHING_PROTOCOLS,
