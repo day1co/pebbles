@@ -20,4 +20,8 @@ export namespace ObjectUtil {
       return null;
     }
   }
+
+  export function isNullish(value: unknown): boolean {
+    return value === undefined || value === null;
+  }
 }
