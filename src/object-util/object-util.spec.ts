@@ -27,37 +27,37 @@ describe('ObjectUtil', () => {
     });
   });
   describe('isNullish', () => {
-    it('should return true', async () => {
+    it('should return true', () => {
       const value = null;
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(true);
     });
-    it('should return true', async () => {
+    it('should return true', () => {
       const value = undefined;
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(true);
     });
-    it('should return false', async () => {
+    it('should return false', () => {
       const value = 0;
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(false);
     });
-    it('should return false', async () => {
+    it('should return false', () => {
       const value = false;
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(false);
     });
-    it('should return false', async () => {
+    it('should return false', () => {
       const value = true;
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(false);
     });
-    it('should return false', async () => {
+    it('should return false', () => {
       const value = 1;
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(false);
     });
-    it('should return false', async () => {
+    it('should return false', () => {
       const value = '{"test": 123}';
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(false);
