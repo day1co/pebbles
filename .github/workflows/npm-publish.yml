@@ -1,0 +1,108 @@
+name: util-npm-publish
+concurrency:
+  group: npm-publish-${{github.sha}}
+  cancel-in-progress: false
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - util/**/*
+
+defaults:
+  run:
+    working-directory: util
+    shell: bash
+
+env:
+  PUSH_TOKEN: ${{ secrets.GH_NPM_TOKEN }}
+  PACKAGE_TOKEN: ${{ secrets.GH_NPM_TOKEN }}
+
+jobs:
+  check-pusher:
+    defaults:
+      run:
+        working-directory: .
+    runs-on: ubuntu-latest
+    outputs:
+      PUSH_TOKEN_OWNER: ${{steps.push-token-owner.outputs.PUSH_TOKEN_OWNER}}
+    steps:
+      - run: |
+          PUSH_TOKEN_OWNER=`gh api user | jq -r .login`
+          echo "::set-output name=PUSH_TOKEN_OWNER::$PUSH_TOKEN_OWNER"
+
+          echo "PUSH_TOKEN_OWNER is $PUSH_TOKEN_OWNER"
+          echo "PUSHER is $PUSHER"
+        id: push-token-owner
+        env:
+          GH_TOKEN: ${{ env.PUSH_TOKEN }}
+          PUSHER: ${{ github.event.pusher.name }}
+
+  ci-label-test:
+    needs: check-pusher
+    # 봇이 액션을 일으키는 것을 방지 (푸시한 사람이 토큰 OWNER인 경우 작동하지 않음)
+    if: github.event.pusher.name != needs.check-pusher.outputs.PUSH_TOKEN_OWNER
+    outputs:
+      has_ci_skip_label: ${{contains(fromJSON(steps.PR.outputs.pr).labels.*.name, 'ci-skip')}}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - uses: 8BitJonny/gh-get-current-pr@1.1.0
+        id: PR
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: ci-label-test
+    if: needs.ci-label-test.outputs.has_ci_skip_label == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100 # 최근 100개 커밋에서 pacakge.json 버전변경 확인
+          token: ${{ env.PUSH_TOKEN }}
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@fastcampus'
+
+      - name: Version change check
+        id: version-changed
+        # package.json 파일의 diff를 확보한 후 `+  "version":` 라인을 확인함.
+        # GNU grep의 exit 코드에 따른 Github Actions의 Fail 방지를 위해 무조건 true를 리턴하게 함.
+        run: |
+          VERSION_CHANGED=$(git diff ${{ github.event.before }}..${{ github.event.after }} package.json | (grep -c -E "^\+\s+\"version\"" || true) )
+          echo "::set-output name=version_changed::$VERSION_CHANGED"
+
+      - name: npm version patch when versionChanged eq 0
+        if: ${{ steps.version-changed.outputs.version_changed == 0 }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          npm --no-git-tag-version version patch
+          PACKAGE_NAME=$(jq -r .name package.json)
+          PACKAGE_VERSION=$(jq -r .version package.json)
+
+          git commit -m "$PACKAGE_NAME: bump up to $PACKAGE_VERSION" package.json
+          git pull --rebase
+          git push origin
+      - name: publish
+        env:
+          NODE_AUTH_TOKEN: ${{ env.PACKAGE_TOKEN }}
+        run: |
+          (cd ../; npm ci)
+          npm publish
+          ../.github/npm-publish-slack.sh
