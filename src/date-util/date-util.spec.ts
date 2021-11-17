@@ -305,11 +305,11 @@ describe('DateUtil', () => {
 
     it('should format return value of setUTCOffset() according to its UTC offset', () => {
       const testDate1 = DateUtil.setUTCOffset(new Date('2000-01-01T00:00:00Z'), 540);
-      expect(DateUtil.format(testDate1, 'YYYY-MM-DDTHH:mm:ss')).toBe('2000-01-01T09:00:00');
+      expect(DateUtil.format(testDate1)).toBe('2000-01-01T09:00:00+09:00');
       expect(DateUtil.format(testDate1, 'M월 D일 H시 m분')).toBe('1월 1일 9시 0분');
 
       const testDate2 = DateUtil.setUTCOffset(new Date('2000-01-01T09:00:00+09:00'), 540);
-      expect(DateUtil.format(testDate2, 'YYYY-MM-DDTHH:mm:ss')).toBe('2000-01-01T09:00:00');
+      expect(DateUtil.format(testDate2)).toBe('2000-01-01T09:00:00+09:00');
       expect(DateUtil.format(testDate2, 'M월 D일 H시 m분')).toBe('1월 1일 9시 0분');
     });
   });
