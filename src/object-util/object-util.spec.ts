@@ -26,4 +26,16 @@ describe('ObjectUtil', () => {
       expect(result).toBeNull();
     });
   });
+  describe('isNullish', () => {
+    it('should return true', async () => {
+      const value = null;
+      const result = ObjectUtil.isNullish(value);
+      expect(result).toBe(true);
+    });
+    it('should return false', async () => {
+      const value = '{"test": 123}';
+      const result = ObjectUtil.isNullish(value);
+      expect(result).toBe(false);
+    })
+  });
 });
