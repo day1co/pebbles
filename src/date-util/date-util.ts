@@ -208,6 +208,18 @@ export namespace DateUtil {
   }
 
   export function format(d: Date, format: string): string {
+    const year = d.getUTCFullYear();
+    const month = d.getUTCMonth() + 1;
+    const day = d.getUTCDate();
+    const hour = d.getUTCHours();
+    const minute = d.getUTCMinutes();
+    const second = d.getUTCSeconds();
+    const millisecond = d.getUTCMilliseconds();
+
+    return replaceFormatWithRegExp(format, year, month, day, hour, minute, second, millisecond);
+  }
+
+  export function formatInLocalTimeZone(d: Date, format: string): string {
     const year = d.getFullYear();
     const month = d.getMonth() + 1;
     const day = d.getDate();
@@ -216,57 +228,7 @@ export namespace DateUtil {
     const second = d.getSeconds();
     const millisecond = d.getMilliseconds();
 
-    const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
-
-    const formattedDate = format.replace(FORMAT_RULE_REGEXP, (match) => {
-      switch (match) {
-        case 'YYYY':
-          return `${year}`;
-        case 'YY':
-          return `${year % 100}`;
-
-        case 'MM':
-          return `${month}`.padStart(2, '0');
-        case 'M':
-          return `${month}`;
-
-        case 'DD':
-          return `${day}`.padStart(2, '0');
-        case 'D':
-          return `${day}`;
-
-        case 'HH':
-          return `${hour}`.padStart(2, '0');
-        case 'H':
-          return `${hour}`;
-
-        case 'mm':
-          return `${minute}`.padStart(2, '0');
-        case 'm':
-          return `${minute}`;
-
-        case 'ss':
-          return `${second}`.padStart(2, '0');
-        case 's':
-          return `${second}`;
-
-        case 'SSS':
-          return `${millisecond}`.padStart(3, '0');
-        case 'SS':
-          return `${millisecond}`.padStart(2, '0');
-        case 'S':
-          return `${millisecond}`;
-
-        default:
-          return match;
-      }
-    });
-
-    if (FORMAT_RULE_REGEXP.test(formattedDate)) {
-      throw new Error(`Invalid format: ${formattedDate}`);
-    }
-
-    return formattedDate;
+    return replaceFormatWithRegExp(format, year, month, day, hour, minute, second, millisecond);
   }
 
   export function formatToISOString(d: Date, ISOFormat: ISO8601FormatType): string {
@@ -309,4 +271,67 @@ function diffMonth(since: Date, until: Date): number {
   }
 
   return diffMonth;
+}
+
+function replaceFormatWithRegExp(
+  format: string,
+  year?: number,
+  month?: number,
+  day?: number,
+  hour?: number,
+  minute?: number,
+  second?: number,
+  millisecond?: number
+): string {
+  const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
+
+  const formattedDate = format.replace(FORMAT_RULE_REGEXP, (match) => {
+    switch (match) {
+      case 'YYYY':
+        return `${year}`;
+      case 'YY':
+        return `${year}`.padStart(2, '0');
+
+      case 'MM':
+        return `${month}`.padStart(2, '0');
+      case 'M':
+        return `${month}`;
+
+      case 'DD':
+        return `${day}`.padStart(2, '0');
+      case 'D':
+        return `${day}`;
+
+      case 'HH':
+        return `${hour}`.padStart(2, '0');
+      case 'H':
+        return `${hour}`;
+
+      case 'mm':
+        return `${minute}`.padStart(2, '0');
+      case 'm':
+        return `${minute}`;
+
+      case 'ss':
+        return `${second}`.padStart(2, '0');
+      case 's':
+        return `${second}`;
+
+      case 'SSS':
+        return `${millisecond}`.padStart(3, '0');
+      case 'SS':
+        return `${millisecond}`.padStart(2, '0');
+      case 'S':
+        return `${millisecond}`;
+
+      default:
+        return match;
+    }
+  });
+
+  if (FORMAT_RULE_REGEXP.test(formattedDate)) {
+    throw new Error(`Invalid format: ${formattedDate}`);
+  }
+
+  return formattedDate;
 }

@@ -292,8 +292,9 @@ describe('DateUtil', () => {
       expect(() => DateUtil.format(new Date(), 'YYYY-MM-DD h')).toThrow();
       expect(() => DateUtil.format(new Date(), 'YYYY년 MM월 d일')).toThrow();
     });
-    it('should format date to string with specific format rule', () => {
-      const testDate1 = new Date('2020-01-01 01:01:01:111');
+
+    it('should format date to UTC string with specific format rule', () => {
+      const testDate1 = new Date('2020-01-01 01:01:01:111Z');
       expect(DateUtil.format(testDate1, 'YYYY-MM-DD HH:mm:ss')).toEqual('2020-01-01 01:01:01');
       expect(DateUtil.format(testDate1, 'YYYY-MM-DD HH:mm:ss.SSS')).toEqual('2020-01-01 01:01:01.111');
       expect(DateUtil.format(testDate1, 'YYYY년 MM월 DD일')).toEqual('2020년 01월 01일');
@@ -301,7 +302,7 @@ describe('DateUtil', () => {
       expect(DateUtil.format(testDate1, 'M/D')).toEqual('1/1');
       expect(DateUtil.format(testDate1, 'MM월 DD일')).toEqual('01월 01일');
 
-      const testDate2 = new Date('2020-11-11 23:23:23:999');
+      const testDate2 = new Date('2020-11-11 23:23:23:999Z');
       expect(DateUtil.format(testDate2, 'YYYY-MM-DD HH:mm:ss')).toEqual('2020-11-11 23:23:23');
       expect(DateUtil.format(testDate2, 'YYYY-MM-DD HH:mm:ss.SSS')).toEqual('2020-11-11 23:23:23.999');
       expect(DateUtil.format(testDate2, 'YYYY년 MM월 DD일')).toEqual('2020년 11월 11일');
@@ -309,16 +310,42 @@ describe('DateUtil', () => {
       expect(DateUtil.format(testDate2, 'M/D')).toEqual('11/11');
       expect(DateUtil.format(testDate2, 'MM월 DD일')).toEqual('11월 11일');
     });
+
+    it('should format local date to UTC string', () => {
+      const testDate1 = new Date('2020-01-01 00:00:00:000+06:00');
+      expect(DateUtil.format(testDate1, 'YYYY-MM-DD HH:mm:ss')).toEqual('2019-12-31 18:00:00');
+
+      const testDate2 = new Date('2020-01-01 09:00:00:000+09:00');
+      expect(DateUtil.format(testDate2, 'YYYY-MM-DD HH:mm:ss')).toEqual('2020-01-01 00:00:00');
+
+      const testDate3 = new Date('2020-11-30 20:00:00:000-10:00');
+      expect(DateUtil.format(testDate3, 'YYYY-MM-DD HH:mm:ss')).toEqual('2020-12-01 06:00:00');
+    });
+  });
+
+  describe('formatInLocalTimeZone', () => {
+    it('', () => {
+      const testDate1 = new Date('2020-01-01 00:00:00:000+06:00');
+      const localHour1 = testDate1.getHours();
+      const localMinute1 = testDate1.getMinutes();
+
+      expect(DateUtil.formatInLocalTimeZone(testDate1, 'H:m')).toEqual(`${localHour1}:${localMinute1}`);
+
+      const testDate2 = new Date('2020-01-01 09:00:00:000+09:00');
+      const localHour2 = testDate2.getHours();
+      const localMinute2 = testDate2.getMinutes();
+      expect(DateUtil.formatInLocalTimeZone(testDate2, 'H:m')).toEqual(`${localHour2}:${localMinute2}`);
+    });
   });
 
   describe('formatToISOString', () => {
     it('should return date to ISO format string', () => {
-      const testDate1 = new Date('2020-01-01 01:01:01:111');
+      const testDate1 = new Date('2020-01-01 01:01:01:111Z');
       expect(DateUtil.formatToISOString(testDate1, 'YYYY-MM-DD')).toEqual('2020-01-01');
       expect(DateUtil.formatToISOString(testDate1, 'YYYY-MM-DDTHH:mm:ss.SSS')).toEqual('2020-01-01T01:01:01.111');
       expect(DateUtil.formatToISOString(testDate1, 'YYYY-MM-DDTHH:mm:ss')).toEqual('2020-01-01T01:01:01');
 
-      const testDate2 = new Date('2020-11-11 23:23:23:999');
+      const testDate2 = new Date('2020-11-11 23:23:23:999Z');
       expect(DateUtil.formatToISOString(testDate2, 'YYYY-MM-DD')).toEqual('2020-11-11');
       expect(DateUtil.formatToISOString(testDate2, 'YYYY-MM-DDTHH:mm:ss.SSS')).toEqual('2020-11-11T23:23:23.999');
       expect(DateUtil.formatToISOString(testDate2, 'YYYY-MM-DDTHH:mm:ss')).toEqual('2020-11-11T23:23:23');
