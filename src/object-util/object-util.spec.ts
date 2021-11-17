@@ -36,6 +36,6 @@ describe('ObjectUtil', () => {
       const value = '{"test": 123}';
       const result = ObjectUtil.isNullish(value);
       expect(result).toBe(false);
-    })
+    });
   });
 });
