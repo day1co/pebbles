@@ -269,6 +269,14 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('setUTCOffset', () => {
+    it('should return date with UTCOffsetMin', () => {
+      const testDate1 = new Date('2020-01-01T01:01:01Z');
+      expect(DateUtil.setUTCOffset(testDate1, 180)).toHaveProperty('UTCOffsetMin');
+      expect(DateUtil.setUTCOffset(testDate1, 180)).toBeInstanceOf(Date);
+    });
+  });
+
   describe('format', () => {
     it('should throw with invalid format string', () => {
       expect(() => DateUtil.format(new Date(), 'y년 m월 d일')).toThrow();
@@ -276,6 +284,7 @@ describe('DateUtil', () => {
       expect(() => DateUtil.format(new Date(), 'YYYY-MM-DD h')).toThrow();
       expect(() => DateUtil.format(new Date(), 'YYYY년 MM월 d일')).toThrow();
     });
+
     it('should format date to string with specific format rule', () => {
       const testDate1 = new Date('2020-01-01 01:01:01:111');
       expect(DateUtil.format(testDate1, 'YYYY-MM-DD HH:mm:ss')).toEqual('2020-01-01 01:01:01');
@@ -292,6 +301,16 @@ describe('DateUtil', () => {
       expect(DateUtil.format(testDate2, 'YYYY년 M월 D일 H시 m분 s초')).toEqual('2020년 11월 11일 23시 23분 23초');
       expect(DateUtil.format(testDate2, 'M/D')).toEqual('11/11');
       expect(DateUtil.format(testDate2, 'MM월 DD일')).toEqual('11월 11일');
+    });
+
+    it('should format return value of setUTCOffset() according to its UTC offset', () => {
+      const testDate1 = DateUtil.setUTCOffset(new Date('2000-01-01T00:00:00Z'), 540);
+      expect(DateUtil.format(testDate1, 'YYYY-MM-DDTHH:mm:ss')).toBe('2000-01-01T09:00:00');
+      expect(DateUtil.format(testDate1, 'M월 D일 H시 m분')).toBe('1월 1일 9시 0분');
+
+      const testDate2 = DateUtil.setUTCOffset(new Date('2000-01-01T09:00:00+09:00'), 540);
+      expect(DateUtil.format(testDate2, 'YYYY-MM-DDTHH:mm:ss')).toBe('2000-01-01T09:00:00');
+      expect(DateUtil.format(testDate2, 'M월 D일 H시 m분')).toBe('1월 1일 9시 0분');
     });
   });
 
