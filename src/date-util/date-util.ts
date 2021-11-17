@@ -7,6 +7,8 @@ const ONE_DAY_IN_SECOND = 60 * 60 * 24;
 const ONE_HOUR_IN_SECOND = 60 * 60;
 const ONE_MINUTE_IN_SECOND = 60;
 
+const DEFAULT_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss+';
+
 const logger = LoggerFactory.getLogger('pebbles:date-util');
 
 export namespace DateUtil {
@@ -215,7 +217,7 @@ export namespace DateUtil {
     return UTCDate;
   }
 
-  export function format(d: Date | Day1D, format: string): string {
+  export function format(d: Date | Day1D, format = DEFAULT_DATE_FORMAT): string {
     let formatResult;
 
     if (d instanceof Day1D && d.UTCOffsetMin) {
@@ -229,6 +231,9 @@ export namespace DateUtil {
         d.getUTCSeconds(),
         d.getUTCMilliseconds()
       );
+      if (format === DEFAULT_DATE_FORMAT) {
+        formatResult += formatGMTOffset(d.UTCOffsetMin);
+      }
     } else {
       formatResult = replaceDateFormat(
         format,
@@ -240,6 +245,9 @@ export namespace DateUtil {
         d.getSeconds(),
         d.getMilliseconds()
       );
+      if (format === DEFAULT_DATE_FORMAT) {
+        formatResult += formatGMTOffset(-d.getTimezoneOffset());
+      }
     }
     return formatResult;
   }
@@ -347,6 +355,10 @@ function replaceDateFormat(
   }
 
   return formattedDate;
+}
+
+function formatGMTOffset(min: number) {
+  return replaceDateFormat('HH:mm', 0, 0, 0, min / 60, min % 60, 0, 0);
 }
 
 function isValidDate(d: Date): boolean {
