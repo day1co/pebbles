@@ -13,7 +13,6 @@
     "clean": "rimraf ./dist ./node_modules",
     "lint": "eslint .",
     "prebuild": "npm run lint",
-    "prepublishOnly": "npm run build",
     "test": "jest --detectOpenHandles --forceExit ./src"
   },
   "type": "module",
