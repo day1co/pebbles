@@ -207,66 +207,41 @@ export namespace DateUtil {
     return parseByFormat(str, 'YYYYMMDDHHmmssSSS');
   }
 
-  export function format(d: Date, format: string): string {
-    const year = d.getFullYear();
-    const month = d.getMonth() + 1;
-    const day = d.getDate();
-    const hour = d.getHours();
-    const minute = d.getMinutes();
-    const second = d.getSeconds();
-    const millisecond = d.getMilliseconds();
+  export function setUTCOffset(d: DateType, offsetMin: number): Date {
+    const UTCDate = new Day1D(getUTCTime(d));
 
-    const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
+    UTCDate.setTime(UTCDate.getTime() + offsetMin * ONE_MINUTE_IN_SECOND * ONE_SECOND);
+    UTCDate.UTCOffsetMin = offsetMin;
+    return UTCDate;
+  }
 
-    const formattedDate = format.replace(FORMAT_RULE_REGEXP, (match) => {
-      switch (match) {
-        case 'YYYY':
-          return `${year}`;
-        case 'YY':
-          return `${year % 100}`;
+  export function format(d: Date | Day1D, format: string): string {
+    let formatResult;
 
-        case 'MM':
-          return `${month}`.padStart(2, '0');
-        case 'M':
-          return `${month}`;
-
-        case 'DD':
-          return `${day}`.padStart(2, '0');
-        case 'D':
-          return `${day}`;
-
-        case 'HH':
-          return `${hour}`.padStart(2, '0');
-        case 'H':
-          return `${hour}`;
-
-        case 'mm':
-          return `${minute}`.padStart(2, '0');
-        case 'm':
-          return `${minute}`;
-
-        case 'ss':
-          return `${second}`.padStart(2, '0');
-        case 's':
-          return `${second}`;
-
-        case 'SSS':
-          return `${millisecond}`.padStart(3, '0');
-        case 'SS':
-          return `${millisecond}`.padStart(2, '0');
-        case 'S':
-          return `${millisecond}`;
-
-        default:
-          return match;
-      }
-    });
-
-    if (FORMAT_RULE_REGEXP.test(formattedDate)) {
-      throw new Error(`Invalid format: ${formattedDate}`);
+    if (d instanceof Day1D && d.UTCOffsetMin) {
+      formatResult = replaceDateFormat(
+        format,
+        d.getUTCFullYear(),
+        d.getUTCMonth() + 1,
+        d.getUTCDate(),
+        d.getUTCHours(),
+        d.getUTCMinutes(),
+        d.getUTCSeconds(),
+        d.getUTCMilliseconds()
+      );
+    } else {
+      formatResult = replaceDateFormat(
+        format,
+        d.getFullYear(),
+        d.getMonth() + 1,
+        d.getDate(),
+        d.getHours(),
+        d.getMinutes(),
+        d.getSeconds(),
+        d.getMilliseconds()
+      );
     }
-
-    return formattedDate;
+    return formatResult;
   }
 
   export function formatToISOString(d: Date, ISOFormat: ISO8601FormatType): string {
@@ -287,6 +262,91 @@ export namespace DateUtil {
     const ss = (seconds % 60).toString().padStart(2, '0');
     return `${hh}:${mm}:${ss}`;
   }
+}
+
+class Day1D extends Date {
+  public UTCOffsetMin: number | undefined;
+
+  constructor(d: DateType) {
+    super(d);
+  }
+}
+
+function getUTCTime(d: DateType): number {
+  if (!(d instanceof Date)) {
+    d = new Date(d);
+  }
+  return Date.UTC(
+    d.getUTCFullYear(),
+    d.getUTCMonth(),
+    d.getUTCDate(),
+    d.getUTCHours(),
+    d.getUTCMinutes(),
+    d.getUTCMilliseconds()
+  );
+}
+
+function replaceDateFormat(
+  format: string,
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+  second: number,
+  millisecond: number
+) {
+  const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
+
+  const formattedDate = format.replace(FORMAT_RULE_REGEXP, (match) => {
+    switch (match) {
+      case 'YYYY':
+        return `${year}`;
+      case 'YY':
+        return `${year}`.padStart(2, '0');
+
+      case 'MM':
+        return `${month}`.padStart(2, '0');
+      case 'M':
+        return `${month}`;
+
+      case 'DD':
+        return `${day}`.padStart(2, '0');
+      case 'D':
+        return `${day}`;
+
+      case 'HH':
+        return `${hour}`.padStart(2, '0');
+      case 'H':
+        return `${hour}`;
+
+      case 'mm':
+        return `${minute}`.padStart(2, '0');
+      case 'm':
+        return `${minute}`;
+
+      case 'ss':
+        return `${second}`.padStart(2, '0');
+      case 's':
+        return `${second}`;
+
+      case 'SSS':
+        return `${millisecond}`.padStart(3, '0');
+      case 'SS':
+        return `${millisecond}`.padStart(2, '0');
+      case 'S':
+        return `${millisecond}`;
+
+      default:
+        return match;
+    }
+  });
+
+  if (FORMAT_RULE_REGEXP.test(formattedDate)) {
+    throw new Error(`Invalid format: ${formattedDate}`);
+  }
+
+  return formattedDate;
 }
 
 function isValidDate(d: Date): boolean {
