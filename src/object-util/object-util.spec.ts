@@ -39,4 +39,32 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isNullish('{"test": 123}')).toBe(false);
     });
   });
+
+  describe('isEmpty', () => {
+    it('should return true', async () => {
+      expect(ObjectUtil.isEmpty(null)).toBe(true);
+      expect(ObjectUtil.isEmpty(undefined)).toBe(true);
+      expect(ObjectUtil.isEmpty(0)).toBe(true);
+      expect(ObjectUtil.isEmpty(1)).toBe(true);
+      expect(ObjectUtil.isEmpty([])).toBe(true);
+      expect(ObjectUtil.isEmpty({})).toBe(true);
+      expect(ObjectUtil.isEmpty('')).toBe(true);
+      expect(ObjectUtil.isEmpty(new Set())).toBe(true);
+      expect(ObjectUtil.isEmpty(new Set([]))).toBe(true);
+      expect(ObjectUtil.isEmpty(new Map())).toBe(true);
+      expect(ObjectUtil.isEmpty(Buffer.alloc(0))).toBe(true);
+      expect(ObjectUtil.isEmpty(new Date('2021-10-10'))).toBe(true);
+    });
+    it('should return false', async () => {
+      expect(ObjectUtil.isEmpty(['foo'])).toBe(false);
+      expect(ObjectUtil.isEmpty({ length: 0 })).toBe(false);
+      expect(ObjectUtil.isEmpty({ 1: 0 })).toBe(false);
+      expect(ObjectUtil.isEmpty({ foo: { bar: 'baz' } })).toBe(false);
+      expect(ObjectUtil.isEmpty('foo')).toBe(false);
+      expect(ObjectUtil.isEmpty(' ')).toBe(false);
+      expect(ObjectUtil.isEmpty(new Set([1, 2, 3, 'foo', {}]))).toBe(false);
+      expect(ObjectUtil.isEmpty(new Map([['foo', 1]]))).toBe(false);
+      expect(ObjectUtil.isEmpty(Buffer.alloc(1))).toBe(false);
+    });
+  });
 });
