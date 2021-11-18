@@ -24,4 +24,16 @@ export namespace ObjectUtil {
   export function isNullish(value: unknown): boolean {
     return value === undefined || value === null;
   }
+
+  export function isEmpty(value: unknown): boolean {
+    if (value instanceof Set || value instanceof Map) {
+      return !value.size;
+    }
+
+    if (typeof value === 'string' || value instanceof Object || value instanceof Buffer) {
+      return !Object.keys(value).length;
+    }
+
+    return true;
+  }
 }
