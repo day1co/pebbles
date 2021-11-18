@@ -2,16 +2,13 @@ categories:
   - title: 'Pebbles'
   - title: '🏢 New Features'
     labels:
-      - 'feature'
-      - 'admin'
+      - 'enhancement'
   - title: '🐛 Bug Fixes'
     labels:
       - 'bug'
-      - 'fix'
   - title: '🧰 Maintenance'
     labels:
-      - 'misc'
-      - 'chore'
+      - 'maintenance'
 exclude-labels:
   - 'skip-changelog'
 template: |

@@ -8,11 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.pull_request.labels.*.name), 'ci-skip')"
     timeout-minutes: 10
 
     strategy:
       matrix:
         node-version: [16.x]
+
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules
@@ -31,20 +33,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Make base folder
-        run: |
-          cd /
-          sudo mkdir -p /fc/log
+      - name: Prepare dot npmrc for private registry
+        run: echo //npm.pkg.github.com/:_authToken=${{ secrets.GH_NPM_TOKEN }} >> ~/.npmrc
       - name: Bootstrap
+        if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-      - name: Lint Check
+      - name: Lint Test
         run: npm run lint
         env:
           NODE_ENV: dev
           CI: true
-      - name: Test Code Check
+      - name: Pebbles Test
         run: npm run test
         env:
           NODE_ENV: test
