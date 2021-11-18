@@ -1,2 +1,5 @@
-enhancement: ['feature/*', 'feat/*', 'feature:*', '*/refactoring*']
-bug: ['fix/*', 'fix:*']
+enhancement: ['feat/*']
+bug: ['fix/*']
+maintenance: ['refactor/*']
+documentation: ['docs/*']
+workflow: ['workflow/*']
