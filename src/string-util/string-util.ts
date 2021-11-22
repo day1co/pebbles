@@ -1,8 +1,63 @@
 import type { Tag } from './string-util.interface';
+import type { TemplateViewContent } from './string-util.type';
 
 const DOMESTIC_PHONE_NUMBER_REGEXP = /^0[1,7]\d{9}$/;
 
 export namespace StringUtil {
+  export function renderTemplate(
+    template: string,
+    view: Record<string, TemplateViewContent>,
+    partial?: Record<string, TemplateViewContent>
+  ): string {
+    const TEMPLATE_SECTION_REGEXP = /{{#([^\s]*)}}([\s\S]*?){{\/\1}}/g;
+    const TEMPLATE_UNESCAPE_HTML_TAG_REGEXP = /{{{([^\s]*)}}}/g;
+    const TEMPLATE_ESCAPE_HTML_TAG_REGEXP = /{{([^\s]*)}}/g;
+    const PARTIAL_TAG_REGEXP = /{{> ([^\s]*)}}/g;
+
+    return template
+      .replace(TEMPLATE_SECTION_REGEXP, (match: string, sectionKey: string): string => {
+        const sectionStartTag = `{{#${sectionKey}}}`;
+        const sectionEndTag = `{{/${sectionKey}}}`;
+
+        const sectionStartTagIndex = template.indexOf(sectionStartTag) + sectionStartTag.length;
+        const sectionEndTagIndex = template.indexOf(sectionEndTag);
+        const sectionTag = template.substring(sectionStartTagIndex, sectionEndTagIndex);
+
+        const sectionTagMatch = sectionTag.match(TEMPLATE_ESCAPE_HTML_TAG_REGEXP);
+
+        // sectionTag가 약속된 {{}} 형태가 아니라면 section 전체 빈 string으로 return
+        if (!sectionTagMatch) {
+          return '';
+        }
+
+        const tagKey = sectionTagMatch[0].slice(2, -2);
+        const _view = view as Record<string, Exclude<TemplateViewContent, string>>;
+
+        const tagList = _view[sectionKey].map((tag: Record<string, string>) => {
+          return tag[tagKey];
+        });
+
+        return tagList.reduce((result: string, tag: string) => {
+          return result + sectionTag.replace(TEMPLATE_ESCAPE_HTML_TAG_REGEXP, tag);
+        }, '');
+      })
+      .replace(TEMPLATE_UNESCAPE_HTML_TAG_REGEXP, (match: string, key: string): string => {
+        const value = view[key] as string;
+        return value === undefined ? '' : value;
+      })
+      .replace(TEMPLATE_ESCAPE_HTML_TAG_REGEXP, (match: string, key: string): string => {
+        const value = view[key] as string;
+        return value === undefined ? '' : escapeHTML(value);
+      })
+      .replace(PARTIAL_TAG_REGEXP, (match: string, key: string): string => {
+        if (!partial) {
+          return '';
+        }
+        const value = partial[key] as string;
+        return value === undefined ? '' : value;
+      });
+  }
+
   export function normalizePhoneNumber(str: string): string {
     if (DOMESTIC_PHONE_NUMBER_REGEXP.test(str)) {
       return str;
@@ -68,6 +123,16 @@ export namespace StringUtil {
     const trimmedText = substringByByteInEUCKR(textToBeTrimmed, maxByteLength - minByteLength);
     return fullText.replace(textToBeTrimmed, trimmedText + '...');
   }
+}
+
+function escapeHTML(template: string): string {
+  return template
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace(/ /g, '&nbsp;');
 }
 
 function getCharacterByteInEUCKR(character: string): number {

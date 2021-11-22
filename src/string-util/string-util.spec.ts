@@ -1,6 +1,49 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
+  describe('renderTemplate', () => {
+    it('should render a template with double brackets', () => {
+      const testTemplate1 = 'Hello {{name}}!';
+      const testTemplate2 = '[{{site}}] 가입을 환영합니다 {{name}}님!';
+
+      expect(StringUtil.renderTemplate(testTemplate1, { name: 'World' })).toEqual('Hello World!');
+      expect(StringUtil.renderTemplate(testTemplate1, { name: 'World', foo: 'bar' })).toEqual('Hello World!');
+      expect(StringUtil.renderTemplate(testTemplate2, { site: '콜로소', name: '아무개' })).toEqual(
+        '[콜로소] 가입을 환영합니다 아무개님!'
+      );
+    });
+
+    it('should render a template with triple brackets as HTML tag', () => {
+      const testTemplate = '{{{test}}} 👈🏻 이건 HTML tag고, {{test}} 👈🏻 이건 이스케이프된 문자입니다';
+      expect(StringUtil.renderTemplate(testTemplate, { test: '<h1>Hello</h1>' })).toEqual(
+        '<h1>Hello</h1> 👈🏻 이건 HTML tag고, &lt;h1&gt;Hello&lt;/h1&gt; 👈🏻 이건 이스케이프된 문자입니다'
+      );
+    });
+
+    it('should render a template section', () => {
+      const testTemplate1 = '{{#courses}}<b>{{title}}</b>{{/courses}}';
+      const view1 = {
+        courses: [{ title: '엑셀' }, { title: '자바' }, { title: '도커' }],
+      };
+
+      const testTemplate2 = '{{#nameList}}{{name}} {{/nameList}}';
+      const view2 = {
+        nameList: [{ name: 'FOO' }, { name: 'BAR' }, { name: 'BAZ' }],
+      };
+
+      expect(StringUtil.renderTemplate(testTemplate1, view1)).toEqual('<b>엑셀</b><b>자바</b><b>도커</b>');
+      expect(StringUtil.renderTemplate(testTemplate2, view2)).toEqual('FOO BAR BAZ ');
+    });
+
+    it('should render a template with partial', () => {
+      const template = '[문자테스트] 안내문자입니다 {{> partial}}';
+      const partial = { partial: '문의사항은 아래링크로' };
+      expect(StringUtil.renderTemplate(template, {}, partial)).toEqual(
+        '[문자테스트] 안내문자입니다 문의사항은 아래링크로'
+      );
+    });
+  });
+
   describe('normalizePhoneNumber', () => {
     it('should normalize phone number starting with 010 or 070', () => {
       expect(StringUtil.normalizePhoneNumber('01012345678')).toBe('01012345678');
