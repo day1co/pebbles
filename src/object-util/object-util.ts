@@ -30,7 +30,7 @@ export namespace ObjectUtil {
       return !value.size;
     }
 
-    if (typeof value === 'string' || value instanceof Object) {
+    if (typeof value === 'string' || value instanceof Object || value instanceof Buffer) {
       return !Object.keys(value).length;
     }
 
