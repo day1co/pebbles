@@ -1,6 +1,6 @@
 import { LoggerFactory } from '../logger';
 
-const logger = LoggerFactory.getLogger('common-util:object-util');
+const logger = LoggerFactory.getLogger('pebbles:object-util');
 
 export namespace ObjectUtil {
   export function serialize(obj: Record<string, unknown>): string | null {
@@ -30,7 +30,7 @@ export namespace ObjectUtil {
       return !value.size;
     }
 
-    if (typeof value === 'string' || value instanceof Object || value instanceof Buffer) {
+    if (typeof value === 'string' || value instanceof Object) {
       return !Object.keys(value).length;
     }
 
