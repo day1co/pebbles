@@ -8,7 +8,7 @@ export class HttpClient {
   private _baseUrl = '';
 
   constructor() {
-    this.logger = LoggerFactory.getLogger('util:http-client');
+    this.logger = LoggerFactory.getLogger('pebbles:http-client');
   }
 
   get baseUrl(): string {

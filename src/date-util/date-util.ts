@@ -7,7 +7,7 @@ const ONE_DAY_IN_SECOND = 60 * 60 * 24;
 const ONE_HOUR_IN_SECOND = 60 * 60;
 const ONE_MINUTE_IN_SECOND = 60;
 
-const logger = LoggerFactory.getLogger('common-util:date-util');
+const logger = LoggerFactory.getLogger('pebbles:date-util');
 
 export namespace DateUtil {
   export function parse(d: DateType): Date {
