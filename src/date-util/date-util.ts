@@ -210,11 +210,11 @@ export namespace DateUtil {
     return parseByFormat(str, 'YYYYMMDDHHmmssSSS');
   }
 
-  export function setUTCOffset(d: DateType, offsetMin: number): Date {
+  export function setUTCOffset(d: DateType, offsetMinute: number): Date {
     const UTCDate = new Day1D(getUTCTime(d));
 
-    UTCDate.setTime(UTCDate.getTime() + offsetMin * ONE_MINUTE_IN_SECOND * ONE_SECOND);
-    UTCDate.UTCOffsetMin = offsetMin;
+    UTCDate.setTime(UTCDate.getTime() + offsetMinute * ONE_MINUTE_IN_SECOND * ONE_SECOND);
+    UTCDate.UTCOffsetMinute = offsetMinute;
     return UTCDate;
   }
 
@@ -241,10 +241,10 @@ export namespace DateUtil {
       millisecond: d.getUTCMilliseconds(),
     };
 
-    if (d instanceof Day1D && d.UTCOffsetMin) {
+    if (d instanceof Day1D && d.UTCOffsetMinute) {
       formatResult = replaceDateFormat(format, dateUTCInfo);
       if (format === DEFAULT_DATE_FORMAT) {
-        formatResult = formatGMTOffset(formatResult, d.UTCOffsetMin);
+        formatResult = formatGMTOffset(formatResult, d.UTCOffsetMinute);
       }
     } else {
       formatResult = replaceDateFormat(format, dateInfo);
@@ -276,7 +276,7 @@ export namespace DateUtil {
 }
 
 class Day1D extends Date {
-  public UTCOffsetMin: number | undefined;
+  public UTCOffsetMinute: number | undefined;
 
   constructor(d: DateType) {
     super(d);
@@ -351,14 +351,14 @@ function replaceDateFormat(format: string, dateInfo: DateInfo) {
   return formattedDate;
 }
 
-function formatGMTOffset(d: string, min: number) {
-  const sign = min < 0 ? '-' : '+';
+function formatGMTOffset(d: string, minute: number) {
+  const sign = minute < 0 ? '-' : '+';
   const dateInfo = {
     year: 0,
     month: 0,
     date: 0,
-    hour: Math.floor(Math.abs(min) / 60),
-    minute: Math.floor(Math.abs(min) % 60),
+    hour: Math.floor(Math.abs(minute) / 60),
+    minute: Math.floor(Math.abs(minute) % 60),
     second: 0,
     millisecond: 0,
   };
