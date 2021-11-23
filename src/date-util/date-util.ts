@@ -1,4 +1,4 @@
-import type { CalcDatetimeOpts } from './date-util.interface';
+import type { CalcDatetimeOpts, DateInfo } from './date-util.interface';
 import type { DateType, DatePropertyType, ISO8601FormatType } from './date-util.type';
 import { LoggerFactory } from '../logger';
 
@@ -220,31 +220,33 @@ export namespace DateUtil {
   export function format(d: Date | Day1D, format = DEFAULT_DATE_FORMAT): string {
     let formatResult;
 
+    const dateInfo = {
+      year: d.getFullYear(),
+      month: d.getMonth() + 1,
+      date: d.getDate(),
+      hour: d.getHours(),
+      minute: d.getMinutes(),
+      second: d.getSeconds(),
+      millisecond: d.getMilliseconds(),
+    };
+
+    const dateUTCInfo = {
+      year: d.getUTCFullYear(),
+      month: d.getUTCMonth() + 1,
+      date: d.getUTCDate(),
+      hour: d.getUTCHours(),
+      minute: d.getUTCMinutes(),
+      second: d.getUTCSeconds(),
+      millisecond: d.getUTCMilliseconds(),
+    };
+
     if (d instanceof Day1D && d.UTCOffsetMin) {
-      formatResult = replaceDateFormat(
-        format,
-        d.getUTCFullYear(),
-        d.getUTCMonth() + 1,
-        d.getUTCDate(),
-        d.getUTCHours(),
-        d.getUTCMinutes(),
-        d.getUTCSeconds(),
-        d.getUTCMilliseconds()
-      );
+      formatResult = replaceDateFormat(format, dateUTCInfo);
       if (format === DEFAULT_DATE_FORMAT) {
         formatResult += formatGMTOffset(d.UTCOffsetMin);
       }
     } else {
-      formatResult = replaceDateFormat(
-        format,
-        d.getFullYear(),
-        d.getMonth() + 1,
-        d.getDate(),
-        d.getHours(),
-        d.getMinutes(),
-        d.getSeconds(),
-        d.getMilliseconds()
-      );
+      formatResult = replaceDateFormat(format, dateInfo);
       if (format === DEFAULT_DATE_FORMAT) {
         formatResult += formatGMTOffset(-d.getTimezoneOffset());
       }
@@ -294,56 +296,47 @@ function getUTCTime(d: DateType): number {
   );
 }
 
-function replaceDateFormat(
-  format: string,
-  year: number,
-  month: number,
-  day: number,
-  hour: number,
-  minute: number,
-  second: number,
-  millisecond: number
-) {
+function replaceDateFormat(format: string, dateInfo: DateInfo) {
   const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
 
   const formattedDate = format.replace(FORMAT_RULE_REGEXP, (match) => {
     switch (match) {
       case 'YYYY':
-        return `${year}`;
+        return `${dateInfo.year}`;
       case 'YY':
-        return `${year}`.padStart(2, '0');
+        return `${dateInfo.year}`.padStart(2, '0');
 
       case 'MM':
-        return `${month}`.padStart(2, '0');
+        return `${dateInfo.month}`.padStart(2, '0');
       case 'M':
-        return `${month}`;
+        return `${dateInfo.month}`;
 
       case 'DD':
-        return `${day}`.padStart(2, '0');
+        return `${dateInfo.date}`.padStart(2, '0');
       case 'D':
-        return `${day}`;
+        return `${dateInfo.date}`;
 
       case 'HH':
-        return `${hour}`.padStart(2, '0');
+        return `${dateInfo.hour}`.padStart(2, '0');
       case 'H':
-        return `${hour}`;
+        return `${dateInfo.hour}`;
 
       case 'mm':
-        return `${minute}`.padStart(2, '0');
+        return `${dateInfo.minute}`.padStart(2, '0');
       case 'm':
-        return `${minute}`;
+        return `${dateInfo.minute}`;
 
       case 'ss':
-        return `${second}`.padStart(2, '0');
+        return `${dateInfo.second}`.padStart(2, '0');
       case 's':
-        return `${second}`;
+        return `${dateInfo.second}`;
 
       case 'SSS':
-        return `${millisecond}`.padStart(3, '0');
+        return `${dateInfo.millisecond}`.padStart(3, '0');
       case 'SS':
-        return `${millisecond}`.padStart(2, '0');
+        return `${dateInfo.millisecond}`.padStart(2, '0');
       case 'S':
-        return `${millisecond}`;
+        return `${dateInfo.millisecond}`;
 
       default:
         return match;
@@ -358,7 +351,17 @@ function replaceDateFormat(
 }
 
 function formatGMTOffset(min: number) {
-  return replaceDateFormat('HH:mm', 0, 0, 0, min / 60, min % 60, 0, 0);
+  const dateInfo = {
+    year: 0,
+    month: 0,
+    date: 0,
+    hour: Math.floor(min / 60),
+    minute: Math.floor(min % 60),
+    second: 0,
+    millisecond: 0,
+  };
+
+  return replaceDateFormat('HH:mm', dateInfo);
 }
 
 function isValidDate(d: Date): boolean {
