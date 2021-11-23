@@ -270,9 +270,9 @@ describe('DateUtil', () => {
   });
 
   describe('setUTCOffset', () => {
-    it('should return date with UTCOffsetMin', () => {
+    it('should return date with UTCOffsetMinute', () => {
       const testDate1 = new Date('2020-01-01T01:01:01Z');
-      expect(DateUtil.setUTCOffset(testDate1, 180)).toHaveProperty('UTCOffsetMin');
+      expect(DateUtil.setUTCOffset(testDate1, 180)).toHaveProperty('UTCOffsetMinute');
       expect(DateUtil.setUTCOffset(testDate1, 180)).toBeInstanceOf(Date);
     });
   });
