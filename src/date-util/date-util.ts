@@ -7,7 +7,8 @@ const ONE_DAY_IN_SECOND = 60 * 60 * 24;
 const ONE_HOUR_IN_SECOND = 60 * 60;
 const ONE_MINUTE_IN_SECOND = 60;
 
-const DEFAULT_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss+';
+const CUSTOM_OFFSET_FORMAT = 'K';
+const DEFAULT_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss' + CUSTOM_OFFSET_FORMAT;
 
 const logger = LoggerFactory.getLogger('pebbles:date-util');
 
@@ -243,12 +244,12 @@ export namespace DateUtil {
     if (d instanceof Day1D && d.UTCOffsetMin) {
       formatResult = replaceDateFormat(format, dateUTCInfo);
       if (format === DEFAULT_DATE_FORMAT) {
-        formatResult += formatGMTOffset(d.UTCOffsetMin);
+        formatResult = formatGMTOffset(formatResult, d.UTCOffsetMin);
       }
     } else {
       formatResult = replaceDateFormat(format, dateInfo);
       if (format === DEFAULT_DATE_FORMAT) {
-        formatResult += formatGMTOffset(-d.getTimezoneOffset());
+        formatResult = formatGMTOffset(formatResult, -d.getTimezoneOffset());
       }
     }
     return formatResult;
@@ -350,18 +351,19 @@ function replaceDateFormat(format: string, dateInfo: DateInfo) {
   return formattedDate;
 }
 
-function formatGMTOffset(min: number) {
+function formatGMTOffset(d: string, min: number) {
+  const sign = min < 0 ? '-' : '+';
   const dateInfo = {
     year: 0,
     month: 0,
     date: 0,
-    hour: Math.floor(min / 60),
-    minute: Math.floor(min % 60),
+    hour: Math.floor(Math.abs(min) / 60),
+    minute: Math.floor(Math.abs(min) % 60),
     second: 0,
     millisecond: 0,
   };
 
-  return replaceDateFormat('HH:mm', dateInfo);
+  return d.replace(CUSTOM_OFFSET_FORMAT, sign + replaceDateFormat('HH:mm', dateInfo));
 }
 
 function isValidDate(d: Date): boolean {
