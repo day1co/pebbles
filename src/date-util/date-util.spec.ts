@@ -311,6 +311,10 @@ describe('DateUtil', () => {
       const testDate2 = DateUtil.setUTCOffset(new Date('2000-01-01T09:00:00+09:00'), 540);
       expect(DateUtil.format(testDate2)).toBe('2000-01-01T09:00:00+09:00');
       expect(DateUtil.format(testDate2, 'M월 D일 H시 m분')).toBe('1월 1일 9시 0분');
+
+      const testDate3 = DateUtil.setUTCOffset(new Date('2000-01-01T00:00:00Z'), -300);
+      expect(DateUtil.format(testDate3)).toBe('1999-12-31T19:00:00-05:00');
+      expect(DateUtil.format(testDate3, 'M월 D일 H시 m분')).toBe('12월 31일 19시 0분');
     });
   });
 
