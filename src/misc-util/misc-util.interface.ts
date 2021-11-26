@@ -1,13 +1,12 @@
 export interface PageInfo {
   count: number;
   limit: number;
-  offset?: number;
+  offset: number;
   range?: number;
   firstPage?: number;
 }
 
 export interface Pagination {
-  offset: number;
   currentPage: number;
   firstPage: number;
   lastPage: number;

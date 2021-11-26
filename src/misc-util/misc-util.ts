@@ -12,7 +12,7 @@ export namespace MiscUtil {
   }
 
   export function getPagination(pageInfo: PageInfo): Pagination {
-    const { count, limit, offset = 0, range = 10, firstPage = 1 } = pageInfo;
+    const { count, limit, offset, range = 10, firstPage = 1 } = pageInfo;
     const pages = [];
     const lastPage = count && limit ? Math.ceil(count / limit) : firstPage;
     const currentPage = limit > 0 ? Math.floor(offset / limit) + firstPage : firstPage;
@@ -23,6 +23,6 @@ export namespace MiscUtil {
       pages.push({ page, offset: (page - firstPage) * limit, active: page === currentPage });
     }
 
-    return { offset, firstPage, lastPage, currentPage, pages };
+    return { firstPage, lastPage, currentPage, pages };
   }
 }
