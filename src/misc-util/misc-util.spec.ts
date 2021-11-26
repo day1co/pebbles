@@ -22,4 +22,45 @@ describe('Miscellaneous Util', () => {
       }
     });
   });
+
+  describe('getPagination', () => {
+    test('should work', () => {
+      expect(MiscUtil.getPagination({ offset: 0, limit: 10, count: 30 })).toEqual({
+        offset: 0,
+        firstPage: 1,
+        lastPage: 3,
+        currentPage: 1,
+        pages: [
+          {
+            active: true,
+            offset: 0,
+            page: 1,
+          },
+          {
+            active: false,
+            offset: 10,
+            page: 2,
+          },
+          {
+            active: false,
+            offset: 20,
+            page: 3,
+          },
+        ],
+      });
+      expect(MiscUtil.getPagination({ offset: 0, limit: 10, count: 9 })).toEqual({
+        offset: 0,
+        firstPage: 1,
+        lastPage: 1,
+        currentPage: 1,
+        pages: [
+          {
+            active: true,
+            offset: 0,
+            page: 1,
+          },
+        ],
+      });
+    });
+  });
 });
