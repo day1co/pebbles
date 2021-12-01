@@ -24,7 +24,7 @@ describe('Miscellaneous Util', () => {
   });
 
   describe('getPagination', () => {
-    test('should work', () => {
+    it('should work', () => {
       expect(MiscUtil.getPagination({ offset: 0, limit: 10, count: 30 })).toEqual({
         firstPage: 1,
         lastPage: 3,
@@ -41,6 +41,9 @@ describe('Miscellaneous Util', () => {
         currentPage: 1,
         pages: [{ active: true, offset: 0, page: 1 }],
       });
+    });
+    it('should throw', () => {
+      expect(() => MiscUtil.getPagination({ offset: 0, limit: 0, count: 10 })).toThrow();
     });
   });
 });
