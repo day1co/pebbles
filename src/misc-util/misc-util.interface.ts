@@ -1,9 +1,9 @@
 export interface PageInfo {
-  count: number;
-  limit: number;
-  offset: number;
-  range?: number;
-  firstPage?: number;
+  readonly count: number;
+  readonly limit: number;
+  readonly offset: number;
+  readonly range?: number;
+  readonly firstPage?: 0 | 1;
 }
 
 export interface Pagination {

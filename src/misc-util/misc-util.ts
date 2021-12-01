@@ -13,6 +13,9 @@ export namespace MiscUtil {
 
   export function getPagination(pageInfo: PageInfo): Pagination {
     const { count, limit, offset, range = 10, firstPage = 1 } = pageInfo;
+
+    if (limit <= 0) throw new Error('limit must be bigger than 0');
+
     const pages = [];
     const lastPage = count && limit ? Math.ceil(count / limit) : firstPage;
     const currentPage = limit > 0 ? Math.floor(offset / limit) + firstPage : firstPage;
