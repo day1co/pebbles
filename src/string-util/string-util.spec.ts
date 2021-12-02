@@ -1,6 +1,30 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
+  describe('midMask', () => {
+    it('should mask phone number', () => {
+      const phone1 = '010-0000-0000';
+      expect(StringUtil.midMask(phone1, 4, 4)).toBe('010-****-0000');
+      expect(StringUtil.midMask(phone1, 9, 4)).toBe('010-0000-****');
+      expect(StringUtil.midMask(phone1, 9, 4, 'X')).toBe('010-0000-XXXX');
+    });
+
+    it('should mask person name', () => {
+      const name1 = '홍길동';
+      const name2 = 'John Doe';
+      expect(StringUtil.midMask(name1, 1, 1)).toBe('홍*동');
+      expect(StringUtil.midMask(name2, 5, 3)).toBe('John ***');
+    });
+
+    it('should mask email', () => {
+      const email1 = 'test@test.com';
+      const email2 = 'abcdefg@test.com';
+      const maskingLength = (email: string) => email.indexOf('@') - 2;
+      expect(StringUtil.midMask(email1, 2, maskingLength(email1))).toBe('te**@test.com');
+      expect(StringUtil.midMask(email2, 2, maskingLength(email2))).toBe('ab*****@test.com');
+    });
+  });
+
   describe('getNonce', () => {
     it('should return a random string', () => {
       const nonce1 = StringUtil.getNonce(8, 16);
