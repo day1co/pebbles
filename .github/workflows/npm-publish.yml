@@ -8,11 +8,11 @@ on:
     branches:
       - main
     paths:
-      - util/**/*
+      - ./**/*
 
 defaults:
   run:
-    working-directory: util
+    working-directory: ./
     shell: bash
 
 env:
@@ -76,7 +76,7 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
-          scope: '@fastcampus'
+          scope: '@day1co'
 
       - name: Version change check
         id: version-changed
