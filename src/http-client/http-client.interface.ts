@@ -1,30 +1,30 @@
 export interface HttpReqConfig {
-  headers?: unknown;
-  params?: unknown;
-  paramsSerializer?: (params: unknown) => string;
-  data?: unknown;
-  timeout?: number;
-  timeoutErrorMessage?: string;
-  withCredentials?: boolean;
-  xsrfCookieName?: string;
-  xsrfHeaderName?: string;
-  onUploadProgress?: (progressEvent: unknown) => void;
-  onDownloadProgress?: (progressEvent: unknown) => void;
-  maxContentLength?: number;
-  validateStatus?: ((status: number) => boolean) | null;
-  maxBodyLength?: number;
-  maxRedirects?: number;
-  socketPath?: string | null;
-  httpAgent?: unknown;
-  httpsAgent?: unknown;
-  decompress?: boolean;
+  readonly headers?: unknown;
+  readonly params?: unknown;
+  readonly paramsSerializer?: (params: unknown) => string;
+  readonly data?: unknown;
+  readonly timeout?: number;
+  readonly timeoutErrorMessage?: string;
+  readonly withCredentials?: boolean;
+  readonly xsrfCookieName?: string;
+  readonly xsrfHeaderName?: string;
+  readonly onUploadProgress?: (progressEvent: unknown) => void;
+  readonly onDownloadProgress?: (progressEvent: unknown) => void;
+  readonly maxContentLength?: number;
+  readonly validateStatus?: ((status: number) => boolean) | null;
+  readonly maxBodyLength?: number;
+  readonly maxRedirects?: number;
+  readonly socketPath?: string | null;
+  readonly httpAgent?: unknown;
+  readonly httpsAgent?: unknown;
+  readonly decompress?: boolean;
 }
 
 export interface HttpRes<Type> {
-  readonly data: Type;
-  readonly status: number;
-  readonly statusText: string;
-  readonly headers: unknown;
-  readonly config: HttpReqConfig;
-  readonly request?: unknown;
+  data: Type;
+  status: number;
+  statusText: string;
+  headers: unknown;
+  config: HttpReqConfig;
+  request?: unknown;
 }
