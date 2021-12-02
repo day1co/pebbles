@@ -50,6 +50,69 @@ describe('StringUtil', () => {
     });
   });
 
+  describe('renderTemplate', () => {
+    it('should render a template with double brackets', () => {
+      const testOpt1 = { template: 'Hello {{name}}!', view: { name: 'World' } };
+      const testOpt2 = {
+        template: '[{{site}}] 가입을 환영합니다 {{name}}님!',
+        view: { site: '콜로소', name: '아무개' },
+      };
+      expect(StringUtil.renderTemplate(testOpt1)).toEqual('Hello World!');
+      expect(StringUtil.renderTemplate(testOpt2)).toEqual('[콜로소] 가입을 환영합니다 아무개님!');
+    });
+
+    it('should render a template with triple brackets as HTML tag', () => {
+      const testOpt = {
+        template: '<div>{{{hello}}}</div>',
+        view: { hello: '<h1>Hello</h1>' },
+      };
+      expect(StringUtil.renderTemplate(testOpt)).toEqual('<div><h1>Hello</h1></div>');
+    });
+
+    it('should render a template section', () => {
+      const testOpt1 = {
+        template: '{{#courses}}<b>{{title}}</b>{{/courses}}',
+        view: {
+          courses: [{ title: '엑셀' }, { title: '자바' }, { title: '도커' }],
+        },
+      };
+      const testOpt2 = {
+        template: '{{#nameList}}{{name}} {{/nameList}}',
+        view: {
+          nameList: [{ name: 'FOO' }, { name: 'BAR' }, { name: 'BAZ' }],
+        },
+      };
+      expect(StringUtil.renderTemplate(testOpt1)).toEqual('<b>엑셀</b><b>자바</b><b>도커</b>');
+      expect(StringUtil.renderTemplate(testOpt2)).toEqual('FOO BAR BAZ ');
+    });
+
+    it('should render a template with partial', () => {
+      const testOpt = {
+        template: '[문자테스트] 안내문자입니다 {{> partial}}',
+        view: {},
+        partial: { partial: '문의사항은 아래링크로' },
+      };
+      expect(StringUtil.renderTemplate(testOpt)).toEqual('[문자테스트] 안내문자입니다 문의사항은 아래링크로');
+    });
+
+    it('should render a template with custom tags', () => {
+      const testOpt = {
+        template: '%{hello}, {{name}}',
+        view: { hello: '안녕하세요' },
+        customTag: ['%{', '}'],
+      };
+      expect(StringUtil.renderTemplate(testOpt)).toEqual('안녕하세요, {{name}}');
+    });
+
+    it('should throw with unclosed tag', () => {
+      const testOpt = {
+        template: '{{hello}',
+        view: { hello: '안녕하세요' },
+      };
+      expect(() => StringUtil.renderTemplate(testOpt)).toThrow();
+    });
+  });
+
   describe('normalizePhoneNumber', () => {
     it('should normalize phone number starting with 010 or 070', () => {
       expect(StringUtil.normalizePhoneNumber('01012345678')).toBe('01012345678');

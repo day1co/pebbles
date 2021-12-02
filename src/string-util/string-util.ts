@@ -1,4 +1,5 @@
-import type { Tag } from './string-util.interface';
+import Mustache from 'mustache';
+import type { Tag, TemplateOpts } from './string-util.interface';
 
 const DOMESTIC_PHONE_NUMBER_REGEXP = /^0[1,7]\d{9}$/;
 
@@ -13,6 +14,11 @@ export namespace StringUtil {
 
   export function getNonce(nonceLength: number, nonceEncoding: number): string {
     return Math.random().toString(nonceEncoding).substr(-nonceLength);
+  }
+
+  export function renderTemplate(templateOpts: TemplateOpts): string {
+    const { template, view, partial, customTag } = templateOpts;
+    return Mustache.render(template, view, partial, customTag as [string, string]);
   }
 
   export function normalizePhoneNumber(str: string): string {
