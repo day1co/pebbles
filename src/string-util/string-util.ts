@@ -5,10 +5,10 @@ const DOMESTIC_PHONE_NUMBER_REGEXP = /^0[1,7]\d{9}$/;
 
 export namespace StringUtil {
   export function midMask(str: string, startIndex: number, length: number, maskChar = '*'): string {
-    const strList = str.split('');
-    const maskingPart = maskChar.repeat(length).split('');
+    const strList = [...str];
+    const maskingPart = maskChar.repeat(length);
 
-    strList.splice(startIndex, length, ...maskingPart);
+    strList.splice(startIndex, length, maskingPart);
     return strList.join('');
   }
 
