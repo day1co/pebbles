@@ -1,6 +1,39 @@
 import { StringUtil } from './string-util';
 
 describe('StringUtil', () => {
+  describe('convertCurrency', () => {
+    const codeLength = 3;
+    const amount = 12345678.99;
+    it('should convert number to USD currency', () => {
+      expect(StringUtil.convertCurrency(amount, 'en-US', 'USD')).toBe('12,345,678.99 US dollars');
+      expect(StringUtil.convertCurrency(amount, 'en-US', 'USD', 'symbol')[0]).toBe('$');
+      expect(StringUtil.convertCurrency(amount, 'en-US', 'USD', 'code').slice(0, codeLength)).toBe('USD');
+    });
+
+    it('should convert number to KRW currency', () => {
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'KRW')).toBe('12,345,679 원');
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'KRW', 'symbol')[0]).toBe('₩');
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'KRW', 'code').slice(0, codeLength)).toBe('KRW');
+    });
+
+    it('should convert number to JPY currency', () => {
+      expect(StringUtil.convertCurrency(amount, 'ja-JP', 'JPY')).toBe('12,345,679円');
+      expect(StringUtil.convertCurrency(amount, 'ja-JP', 'JPY', 'symbol')[0]).toBe('￥');
+      expect(StringUtil.convertCurrency(amount, 'ja-JP', 'JPY', 'code').slice(0, codeLength)).toBe('JPY');
+    });
+
+    it('should convert number to USD currency in Korean locale', () => {
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'USD')).toBe('12,345,678.99 미국 달러');
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'USD', 'symbol').slice(0, codeLength)).toBe('US$');
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'USD', 'code').slice(0, codeLength)).toBe('USD');
+    });
+
+    it('should convert number to JPY currency in Korean locale', () => {
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'JPY')).toBe('12,345,679 엔화');
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'JPY', 'symbol').slice(0, codeLength)).toBe('JP¥');
+      expect(StringUtil.convertCurrency(amount, 'ko-KR', 'JPY', 'code').slice(0, codeLength)).toBe('JPY');
+    });
+  });
   describe('midMask', () => {
     it('should mask phone number', () => {
       const phone1 = '010-0000-0000';

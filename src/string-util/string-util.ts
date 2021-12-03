@@ -1,9 +1,39 @@
 import Mustache from 'mustache';
 import type { Tag, TemplateOpts } from './string-util.interface';
+import type { CurrencyDisplay } from './string-util.type';
 
 const DOMESTIC_PHONE_NUMBER_REGEXP = /^0[1,7]\d{9}$/;
 
 export namespace StringUtil {
+  // locale parameter accepts IETF language tag
+  // currency parameter only accepts ISO 4217 currency code
+  export function convertCurrency(
+    amount: number,
+    localeCode: string,
+    currency: string,
+    currencyDisplay: CurrencyDisplay = 'name'
+  ): string {
+    if (!Number.isFinite(amount)) {
+      throw new Error(`invalid amount value => ${amount.toString()}`);
+    }
+
+    let result;
+    result = Intl.NumberFormat(localeCode, {
+      style: 'currency',
+      currency,
+      currencyDisplay,
+    }).format(amount);
+
+    if (currencyDisplay === 'name' && currency !== 'USD') {
+      const splitResult = result.split(' ');
+
+      if (splitResult.length !== 1) {
+        result = `${splitResult[0]} ${splitResult[splitResult.length - 1]}`;
+      }
+    }
+    return result;
+  }
+
   export function midMask(str: string, startIndex: number, length: number, maskChar = '*'): string {
     const strList = [...str];
     const maskingPart = maskChar.repeat(length);
