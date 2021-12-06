@@ -103,6 +103,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ env.PACKAGE_TOKEN }}
         run: |
-          (cd ../; npm ci)
+          npm ci
           npm publish
-          ../.github/npm-publish-slack.sh
+          ./.github/npm-publish-slack.sh
