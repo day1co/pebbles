@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [open, reopened]
 
 permissions:
   pull-requests: write
