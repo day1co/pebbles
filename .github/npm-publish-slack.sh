@@ -1,10 +1,6 @@
 #!/bin/bash
 
 slackToDeptDev() {
-	curl \
-			-X POST \
-			--data-urlencode \
-			"payload={\"channel\": \"#npm-publish-notify\", \"text\": \"$1\", \"attachments\":[{ \"fields\":[{\"title\":\"Notes\",\"value\":\"$2\"  }] }] }" https://hooks.slack.com/services/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
 }
 
 PACKAGE_NAME=$(jq -r .name package.json)
