@@ -3,6 +3,10 @@ on:
   pull_request:
     types: [opened]
 
+permissions:
+  contents: write
+  pull-requests: read
+
 jobs:
   pr-labeler:
     runs-on: ubuntu-latest
