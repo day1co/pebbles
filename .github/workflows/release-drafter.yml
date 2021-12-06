@@ -3,9 +3,10 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types: [open, reopened]
 
 permissions:
-  contents: write
   pull-requests: write
 
 jobs:
