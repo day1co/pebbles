@@ -1,5 +1,16 @@
 node_modules/
-dist/
 coverage/
 .idea
 .DS_Store
+
+# Build results
+index.*
+boolean-util/
+date-util/
+http-client/
+json-web-token/
+logger/
+misc-util/
+number-util/
+object-util/
+string-util/

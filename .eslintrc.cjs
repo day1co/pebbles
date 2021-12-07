@@ -4,7 +4,6 @@ module.exports = {
     node: true,
   },
   extends: ['plugin:prettier/recommended', 'prettier', 'plugin:@typescript-eslint/recommended'],
-  ignorePatterns: ['dist'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,

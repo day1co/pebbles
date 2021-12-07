@@ -9,14 +9,14 @@
     "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
-    "build": "rimraf ./dist & tsc",
-    "clean": "rimraf ./dist ./node_modules",
+    "build": "tsc",
+    "clean": "npm run removeOldBuild && rimraf ./node_modules",
     "lint": "eslint .",
-    "prebuild": "npm run lint",
+    "prebuild": "npm run removeOldBuild && npm run lint",
     "prepublishOnly": "npm run build",
+    "removeOldBuild": "rimraf `find . -type d -maxdepth 1 ! -name src ! -name \".*\" ! -name node_modules` index.*",
     "test": "jest --detectOpenHandles --forceExit ./src"
   },
-  "type": "module",
   "dependencies": {
     "axios": "^0.21.4",
     "jsonwebtoken": "^8.5.1",
