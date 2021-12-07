@@ -4,7 +4,7 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "strict": true,
-    "module": "es2020",
+    "module": "commonjs",
     "moduleResolution": "node",
     "types": ["node", "jest"],
     "declaration": true,

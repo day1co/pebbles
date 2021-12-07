@@ -1,6 +1,8 @@
 {
   "name": "@day1co/pebbles",
   "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/day1co/pebbles.git"
@@ -8,6 +10,9 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rimraf ./dist & tsc",
     "clean": "rimraf ./dist ./node_modules",
@@ -16,7 +21,6 @@
     "prepublishOnly": "npm run build",
     "test": "jest --detectOpenHandles --forceExit ./src"
   },
-  "type": "module",
   "dependencies": {
     "axios": "^0.21.4",
     "jsonwebtoken": "^8.5.1",
