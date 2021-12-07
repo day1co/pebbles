@@ -1,8 +1,8 @@
 {
   "name": "@day1co/pebbles",
   "version": "0.0.1",
-  "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/day1co/pebbles.git"
@@ -10,14 +10,11 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "rimraf ./dist & tsc",
-    "clean": "rimraf ./dist ./node_modules",
+    "build": "tsc",
+    "clean": "rimraf ./lib ./node_modules",
     "lint": "eslint .",
-    "prebuild": "npm run lint",
+    "prebuild": "rimraf ./lib && npm run lint",
     "prepublishOnly": "npm run build",
     "test": "jest --detectOpenHandles --forceExit ./src"
   },
