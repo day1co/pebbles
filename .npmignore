@@ -1,4 +1,3 @@
-src/
 jest.config.cjs
 tsconfig.json
 .*
