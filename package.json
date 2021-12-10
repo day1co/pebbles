@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "axios": "^0.21.4",
+    "lodash": "^4.17.21",
     "mustache": "^4.2.0",
-    "pino": "^6.13.2",
-    "lodash": "^4.17.21"
+    "pino": "^6.13.2"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",

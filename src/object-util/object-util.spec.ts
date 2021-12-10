@@ -77,8 +77,7 @@ describe('ObjectUtil', () => {
         },
       };
       const clonedObj = ObjectUtil.deepClone(obj);
-      clonedObj.b.c = 3;
-      expect(clonedObj.b.c).not.toEqual(obj.b.c);
+      expect(clonedObj).not.toBe(obj);
     });
   });
 });
