@@ -1,4 +1,4 @@
-name: util-npm-publish
+name: pebbles-npm-publish
 concurrency:
   group: npm-publish-${{github.sha}}
   cancel-in-progress: false
@@ -7,9 +7,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - src/**/*.ts
-      - package.json
+    paths-ignore:
+      - src/**/*.spec.ts
+      - .github/**/*
+
 
 defaults:
   run:
@@ -69,7 +70,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 100 # 최근 100개 커밋에서 pacakge.json 버전변경 확인
+          fetch-depth: 100 # 최근 100개 커밋에서 package.json 버전변경 확인
           token: ${{ env.PUSH_TOKEN }}
 
       - uses: actions/setup-node@v2
