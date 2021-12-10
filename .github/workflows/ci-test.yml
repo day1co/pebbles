@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Prepare dot npmrc for private registry
-        run: echo //npm.pkg.github.com/:_authToken=${{ secrets.GH_NPM_TOKEN }} >> ~/.npmrc
+        run: echo //npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }} >> ~/.npmrc
       - name: Bootstrap
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci

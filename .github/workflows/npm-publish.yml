@@ -18,8 +18,8 @@ defaults:
     shell: bash
 
 env:
-  PUSH_TOKEN: ${{ secrets.GH_NPM_TOKEN }}
-  PACKAGE_TOKEN: ${{ secrets.GH_NPM_TOKEN }}
+  PUSH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  PACKAGE_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
   check-pusher:
