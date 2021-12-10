@@ -1,4 +1,5 @@
 import { LoggerFactory } from '../logger';
+import _ from 'lodash';
 
 const logger = LoggerFactory.getLogger('pebbles:object-util');
 
@@ -35,5 +36,9 @@ export namespace ObjectUtil {
     }
 
     return true;
+  }
+
+  export function deepClone<T>(obj: T): T {
+    return _.cloneDeep(obj) as T;
   }
 }
