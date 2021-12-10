@@ -67,4 +67,18 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isEmpty(Buffer.alloc(1))).toBe(false);
     });
   });
+
+  describe('deepClone', () => {
+    it('should return deep cloned object', () => {
+      const obj = {
+        a: 1,
+        b: {
+          c: 2,
+        },
+      };
+      const clonedObj = ObjectUtil.deepClone(obj);
+      clonedObj.b.c = 3;
+      expect(clonedObj.b.c).not.toEqual(obj.b.c);
+    });
+  });
 });
