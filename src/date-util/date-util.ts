@@ -1,4 +1,4 @@
-import type { CalcDatetimeOpts, DateInfo } from './date-util.interface';
+import type { CalcDatetimeOpts, DateFormatOpts } from './date-util.interface';
 import type { DateType, DatePropertyType, ISO8601FormatType } from './date-util.type';
 import { LoggerFactory } from '../logger';
 
@@ -7,8 +7,9 @@ const ONE_DAY_IN_SECOND = 60 * 60 * 24;
 const ONE_HOUR_IN_SECOND = 60 * 60;
 const ONE_MINUTE_IN_SECOND = 60;
 
-const CUSTOM_OFFSET_FORMAT = 'K';
-const DEFAULT_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss' + CUSTOM_OFFSET_FORMAT;
+const DEFAULT_UTC_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
+const DEFAULT_LOCALE_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss[Z]';
+const DEFAULT_LOCALE_TIMEZONE_FORMAT = '[Z]';
 
 const logger = LoggerFactory.getLogger('pebbles:date-util');
 
@@ -211,52 +212,95 @@ export namespace DateUtil {
   }
 
   export function setUTCOffset(d: DateType, offsetMinute: number): Date {
-    const UTCDate = new Day1D(getUTCTime(d));
-
-    UTCDate.setTime(UTCDate.getTime() + offsetMinute * ONE_MINUTE_IN_SECOND * ONE_SECOND);
-    UTCDate.UTCOffsetMinute = offsetMinute;
-    return UTCDate;
+    return new Date(parse(d).getTime() + offsetMinute * ONE_SECOND * ONE_MINUTE_IN_SECOND);
   }
 
-  export function format(d: Date | Day1D, format = DEFAULT_DATE_FORMAT): string {
-    let formatResult;
+  export function format(d: Date, opts?: DateFormatOpts): string {
+    // format의 기본 기준은 로컬 런타임으로 한다.
+    const isUTC = opts?.isUTC ?? false;
+    let formatTarget = opts?.format ? opts.format : isUTC ? DEFAULT_UTC_DATE_FORMAT : DEFAULT_LOCALE_DATE_FORMAT;
 
-    const dateInfo = {
-      year: d.getFullYear(),
-      month: d.getMonth() + 1,
-      date: d.getDate(),
-      hour: d.getHours(),
-      minute: d.getMinutes(),
-      second: d.getSeconds(),
-      millisecond: d.getMilliseconds(),
-    };
+    const dateInfo = isUTC
+      ? {
+          year: d.getUTCFullYear(),
+          month: d.getUTCMonth() + 1,
+          date: d.getUTCDate(),
+          hour: d.getUTCHours(),
+          minute: d.getUTCMinutes(),
+          second: d.getUTCSeconds(),
+          millisecond: d.getUTCMilliseconds(),
+        }
+      : {
+          year: d.getFullYear(),
+          month: d.getMonth() + 1,
+          date: d.getDate(),
+          hour: d.getHours(),
+          minute: d.getMinutes(),
+          second: d.getSeconds(),
+          millisecond: d.getMilliseconds(),
+        };
 
-    const dateUTCInfo = {
-      year: d.getUTCFullYear(),
-      month: d.getUTCMonth() + 1,
-      date: d.getUTCDate(),
-      hour: d.getUTCHours(),
-      minute: d.getUTCMinutes(),
-      second: d.getUTCSeconds(),
-      millisecond: d.getUTCMilliseconds(),
-    };
-
-    if (d instanceof Day1D && d.UTCOffsetMinute) {
-      formatResult = replaceDateFormat(format, dateUTCInfo);
-      if (format === DEFAULT_DATE_FORMAT) {
-        formatResult = formatGMTOffset(formatResult, d.UTCOffsetMinute);
-      }
-    } else {
-      formatResult = replaceDateFormat(format, dateInfo);
-      if (format === DEFAULT_DATE_FORMAT) {
-        formatResult = formatGMTOffset(formatResult, -d.getTimezoneOffset());
-      }
+    if (formatTarget === DEFAULT_LOCALE_DATE_FORMAT) {
+      formatTarget = formatTarget.replace(DEFAULT_LOCALE_TIMEZONE_FORMAT, getLocaleTimezoneOffset(d));
     }
-    return formatResult;
+
+    const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
+    formatTarget = formatTarget.replace(FORMAT_RULE_REGEXP, (match) => {
+      switch (match) {
+        case 'YYYY':
+          return String(dateInfo.year);
+        case 'YY':
+          return String(dateInfo.year).padStart(2, '0');
+
+        case 'MM':
+          return String(dateInfo.month).padStart(2, '0');
+        case 'M':
+          return String(dateInfo.month);
+
+        case 'DD':
+          return String(dateInfo.date).padStart(2, '0');
+        case 'D':
+          return String(dateInfo.date);
+
+        case 'HH':
+          return String(dateInfo.hour).padStart(2, '0');
+        case 'H':
+          return String(dateInfo.hour);
+
+        case 'mm':
+          return String(dateInfo.minute).padStart(2, '0');
+        case 'm':
+          return String(dateInfo.minute);
+
+        case 'ss':
+          return String(dateInfo.second).padStart(2, '0');
+        case 's':
+          return String(dateInfo.second);
+
+        case 'SSS':
+          return String(dateInfo.millisecond).padStart(3, '0');
+        case 'SS':
+          return String(dateInfo.millisecond).padStart(2, '0');
+        case 'S':
+          return String(dateInfo.millisecond);
+
+        default:
+          return match;
+      }
+    });
+    if (FORMAT_RULE_REGEXP.test(formatTarget)) {
+      throw new Error(`Invalid format: ${formatTarget}`);
+    }
+    return formatTarget;
   }
 
-  export function formatToISOString(d: Date, ISOFormat: ISO8601FormatType): string {
-    return format(d, ISOFormat);
+  export function formatToISOString(
+    d: Date,
+    opts: Omit<DateFormatOpts, 'format'> & { format: ISO8601FormatType }
+  ): string {
+    const ISOFormat = opts.format;
+    const isUTC = opts.isUTC ?? false;
+    return format(d, { format: ISOFormat, isUTC: isUTC });
   }
 
   export function secondsToTimeFormat(seconds: number): string {
@@ -275,95 +319,13 @@ export namespace DateUtil {
   }
 }
 
-class Day1D extends Date {
-  public UTCOffsetMinute: number | undefined;
+function getLocaleTimezoneOffset(d: Date): string {
+  const localeTimezoneOffset = Math.abs(d.getTimezoneOffset());
+  const sign = localeTimezoneOffset < 0 ? '-' : '+';
 
-  constructor(d: DateType) {
-    super(d);
-  }
-}
-
-function getUTCTime(d: DateType): number {
-  if (!(d instanceof Date)) {
-    d = new Date(d);
-  }
-  return Date.UTC(
-    d.getUTCFullYear(),
-    d.getUTCMonth(),
-    d.getUTCDate(),
-    d.getUTCHours(),
-    d.getUTCMinutes(),
-    d.getUTCMilliseconds()
-  );
-}
-
-function replaceDateFormat(format: string, dateInfo: DateInfo) {
-  const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
-
-  const formattedDate = format.replace(FORMAT_RULE_REGEXP, (match) => {
-    switch (match) {
-      case 'YYYY':
-        return `${dateInfo.year}`;
-      case 'YY':
-        return `${dateInfo.year}`.padStart(2, '0');
-
-      case 'MM':
-        return `${dateInfo.month}`.padStart(2, '0');
-      case 'M':
-        return `${dateInfo.month}`;
-
-      case 'DD':
-        return `${dateInfo.date}`.padStart(2, '0');
-      case 'D':
-        return `${dateInfo.date}`;
-
-      case 'HH':
-        return `${dateInfo.hour}`.padStart(2, '0');
-      case 'H':
-        return `${dateInfo.hour}`;
-
-      case 'mm':
-        return `${dateInfo.minute}`.padStart(2, '0');
-      case 'm':
-        return `${dateInfo.minute}`;
-
-      case 'ss':
-        return `${dateInfo.second}`.padStart(2, '0');
-      case 's':
-        return `${dateInfo.second}`;
-
-      case 'SSS':
-        return `${dateInfo.millisecond}`.padStart(3, '0');
-      case 'SS':
-        return `${dateInfo.millisecond}`.padStart(2, '0');
-      case 'S':
-        return `${dateInfo.millisecond}`;
-
-      default:
-        return match;
-    }
-  });
-
-  if (FORMAT_RULE_REGEXP.test(formattedDate)) {
-    throw new Error(`Invalid format: ${formattedDate}`);
-  }
-
-  return formattedDate;
-}
-
-function formatGMTOffset(d: string, minute: number) {
-  const sign = minute < 0 ? '-' : '+';
-  const dateInfo = {
-    year: 0,
-    month: 0,
-    date: 0,
-    hour: Math.floor(Math.abs(minute) / 60),
-    minute: Math.floor(Math.abs(minute) % 60),
-    second: 0,
-    millisecond: 0,
-  };
-
-  return d.replace(CUSTOM_OFFSET_FORMAT, sign + replaceDateFormat('HH:mm', dateInfo));
+  const offsetHours = String(Math.floor(localeTimezoneOffset / 60)).padStart(2, '0');
+  const offsetMinutes = String(Math.floor(localeTimezoneOffset % 60)).padStart(2, '0');
+  return `${sign}${offsetHours}:${offsetMinutes}`;
 }
 
 function isValidDate(d: Date): boolean {
