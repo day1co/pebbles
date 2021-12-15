@@ -98,7 +98,7 @@ jobs:
           PACKAGE_NAME=$(jq -r .name package.json)
           PACKAGE_VERSION=$(jq -r .version package.json)
 
-          git commit -m "$PACKAGE_NAME: bump up to $PACKAGE_VERSION" package.json
+          git commit -m "$PACKAGE_NAME: bump up to $PACKAGE_VERSION" package.json package-lock.json
           git pull --rebase
           git push origin
       - name: publish
