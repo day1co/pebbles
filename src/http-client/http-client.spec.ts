@@ -21,6 +21,7 @@ describe('HttpState', () => {
     const NOT_FOUND: HttpState = HttpState.NOT_FOUND;
     const TEAPOT: HttpState = HttpState.TEAPOT;
     const INTERNAL_SERVER_ERROR: HttpState = HttpState.INTERNAL_SERVER_ERROR;
+    const SERVICE_UNAVAILABLE: HttpState = HttpState.SERVICE_UNAVAILABLE;
     const CUSTOM_UNKNOWN_ERROR: HttpState = HttpState.CUSTOM_UNKNOWN_ERROR;
 
     expect(OK).toEqual(200);
@@ -33,6 +34,7 @@ describe('HttpState', () => {
     expect(NOT_FOUND).toEqual(404);
     expect(TEAPOT).toEqual(418);
     expect(INTERNAL_SERVER_ERROR).toEqual(500);
+    expect(SERVICE_UNAVAILABLE).toEqual(503);
     expect(CUSTOM_UNKNOWN_ERROR).toEqual(520);
   });
 });
