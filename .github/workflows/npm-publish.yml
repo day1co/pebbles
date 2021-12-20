@@ -99,7 +99,7 @@ jobs:
           PACKAGE_VERSION=$(jq -r .version package.json)
 
           git status
-          
+
           git commit -m "$PACKAGE_NAME: bump up to $PACKAGE_VERSION" package.json package-lock.json
           git pull --rebase
           git push origin
@@ -109,4 +109,4 @@ jobs:
         run: |
           npm ci
           npm publish
-          ./.github/npm-publish-slack.sh
+          ./.github/npm-publish-slack.sh ${{ secrets.SLACK_WEBHOOK_URL }}
