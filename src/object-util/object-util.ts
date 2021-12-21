@@ -37,7 +37,7 @@ export namespace ObjectUtil {
     return true;
   }
 
-  export function deepClone<T>(obj: T): T {
-    return JSON.parse(JSON.stringify(obj)) as T;
+  export function deepClone<T extends Record<string, unknown>>(obj: T): T {
+    return JSON.parse(JSON.stringify(obj));
   }
 }
