@@ -66,4 +66,26 @@ export namespace ObjectUtil {
 
     return clonedObj;
   }
+
+  export function merge(obj: Record<string, unknown>, ...args: Record<string, unknown>[]): Record<string, unknown> {
+    const objKeys = Object.keys(obj);
+    const argKeysArray: string[][] = [];
+    const result: Record<string, unknown> = {};
+
+    args.forEach((arg) => {
+      argKeysArray.push(Object.keys(arg));
+    });
+
+    objKeys.forEach((key) => {
+      result[key] = obj[key];
+    });
+
+    for (let ix = 0; ix < args.length; ix++) {
+      argKeysArray[ix].forEach((key) => {
+        result[key] = args[ix][key];
+      });
+    }
+
+    return result;
+  }
 }
