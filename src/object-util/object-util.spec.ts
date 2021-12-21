@@ -135,4 +135,21 @@ describe('ObjectUtil', () => {
       expect(() => ObjectUtil.deepClone<Buffer>(buffer)).toThrow();
     });
   });
+
+  describe('merge', () => {
+    it('merge distinct keys', () => {
+      expect(ObjectUtil.merge({ foo: 'abc' }, { bar: 'def' })).toEqual({ foo: 'abc', bar: 'def' });
+    });
+    it('merge same key', () => {
+      expect(ObjectUtil.merge({ foo: 'abc' }, { foo: 'def' })).toEqual({ foo: 'def' });
+    });
+    it('merge three objects', () => {
+      expect(ObjectUtil.merge({ foo: 'abc' }, { bar: 'def' }, { baz: 'ghi' })).toEqual({
+        foo: 'abc',
+        bar: 'def',
+        baz: 'ghi',
+      });
+      expect(ObjectUtil.merge({ foo: 'abc' }, { foo: 'def' }, { foo: 'ghi' })).toEqual({ foo: 'ghi' });
+    });
+  });
 });
