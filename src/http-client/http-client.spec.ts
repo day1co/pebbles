@@ -1,3 +1,4 @@
+import { constants } from 'http2';
 import { HttpClient } from './http-client';
 import { HttpState } from './http-state.enum';
 
@@ -24,17 +25,17 @@ describe('HttpState', () => {
     const SERVICE_UNAVAILABLE: HttpState = HttpState.SERVICE_UNAVAILABLE;
     const CUSTOM_UNKNOWN_ERROR: HttpState = HttpState.CUSTOM_UNKNOWN_ERROR;
 
-    expect(OK).toEqual(200);
-    expect(CREATED).toEqual(201);
-    expect(ACCEPTED).toEqual(202);
-    expect(NO_CONTENT).toEqual(204);
-    expect(BAD_REQUEST).toEqual(400);
-    expect(UNAUTHORIZED).toEqual(401);
-    expect(FORBIDDEN).toEqual(403);
-    expect(NOT_FOUND).toEqual(404);
-    expect(TEAPOT).toEqual(418);
-    expect(INTERNAL_SERVER_ERROR).toEqual(500);
-    expect(SERVICE_UNAVAILABLE).toEqual(503);
+    expect(OK).toEqual(constants.HTTP_STATUS_OK);
+    expect(CREATED).toEqual(constants.HTTP_STATUS_CREATED);
+    expect(ACCEPTED).toEqual(constants.HTTP_STATUS_ACCEPTED);
+    expect(NO_CONTENT).toEqual(constants.HTTP_STATUS_NO_CONTENT);
+    expect(BAD_REQUEST).toEqual(constants.HTTP_STATUS_BAD_REQUEST);
+    expect(UNAUTHORIZED).toEqual(constants.HTTP_STATUS_UNAUTHORIZED);
+    expect(FORBIDDEN).toEqual(constants.HTTP_STATUS_FORBIDDEN);
+    expect(NOT_FOUND).toEqual(constants.HTTP_STATUS_NOT_FOUND);
+    expect(TEAPOT).toEqual(constants.HTTP_STATUS_TEAPOT);
+    expect(INTERNAL_SERVER_ERROR).toEqual(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR);
+    expect(SERVICE_UNAVAILABLE).toEqual(constants.HTTP_STATUS_SERVICE_UNAVAILABLE);
     expect(CUSTOM_UNKNOWN_ERROR).toEqual(520);
   });
 });
