@@ -82,8 +82,8 @@ describe('ObjectUtil', () => {
       expect(clonedInterfaceObj).not.toBe(interfaceObj);
       expect(clonedInterfaceObj).toEqual(interfaceObj);
 
-      const array = ['foo', 'bar'];
-      const clonedArray = ObjectUtil.deepClone<string[]>(array);
+      const array = ['foo', { bar: 1 }];
+      const clonedArray = ObjectUtil.deepClone<(string | Bar)[]>(array);
       expect(clonedArray).not.toBe(array);
       expect(clonedArray).toEqual(array);
 
