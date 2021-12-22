@@ -70,10 +70,29 @@ describe('ObjectUtil', () => {
 
   describe('deepClone', () => {
     it('should return deep cloned object', () => {
-      const obj = { foo: 1, bar: { baz: 2 } };
-      const clonedObj = ObjectUtil.deepClone(obj);
-      expect(clonedObj).not.toBe(obj);
-      expect(clonedObj).toEqual(obj);
+      interface TestInterface {
+        foo: number;
+        bar: { baz: number };
+      }
+      const interfaceObj: TestInterface = { foo: 1, bar: { baz: 2 } };
+      const clonedInterfaceObj = ObjectUtil.deepClone<TestInterface>(interfaceObj);
+      expect(clonedInterfaceObj).not.toBe(interfaceObj);
+      expect(clonedInterfaceObj).toEqual(interfaceObj);
+
+      const array = ['foo', 'bar'];
+      const clonedArray = ObjectUtil.deepClone<string[]>(array);
+      expect(clonedArray).not.toBe(array);
+      expect(clonedArray).toEqual(array);
+
+      // Todo: 아래 형태들도 지원해야 함
+      const map = new Map<string, number>();
+      map.set('foo', 1);
+      map.set('bar', 2);
+      expect(() => ObjectUtil.deepClone(map)).toThrow();
+      const set = new Set<string>();
+      set.add('foo');
+      set.add('bar');
+      expect(() => ObjectUtil.deepClone(set)).toThrow();
     });
   });
 });

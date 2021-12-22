@@ -37,7 +37,14 @@ export namespace ObjectUtil {
     return true;
   }
 
-  export function deepClone<T extends Record<string, unknown>>(obj: T): T {
+  // Todo: Map과 Set 등의 특정 Object type에 대한 지원 필요
+  export function deepClone<Type>(obj: Type): Type {
+    if (!(obj instanceof Object)) {
+      throw new Error('Should be an object type');
+    } else if (obj instanceof Map || obj instanceof Set) {
+      throw new Error('Map or Set is not supported type yet');
+    }
+
     return JSON.parse(JSON.stringify(obj));
   }
 }
