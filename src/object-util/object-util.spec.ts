@@ -71,10 +71,13 @@ describe('ObjectUtil', () => {
   describe('deepClone', () => {
     it('should return deep cloned object', () => {
       interface TestInterface {
-        foo: number;
-        bar: { baz: number };
+        foo: Bar;
+        baz: number;
       }
-      const interfaceObj: TestInterface = { foo: 1, bar: { baz: 2 } };
+      interface Bar {
+        bar: number;
+      }
+      const interfaceObj: TestInterface = { foo: { bar: 1 }, baz: 2 };
       const clonedInterfaceObj = ObjectUtil.deepClone<TestInterface>(interfaceObj);
       expect(clonedInterfaceObj).not.toBe(interfaceObj);
       expect(clonedInterfaceObj).toEqual(interfaceObj);
@@ -84,15 +87,23 @@ describe('ObjectUtil', () => {
       expect(clonedArray).not.toBe(array);
       expect(clonedArray).toEqual(array);
 
-      // Todo: 아래 형태들도 지원해야 함
-      const map = new Map<string, number>();
+      const map = new Map<string, number | Bar>();
       map.set('foo', 1);
-      map.set('bar', 2);
-      expect(() => ObjectUtil.deepClone(map)).toThrow();
-      const set = new Set<string>();
+      map.set('bar', { bar: 2 });
+      const clonedMap = ObjectUtil.deepClone<Map<string, number | Bar>>(map);
+      expect(clonedMap).not.toBe(map);
+      expect(clonedMap).toEqual(map);
+
+      const set = new Set<string | { bar: number }>();
       set.add('foo');
-      set.add('bar');
-      expect(() => ObjectUtil.deepClone(set)).toThrow();
+      set.add({ bar: 1 });
+      const clonedSet = ObjectUtil.deepClone<Set<string | Bar>>(set);
+      expect(clonedSet).not.toBe(set);
+      expect(clonedSet).toEqual(set);
+    });
+    it('should throw error', () => {
+      const buffer = Buffer.alloc(10);
+      expect(() => ObjectUtil.deepClone(buffer)).toThrow();
     });
   });
 });
