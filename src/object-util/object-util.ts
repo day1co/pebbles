@@ -1,4 +1,5 @@
 import { LoggerFactory } from '../logger';
+import { ObjectType } from './object-util.type';
 
 const logger = LoggerFactory.getLogger('pebbles:object-util');
 
@@ -37,12 +38,32 @@ export namespace ObjectUtil {
     return true;
   }
 
-  // Todo: Map과 Set 등의 특정 Object type에 대한 지원 필요
-  export function deepClone<Type>(obj: Type): Type {
-    if (!(obj instanceof Object)) {
-      throw new Error('Should be an object type');
-    } else if (obj instanceof Map || obj instanceof Set || obj instanceof Buffer) {
-      throw new Error('Map/Set/Buffer is not a supported type yet');
+  // Todo: Buffer type에 대한 지원 필요
+  export function deepClone<Type extends ObjectType>(obj: Type): Type {
+    if (obj instanceof Buffer) {
+      throw new Error('Buffer is not a supported type yet');
+    }
+
+    if (obj instanceof (Map || Set)) {
+      const result = new Map();
+      const keys = Array.from(obj.keys());
+
+      keys.forEach((key) => {
+        result.set(key, obj.get(key));
+      });
+
+      return result as ObjectType;
+    }
+
+    if (obj instanceof Set) {
+      const result = new Set();
+      const keys = Array.from(obj.keys());
+
+      keys.forEach((key) => {
+        result.add(key);
+      });
+
+      return result as ObjectType;
     }
 
     return JSON.parse(JSON.stringify(obj));
