@@ -41,8 +41,8 @@ export namespace ObjectUtil {
   export function deepClone<Type>(obj: Type): Type {
     if (!(obj instanceof Object)) {
       throw new Error('Should be an object type');
-    } else if (obj instanceof Map || obj instanceof Set) {
-      throw new Error('Map or Set is not supported type yet');
+    } else if (obj instanceof Map || obj instanceof Set || obj instanceof Buffer) {
+      throw new Error('Map/Set/Buffer is not a supported type yet');
     }
 
     return JSON.parse(JSON.stringify(obj));
