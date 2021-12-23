@@ -31,19 +31,14 @@ export namespace ObjectUtil {
       return !value.size;
     }
 
-    if (typeof value === 'string' || value instanceof Object || value instanceof Buffer) {
+    if (typeof value === 'string' || value instanceof Object) {
       return !Object.keys(value).length;
     }
 
     return true;
   }
 
-  // Todo: Buffer type에 대한 지원 필요
   export function deepClone<Type extends ObjectType>(obj: Type): Type {
-    if (obj instanceof Buffer) {
-      throw new Error('Buffer is not a supported type yet');
-    }
-
     if (obj instanceof (Map || Set)) {
       const result = new Map();
       const keys = Array.from(obj.keys());

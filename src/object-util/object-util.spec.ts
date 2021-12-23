@@ -101,9 +101,5 @@ describe('ObjectUtil', () => {
       expect(clonedSet).not.toBe(set);
       expect(clonedSet).toEqual(set);
     });
-    it('should throw error', () => {
-      const buffer = Buffer.alloc(10);
-      expect(() => ObjectUtil.deepClone(buffer)).toThrow();
-    });
   });
 });
