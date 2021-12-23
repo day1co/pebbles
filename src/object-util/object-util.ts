@@ -38,29 +38,34 @@ export namespace ObjectUtil {
     return true;
   }
 
+  // Todo: 누락된 type들이 있을 것
   export function deepClone<Type extends ObjectType>(obj: Type): Type {
-    if (obj instanceof (Map || Set)) {
-      const result = new Map();
-      const keys = Array.from(obj.keys());
+    let clonedObj: ObjectType;
+    const constructor = obj.constructor;
+    const constructorFunc = constructor as new (...arg: unknown[]) => Type;
 
-      keys.forEach((key) => {
-        result.set(key, obj.get(key));
-      });
-
-      return result as ObjectType;
+    switch (constructor) {
+      case Date:
+        return new constructorFunc(obj.getTime()) as ObjectType;
+      case Map:
+      case Set:
+      case RegExp:
+        return new constructorFunc(obj) as ObjectType;
+      case Buffer:
+        throw new Error('Not supported type');
+      default:
+        clonedObj = new constructorFunc();
     }
 
-    if (obj instanceof Set) {
-      const result = new Set();
-      const keys = Array.from(obj.keys());
-
-      keys.forEach((key) => {
-        result.add(key);
-      });
-
-      return result as ObjectType;
+    for (const property in obj) {
+      const val: unknown = obj[property];
+      if (!(val instanceof Object)) {
+        clonedObj[property] = obj[property];
+      } else {
+        clonedObj[property] = deepClone(obj[property]);
+      }
     }
 
-    return JSON.parse(JSON.stringify(obj));
+    return clonedObj;
   }
 }
