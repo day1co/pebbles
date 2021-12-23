@@ -81,15 +81,44 @@ describe('ObjectUtil', () => {
       expect(clonedInterfaceObj).not.toBe(interfaceObj);
       expect(clonedInterfaceObj).toEqual(interfaceObj);
 
+      class TestClass {
+        private _foo: number;
+
+        constructor(arg: number) {
+          this._foo = arg;
+        }
+
+        get foo(): number {
+          return this._foo;
+        }
+
+        set foo(arg: number) {
+          this._foo = arg;
+        }
+      }
+      const classObj: TestClass = new TestClass(1);
+      const clonedClassObj = ObjectUtil.deepClone<TestClass>(classObj);
+      expect(clonedClassObj instanceof TestClass).toBe(true);
+      expect(clonedClassObj).not.toBe(classObj);
+      expect(clonedClassObj).toEqual(classObj);
+
       const array = ['foo', { bar: 1 }];
       const clonedArray = ObjectUtil.deepClone<(string | Bar)[]>(array);
+      expect(clonedArray instanceof Array).toBe(true);
       expect(clonedArray).not.toBe(array);
       expect(clonedArray).toEqual(array);
+
+      const date = new Date();
+      const clonedDate = ObjectUtil.deepClone<Date>(date);
+      expect(clonedDate instanceof Date).toBe(true);
+      expect(clonedDate).not.toBe(date);
+      expect(clonedDate).toEqual(date);
 
       const map = new Map<string, number | Bar>();
       map.set('foo', 1);
       map.set('bar', { bar: 2 });
       const clonedMap = ObjectUtil.deepClone<Map<string, number | Bar>>(map);
+      expect(clonedMap instanceof Map).toBe(true);
       expect(clonedMap).not.toBe(map);
       expect(clonedMap).toEqual(map);
 
@@ -97,8 +126,13 @@ describe('ObjectUtil', () => {
       set.add('foo');
       set.add({ bar: 1 });
       const clonedSet = ObjectUtil.deepClone<Set<string | Bar>>(set);
+      expect(clonedSet instanceof Set).toBe(true);
       expect(clonedSet).not.toBe(set);
       expect(clonedSet).toEqual(set);
+    });
+    it('should throw error', () => {
+      const buffer = Buffer.alloc(10);
+      expect(() => ObjectUtil.deepClone<Buffer>(buffer)).toThrow('Not supported type');
     });
   });
 });
