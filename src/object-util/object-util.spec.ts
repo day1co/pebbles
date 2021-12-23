@@ -64,7 +64,6 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isEmpty(' ')).toBe(false);
       expect(ObjectUtil.isEmpty(new Set([1, 2, 3, 'foo', {}]))).toBe(false);
       expect(ObjectUtil.isEmpty(new Map([['foo', 1]]))).toBe(false);
-      expect(ObjectUtil.isEmpty(Buffer.alloc(1))).toBe(false);
     });
   });
 
