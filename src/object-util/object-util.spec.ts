@@ -132,7 +132,7 @@ describe('ObjectUtil', () => {
     });
     it('should throw error', () => {
       const buffer = Buffer.alloc(10);
-      expect(() => ObjectUtil.deepClone<Buffer>(buffer)).toThrow('Not supported type');
+      expect(() => ObjectUtil.deepClone<Buffer>(buffer)).toThrow();
     });
   });
 });

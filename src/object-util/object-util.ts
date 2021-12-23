@@ -51,8 +51,6 @@ export namespace ObjectUtil {
       case Set:
       case RegExp:
         return new constructorFunc(obj) as ObjectType;
-      case Buffer:
-        throw new Error('Not supported type');
       default:
         clonedObj = new constructorFunc();
     }
