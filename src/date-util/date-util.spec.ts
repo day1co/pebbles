@@ -305,6 +305,7 @@ describe('DateUtil', () => {
       );
       expect(DateUtil.format(testDate1, { format: 'M/D' })).toEqual('1/1');
       expect(DateUtil.format(testDate1, { format: 'MM월 DD일' })).toEqual('01월 01일');
+      expect(DateUtil.format(testDate1, { format: 'YY/MM/DD' })).toEqual('20/01/01');
 
       const testDate2 = new Date('2020-11-11 23:23:23:999');
       expect(DateUtil.format(testDate2, { format: 'YYYY-MM-DD HH:mm:ss' })).toEqual('2020-11-11 23:23:23');
@@ -315,6 +316,7 @@ describe('DateUtil', () => {
       );
       expect(DateUtil.format(testDate2, { format: 'M/D' })).toEqual('11/11');
       expect(DateUtil.format(testDate2, { format: 'MM월 DD일' })).toEqual('11월 11일');
+      expect(DateUtil.format(testDate2, { format: 'YY/MM/DD' })).toEqual('20/11/11');
     });
 
     it('should format date to string with default format rule', () => {
