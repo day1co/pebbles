@@ -250,7 +250,7 @@ export namespace DateUtil {
         case 'YYYY':
           return String(dateInfo.year);
         case 'YY':
-          return String(dateInfo.year).padStart(2, '0');
+          return String(dateInfo.year % 100).padStart(2, '0');
 
         case 'MM':
           return String(dateInfo.month).padStart(2, '0');
