@@ -163,4 +163,41 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.merge(obj1, obj2, obj3)).toEqual(result);
     });
   });
+
+  describe('omit', () => {
+    interface TestObj {
+      foo: 1;
+      bar: 2;
+      baz?: unknown;
+    }
+    it('should return object with given keys deleted', () => {
+      const testObj1: TestObj = { foo: 1, bar: 2, baz: 3 };
+      const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
+      const testObj3: TestObj = { foo: 1, bar: 2, baz: [1, 2, 3] };
+      expect(ObjectUtil.omit<TestObj>(testObj1, ['foo', 'bar'])).toEqual({ baz: 3 });
+      expect(ObjectUtil.omit<TestObj>(testObj2, ['baz'])).toEqual({ foo: 1, bar: 2 });
+      expect(ObjectUtil.omit<TestObj>(testObj3, ['baz'])).toEqual({ foo: 1, bar: 2 });
+    });
+
+    it('should delete object keys flattened', () => {
+      const testObj1: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
+      const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: [1, 2], bar: { foo: 1, bar: 2 } } };
+      expect(ObjectUtil.omit<TestObj>(testObj1, ['baz.foo'])).toEqual({ foo: 1, bar: 2, baz: { bar: 2 } });
+      expect(ObjectUtil.omit<TestObj>(testObj2, ['foo', 'baz.bar.bar'])).toEqual({
+        bar: 2,
+        baz: { foo: [1, 2], bar: { foo: 1 } },
+      });
+    });
+
+    it('should not deform original object', () => {
+      const testObj1: TestObj = { foo: 1, bar: 2 };
+      const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } };
+      const testResult1 = ObjectUtil.omit<TestObj>(testObj1, ['bar']);
+      const testResult2 = ObjectUtil.omit<TestObj>(testObj2, ['bar', 'baz.foo', 'baz.baz.bar']);
+      expect(testObj1).toEqual({ foo: 1, bar: 2 });
+      expect(testObj2).toEqual({ foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } });
+      expect(testObj1).not.toEqual(testResult1);
+      expect(testObj2).not.toEqual(testResult2);
+    });
+  });
 });
