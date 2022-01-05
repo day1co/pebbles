@@ -109,4 +109,5 @@ jobs:
         run: |
           npm ci
           npm publish
-          ./.github/npm-publish-slack.sh ${{ secrets.SLACK_WEBHOOK_URL }}
+          CHANGE_LOG=$(git --no-pager log ${{ github.event.before }}..${{ github.event.after }} --pretty=format:"%an - %s")
+          ./.github/npm-publish-slack.sh $(CHANGE_LOG) ${{ secrets.SLACK_WEBHOOK_URL }}
