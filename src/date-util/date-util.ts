@@ -211,6 +211,14 @@ export namespace DateUtil {
     return parseByFormat(str, 'YYYYMMDDHHmmssSSS');
   }
 
+  export function parseUnixTime(unixTime: string | number): Date {
+    if (typeof unixTime === 'string') {
+      unixTime = parseInt(unixTime);
+    }
+    unixTime *= ONE_SECOND;
+    return parse(unixTime);
+  }
+
   export function setUTCOffset(d: DateType, offsetMinute: number): Date {
     return new Date(parse(d).getTime() + offsetMinute * ONE_SECOND * ONE_MINUTE_IN_SECOND);
   }

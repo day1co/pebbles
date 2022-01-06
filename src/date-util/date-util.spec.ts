@@ -269,6 +269,21 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('parseUnixTime', () => {
+    it('should return Date instance of given unix time', () => {
+      // see https://www.epochconverter.com/
+      expect(DateUtil.parseUnixTime('1000000000')).toEqual(new Date('2001-09-09T10:46:40+09:00'));
+      expect(DateUtil.parseUnixTime('0')).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
+      expect(DateUtil.parseUnixTime('-1000000000')).toEqual(new Date('1938-04-25T07:13:20+09:00'));
+    });
+
+    it('should throw with invalid parameter', () => {
+      expect(() => DateUtil.parseUnixTime(Number.NEGATIVE_INFINITY)).toThrow();
+      expect(() => DateUtil.parseUnixTime(Number.POSITIVE_INFINITY)).toThrow();
+      expect(() => DateUtil.parseUnixTime('')).toThrow();
+    });
+  });
+
   describe('setUTCOffset', () => {
     const testDate1 = '2020-01-01 01:01:01Z';
     const testDate2 = '2020-01-01 00:00:00-09:00';
