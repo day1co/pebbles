@@ -53,7 +53,7 @@ export namespace DateUtil {
 
       return date;
     } catch (err) {
-      logger.error('calcDatetime error: %s, %s, %s', err, d, JSON.stringify(opts));
+      logger.error('calcDatetime error: %s, %s, %o', err, d, opts);
       throw err;
     }
   }

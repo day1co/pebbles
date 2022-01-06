@@ -21,35 +21,25 @@ export class HttpClient {
 
   sendGetRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
-    this.logger.debug(`getRequest to %s with config: %s`, fullUrl, JSON.stringify(config));
+    this.logger.debug(`getRequest to %s with config: %o`, fullUrl, config);
     return axios.get<Type, HttpRes<Type>>(fullUrl, config);
   }
 
   sendPostRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
-    this.logger.debug(
-      `postRequest to %s with data: %s, config: %s `,
-      fullUrl,
-      JSON.stringify(data),
-      JSON.stringify(config)
-    );
+    this.logger.debug(`postRequest to %s with data: %o, config: %o`, fullUrl, data, config);
     return axios.post<Type, HttpRes<Type>>(fullUrl, data, config);
   }
 
   sendPutRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
-    this.logger.debug(
-      `putRequest to %s with data: %s, config: %s`,
-      fullUrl,
-      JSON.stringify(data),
-      JSON.stringify(config)
-    );
+    this.logger.debug(`putRequest to %s with data: %o, config: %o`, fullUrl, data, config);
     return axios.put<Type, HttpRes<Type>>(fullUrl, data, config);
   }
 
   sendDeleteRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>> {
     const fullUrl = this.getFullUrl(url);
-    this.logger.debug(`deleteRequest to %s with config: %s`, fullUrl, JSON.stringify(config));
+    this.logger.debug(`deleteRequest to %s with config: %o`, fullUrl, config);
     return axios.delete<Type, HttpRes<Type>>(fullUrl, config);
   }
 
