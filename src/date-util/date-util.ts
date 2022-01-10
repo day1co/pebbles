@@ -258,7 +258,8 @@ export namespace DateUtil {
       formatTarget = formatTarget.replace(DEFAULT_LOCALE_TIMEZONE_FORMAT, getLocaleTimezoneOffset(d));
     }
 
-    const FORMAT_RULE_REGEXP = /[yYmMdDhHsS]{1,4}/g;
+    const FORMAT_RULE_REGEXP = /(Y{2,4}|M?M|D?D|H?H|m?m|s?s|S?S?S)/g;
+    const FORMAT_VERIFICATION_REGEXP = /(Y{2,4}|M?M|D?D|H?H|S?S?S)/gi;
     formatTarget = formatTarget.replace(FORMAT_RULE_REGEXP, (match) => {
       switch (match) {
         case 'YYYY':
@@ -302,7 +303,7 @@ export namespace DateUtil {
           return match;
       }
     });
-    if (FORMAT_RULE_REGEXP.test(formatTarget)) {
+    if (FORMAT_VERIFICATION_REGEXP.test(formatTarget)) {
       throw new Error(`Invalid format: ${formatTarget}`);
     }
     return formatTarget;
