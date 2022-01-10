@@ -40,49 +40,60 @@ export namespace ObjectUtil {
 
   // Todo: 누락된 type들이 있을 것
   export function deepClone<Type extends ObjectType>(obj: Type): Type {
-    let clonedObj: ObjectType;
+    let clonedObj: Type;
     const constructor = obj.constructor;
     const constructorFunc = constructor as new (...arg: unknown[]) => Type;
 
-    switch (constructor) {
-      case Date:
-        return new constructorFunc(obj.getTime()) as ObjectType;
-      case Map:
-      case Set:
-      case RegExp:
-        return new constructorFunc(obj) as ObjectType;
-      default:
-        clonedObj = new constructorFunc();
+    if (obj instanceof Date) {
+      return new constructorFunc(obj.getTime());
+    } else if (obj instanceof Map || obj instanceof Set || obj instanceof RegExp) {
+      return new constructorFunc(obj);
+    } else if (Array.isArray(obj)) {
+      return new constructorFunc(...obj);
+    } else {
+      clonedObj = new constructorFunc();
     }
 
-    for (const property in obj) {
-      const val: unknown = obj[property];
-      if (!(val instanceof Object)) {
-        clonedObj[property] = obj[property];
+    const keys: (number | string | symbol)[] = Object.getOwnPropertyNames(obj);
+    keys.push(...Object.getOwnPropertySymbols(obj));
+    keys.forEach((key) => {
+      if (obj[key] instanceof Object) {
+        Object.defineProperty(clonedObj, key, {
+          configurable: true,
+          enumerable: true,
+          value: deepClone(obj[key]),
+          writable: true,
+        });
       } else {
-        clonedObj[property] = deepClone(obj[property]);
+        Object.defineProperty(clonedObj, key, {
+          configurable: true,
+          enumerable: true,
+          value: obj[key],
+          writable: true,
+        });
       }
-    }
+    });
 
     return clonedObj;
   }
 
-  export function merge(obj: Record<string, unknown>, ...args: Record<string, unknown>[]): Record<string, unknown> {
-    const objKeys = Object.keys(obj);
-    const argKeysArray: string[][] = [];
-    const result: Record<string, unknown> = {};
+  export function merge(obj: ObjectType, ...args: ObjectType[]): ObjectType {
+    const argKeysArray: (number | string | symbol)[][] = [];
+    const result = deepClone<ObjectType>(obj);
 
     args.forEach((arg) => {
-      argKeysArray.push(Object.keys(arg));
-    });
-
-    objKeys.forEach((key) => {
-      result[key] = obj[key];
+      const keys: (number | string | symbol)[] = Object.getOwnPropertyNames(arg);
+      keys.push(...Object.getOwnPropertySymbols(arg));
+      argKeysArray.push(keys);
     });
 
     for (let ix = 0; ix < args.length; ix++) {
       argKeysArray[ix].forEach((key) => {
-        result[key] = args[ix][key];
+        if (result[key] instanceof Object && args[ix][key] instanceof Object) {
+          result[key] = merge(result[key], args[ix][key]);
+        } else {
+          result[key] = args[ix][key];
+        }
       });
     }
 
