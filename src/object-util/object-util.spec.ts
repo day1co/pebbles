@@ -1,4 +1,5 @@
 import { ObjectUtil } from './object-util';
+import { ObjectType } from './object-util.type';
 
 describe('ObjectUtil', () => {
   describe('serialize', () => {
@@ -129,6 +130,14 @@ describe('ObjectUtil', () => {
       expect(clonedSet instanceof Set).toBe(true);
       expect(clonedSet).not.toBe(set);
       expect(clonedSet).toEqual(set);
+
+      type SymbolKeyObj = { [key: symbol]: string };
+      const symbolKeyObj: SymbolKeyObj = {};
+      const symbol = Symbol('foo');
+      symbolKeyObj[symbol] = 'bar';
+      const clonedSymbolKey = ObjectUtil.deepClone<SymbolKeyObj>(symbolKeyObj);
+      expect(clonedSymbolKey).not.toBe(symbolKeyObj);
+      expect(clonedSymbolKey).toEqual(symbolKeyObj);
     });
     it('should throw error', () => {
       const buffer = Buffer.alloc(10);
@@ -137,19 +146,21 @@ describe('ObjectUtil', () => {
   });
 
   describe('merge', () => {
-    it('merge distinct keys', () => {
-      expect(ObjectUtil.merge({ foo: 'abc' }, { bar: 'def' })).toEqual({ foo: 'abc', bar: 'def' });
-    });
-    it('merge same key', () => {
-      expect(ObjectUtil.merge({ foo: 'abc' }, { foo: 'def' })).toEqual({ foo: 'def' });
-    });
-    it('merge three objects', () => {
-      expect(ObjectUtil.merge({ foo: 'abc' }, { bar: 'def' }, { baz: 'ghi' })).toEqual({
-        foo: 'abc',
-        bar: 'def',
-        baz: 'ghi',
-      });
-      expect(ObjectUtil.merge({ foo: 'abc' }, { foo: 'def' }, { foo: 'ghi' })).toEqual({ foo: 'ghi' });
+    it('merge jsons and arrays', () => {
+      const obj1 = { foo: [{ bar: 2 }, { qux: 4 }] };
+      const obj2 = { foo: [{ baz: 3 }, { quux: 5 }] };
+      type SymbolKeyObj = { [key: symbol]: number };
+      const obj3: SymbolKeyObj = {};
+      const symbol = Symbol('quuz');
+      obj3[symbol] = 6;
+      const result: ObjectType = {
+        foo: [
+          { bar: 2, baz: 3 },
+          { qux: 4, quux: 5 },
+        ],
+      };
+      result[symbol] = 6;
+      expect(ObjectUtil.merge(obj1, obj2, obj3)).toEqual(result);
     });
   });
 });
