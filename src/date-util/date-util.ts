@@ -10,6 +10,9 @@ const ONE_MINUTE_IN_SECOND = 60;
 const DEFAULT_UTC_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 const DEFAULT_LOCALE_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss[Z]';
 const DEFAULT_LOCALE_TIMEZONE_FORMAT = '[Z]';
+const DATE_FORMAT = 'YYYY-MM-DD';
+const DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+const TIMESTAMP_FORMAT = 'YYYYMMDDHHmmssSSS';
 
 const logger = LoggerFactory.getLogger('pebbles:date-util');
 
@@ -208,7 +211,7 @@ export namespace DateUtil {
   }
 
   export function parseTimestamp(str: string): Date {
-    return parseByFormat(str, 'YYYYMMDDHHmmssSSS');
+    return parseByFormat(str, TIMESTAMP_FORMAT);
   }
 
   export function setUTCOffset(d: DateType, offsetMinute: number): Date {
@@ -302,6 +305,16 @@ export namespace DateUtil {
     const ISOFormat = opts.format;
     const isUTC = opts.isUTC ?? false;
     return format(d, { format: ISOFormat, isUTC: isUTC });
+  }
+
+  export function formatDate(d: Date, isUTC = false): string {
+    return format(d, { format: DATE_FORMAT, isUTC });
+  }
+  export function formatDatetime(d: Date, isUTC = false): string {
+    return format(d, { format: DATETIME_FORMAT, isUTC });
+  }
+  export function formatTimestamp(d: Date, isUTC = false): string {
+    return format(d, { format: TIMESTAMP_FORMAT, isUTC });
   }
 
   export function secondsToTimeFormat(seconds: number): string {

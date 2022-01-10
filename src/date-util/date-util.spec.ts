@@ -377,6 +377,75 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('formatDate', () => {
+    it('should format date to YYYY-MM-DD format string', () => {
+      expect(DateUtil.formatDate(new Date('2020-01-01 01:01:01:111'))).toBe('2020-01-01');
+      expect(DateUtil.formatDate(new Date('2020-11-11 23:23:23:999'))).toBe('2020-11-11');
+    });
+    it('should format date to YYYY-MM-DD as UTC timezone', () => {
+      const localRuntimeTimezone = new Date().getTimezoneOffset() / 60;
+      const test1 = DateUtil.formatDate(new Date('2020-01-01 01:01:01:111'), true);
+      const test2 = DateUtil.formatDate(new Date('2020-01-01 01:01:01:111Z'), true);
+      const test3 = DateUtil.formatDate(new Date('2020-11-11 23:23:23:999'), true);
+      const test4 = DateUtil.formatDate(new Date('2020-11-11 23:23:23:999Z'), true);
+
+      if (localRuntimeTimezone < 0) {
+        expect(test1).toBe('2019-12-31');
+        expect(test2).toBe('2020-01-01');
+        expect(test3).toBe('2020-11-11');
+        expect(test4).toBe('2020-11-11');
+      }
+      if (localRuntimeTimezone > 0) {
+        expect(test1).toBe('2020-01-01');
+        expect(test2).toBe('2020-01-01');
+        expect(test3).toBe('2020-11-12');
+        expect(test4).toBe('2020-11-11');
+      }
+    });
+  });
+
+  describe('formatDatetime', () => {
+    it('should format date to YYYY-MM-DD HH:mm:ss format string', () => {
+      expect(DateUtil.formatDatetime(new Date('2020-01-01 01:01:01:111'))).toBe('2020-01-01 01:01:01');
+      expect(DateUtil.formatDatetime(new Date('2020-11-11 23:23:23:999'))).toBe('2020-11-11 23:23:23');
+    });
+    it('should format date in local runtime as default', () => {
+      const localRuntimeTimezone = new Date().getTimezoneOffset() / 60;
+      if (localRuntimeTimezone !== 0) {
+        expect(DateUtil.formatDatetime(new Date('2020-01-01 01:01:01:111Z'))).not.toBe('2020-01-01 01:01:01');
+        expect(DateUtil.formatDatetime(new Date('2020-11-11 23:23:23:999Z'))).not.toBe('2020-11-12 23:23:23');
+      } else {
+        expect(DateUtil.formatDatetime(new Date('2020-01-01 01:01:01:111Z'))).toBe('2020-01-01 01:01:01');
+        expect(DateUtil.formatDatetime(new Date('2020-11-11 23:23:23:999Z'))).toBe('2020-11-11 23:23:23');
+      }
+    });
+    it('should format date to YYYY-MM-DD HH:mm:ss as UTC timezone if true value is provided as isUTC parameter', () => {
+      expect(DateUtil.formatDatetime(new Date('2020-01-01 01:01:01:111Z'), true)).toBe('2020-01-01 01:01:01');
+      expect(DateUtil.formatDatetime(new Date('2020-11-11 23:23:23:999Z'), true)).toBe('2020-11-11 23:23:23');
+    });
+  });
+
+  describe('formatTimestamp', () => {
+    it('should format date to YYYYMMDDHHmmssSSS format string', () => {
+      expect(DateUtil.formatTimestamp(new Date('2020-01-01 01:01:01:111'))).toBe('20200101010101111');
+      expect(DateUtil.formatTimestamp(new Date('2020-11-11 23:23:23:999'))).toBe('20201111232323999');
+    });
+    it('should format date in local runtime as default', () => {
+      const localRuntimeTimezone = new Date().getTimezoneOffset() / 60;
+      if (localRuntimeTimezone !== 0) {
+        expect(DateUtil.formatTimestamp(new Date('2020-01-01 01:01:01:111Z'))).not.toBe('20200101010101111');
+        expect(DateUtil.formatTimestamp(new Date('2020-11-11 23:23:23:999Z'))).not.toBe('20201112232323999');
+      } else {
+        expect(DateUtil.formatTimestamp(new Date('2020-01-01 01:01:01:111Z'))).toBe('20200101010101111');
+        expect(DateUtil.formatTimestamp(new Date('2020-11-11 23:23:23:999Z'))).toBe('20201111232323999');
+      }
+    });
+    it('should format date to YYYYMMDDHHmmssSSS as UTC timezone if true value is provided as isUTC parameter', () => {
+      expect(DateUtil.formatTimestamp(new Date('2020-01-01 01:01:01:111Z'), true)).toBe('20200101010101111');
+      expect(DateUtil.formatTimestamp(new Date('2020-11-11 23:23:23:999Z'), true)).toBe('20201111232323999');
+    });
+  });
+
   describe('secondsToTimeFormat', () => {
     it('음수를 넣으면 throw가 발생한다', () => {
       expect(() => DateUtil.secondsToTimeFormat(-5)).toThrow();
