@@ -264,6 +264,25 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('parseByUtc', () => {
+    it('should throw error when invalid arguments given', () => {
+      expect(() => DateUtil.parseByUtc('')).toThrow();
+      expect(() => DateUtil.parseByUtc('abc')).toThrow();
+      expect(() => DateUtil.parseByUtc('1월 1일')).toThrow();
+    });
+
+    it('should return converted date UTC', () => {
+      expect(DateUtil.parseByUtc('2021-12-31')).toEqual(new Date('2021-12-31T00:00:00Z'));
+      expect(DateUtil.parseByUtc('2022-01-01 00:00:00')).toEqual(new Date('2022-01-01T00:00:00Z'));
+      expect(DateUtil.parseByUtc('2022-01-01 00:00:00Z')).toEqual(new Date('2022-01-01T00:00:00Z'));
+      expect(DateUtil.parseByUtc(new Date('2022-01-01 00:00:00'))).toEqual(new Date('2022-01-01T00:00:00Z'));
+      // Date 객체 자체에서 UTC 여부를 알 수 없으므로 변환
+      expect(DateUtil.parseByUtc(new Date('2022-01-01 00:00:00Z'))).not.toEqual(new Date('2022-01-01T00:00:00Z'));
+      const now = new Date();
+      expect(DateUtil.parseByUtc(now)).not.toEqual(now);
+    });
+  });
+
   describe('parseTimestamp', () => {
     it('should throw error when invalid arguments given', () => {
       expect(() => DateUtil.parseTimestamp('20210131')).not.toThrow();

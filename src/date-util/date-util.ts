@@ -225,6 +225,16 @@ export namespace DateUtil {
     return new Date(parse(d).getTime() + offsetMinute * ONE_SECOND_IN_MILLI * ONE_MINUTE_IN_SECOND);
   }
 
+  export function parseByUtc(d: DateType): Date {
+    if (d instanceof Date) {
+      return parse(d.getTime() - d.getTimezoneOffset() * 60 * 1000);
+    }
+    if (typeof d === 'string' && !/UTC|GMT|Z|z$/.test(d)) {
+      d = d + 'Z';
+    }
+    return parse(d);
+  }
+
   export function format(d: Date, opts?: DateFormatOpts): string {
     // format의 기본 기준은 로컬 런타임으로 한다.
     const isUTC = opts?.isUTC ?? false;
