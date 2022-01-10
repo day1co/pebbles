@@ -276,10 +276,15 @@ describe('DateUtil', () => {
       expect(DateUtil.parseByUtc('2022-01-01 00:00:00')).toEqual(new Date('2022-01-01T00:00:00Z'));
       expect(DateUtil.parseByUtc('2022-01-01 00:00:00Z')).toEqual(new Date('2022-01-01T00:00:00Z'));
       expect(DateUtil.parseByUtc(new Date('2022-01-01 00:00:00'))).toEqual(new Date('2022-01-01T00:00:00Z'));
-      // Date 객체 자체에서 UTC 여부를 알 수 없으므로 변환
-      expect(DateUtil.parseByUtc(new Date('2022-01-01 00:00:00Z'))).not.toEqual(new Date('2022-01-01T00:00:00Z'));
       const now = new Date();
-      expect(DateUtil.parseByUtc(now)).not.toEqual(now);
+      if (new Date().getTimezoneOffset() === 0) {
+        expect(DateUtil.parseByUtc(new Date('2022-01-01 00:00:00Z'))).toEqual(new Date('2022-01-01T00:00:00Z'));
+        expect(DateUtil.parseByUtc(now)).toEqual(now);
+      } else {
+        // Date 객체 자체에서 UTC 여부를 알 수 없으므로 변환
+        expect(DateUtil.parseByUtc(new Date('2022-01-01 00:00:00Z'))).not.toEqual(new Date('2022-01-01T00:00:00Z'));
+        expect(DateUtil.parseByUtc(now)).not.toEqual(now);
+      }
     });
   });
 
