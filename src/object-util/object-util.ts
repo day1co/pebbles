@@ -1,5 +1,5 @@
 import { LoggerFactory } from '../logger';
-import { ObjectType } from './object-util.type';
+import { ObjectKeyType, ObjectType } from './object-util.type';
 
 const logger = LoggerFactory.getLogger('pebbles:object-util');
 
@@ -54,7 +54,7 @@ export namespace ObjectUtil {
       clonedObj = new constructorFunc();
     }
 
-    const keys: (number | string | symbol)[] = Object.getOwnPropertyNames(obj);
+    const keys: ObjectKeyType[] = Object.getOwnPropertyNames(obj);
     keys.push(...Object.getOwnPropertySymbols(obj));
     keys.forEach((key) => {
       let value;
@@ -76,11 +76,11 @@ export namespace ObjectUtil {
   }
 
   export function merge(obj: ObjectType, ...args: ObjectType[]): ObjectType {
-    const argKeysArray: (number | string | symbol)[][] = [];
+    const argKeysArray: ObjectKeyType[][] = [];
     const result = deepClone<ObjectType>(obj);
 
     args.forEach((arg) => {
-      const keys: (number | string | symbol)[] = Object.getOwnPropertyNames(arg);
+      const keys: ObjectKeyType[] = Object.getOwnPropertyNames(arg);
       keys.push(...Object.getOwnPropertySymbols(arg));
       argKeysArray.push(keys);
     });
