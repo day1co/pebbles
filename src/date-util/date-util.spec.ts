@@ -275,6 +275,7 @@ describe('DateUtil', () => {
       expect(DateUtil.parseByUtc('2021-12-31')).toEqual(new Date('2021-12-31T00:00:00Z'));
       expect(DateUtil.parseByUtc('2022-01-01 00:00:00')).toEqual(new Date('2022-01-01T00:00:00Z'));
       expect(DateUtil.parseByUtc('2022-01-01 00:00:00Z')).toEqual(new Date('2022-01-01T00:00:00Z'));
+      expect(DateUtil.parseByUtc('2022-01-01 00:00:00+09:00')).toEqual(new Date('2022-01-01T00:00:00Z'));
       expect(DateUtil.parseByUtc(new Date('2022-01-01 00:00:00'))).toEqual(new Date('2022-01-01T00:00:00Z'));
       const now = new Date();
       if (new Date().getTimezoneOffset() === 0) {

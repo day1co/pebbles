@@ -227,9 +227,8 @@ export namespace DateUtil {
 
   export function parseByUtc(d: DateType): Date {
     if (d instanceof Date) {
-      return parse(d.getTime() - d.getTimezoneOffset() * 60 * 1000);
-    }
-    if (typeof d === 'string' && !/UTC|GMT|Z|z$/.test(d)) {
+      d = d.getTime() - d.getTimezoneOffset() * ONE_SECOND * ONE_MINUTE_IN_SECOND;
+    } else if (typeof d === 'string' && !/UTC|GMT|Z|z$/.test(d)) {
       d = d + 'Z';
     }
     return parse(d);
