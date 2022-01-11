@@ -57,21 +57,19 @@ export namespace ObjectUtil {
     const keys: (number | string | symbol)[] = Object.getOwnPropertyNames(obj);
     keys.push(...Object.getOwnPropertySymbols(obj));
     keys.forEach((key) => {
+      let value;
       if (obj[key] instanceof Object) {
-        Object.defineProperty(clonedObj, key, {
-          configurable: true,
-          enumerable: true,
-          value: deepClone(obj[key]),
-          writable: true,
-        });
+        value = deepClone(obj[key]);
       } else {
-        Object.defineProperty(clonedObj, key, {
-          configurable: true,
-          enumerable: true,
-          value: obj[key],
-          writable: true,
-        });
+        value = obj[key];
       }
+
+      Object.defineProperty(clonedObj, key, {
+        configurable: true,
+        enumerable: true,
+        value,
+        writable: true,
+      });
     });
 
     return clonedObj;
