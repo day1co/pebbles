@@ -1,1 +1,2 @@
-export type ObjectType = Record<number | string | symbol, any>;
+export type ObjectKeyType = number | string | symbol;
+export type ObjectType = Record<ObjectKeyType, any>;
