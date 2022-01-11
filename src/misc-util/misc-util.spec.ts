@@ -8,7 +8,7 @@ describe('Miscellaneous Util', () => {
       await MiscUtil.sleep(500);
       const finishTime = Date.now();
       console.timeEnd('sleep');
-      expect(finishTime - startTime).toBeLessThan(500 + 10);
+      expect(finishTime - startTime).toBeLessThan(500 + 15);
       expect(finishTime - startTime).toBeGreaterThanOrEqual(500);
     });
   });
