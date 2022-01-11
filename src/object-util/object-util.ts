@@ -40,7 +40,6 @@ export namespace ObjectUtil {
 
   // Todo: 누락된 type들이 있을 것
   export function deepClone<Type extends ObjectType>(obj: Type): Type {
-    let clonedObj: Type;
     const constructor = obj.constructor;
     const constructorFunc = constructor as new (...arg: unknown[]) => Type;
 
@@ -50,10 +49,9 @@ export namespace ObjectUtil {
       return new constructorFunc(obj);
     } else if (Array.isArray(obj)) {
       return new constructorFunc(...obj);
-    } else {
-      clonedObj = new constructorFunc();
     }
 
+    const clonedObj = new constructorFunc();
     const keys: ObjectKeyType[] = Object.getOwnPropertyNames(obj);
     keys.push(...Object.getOwnPropertySymbols(obj));
     keys.forEach((key) => {
