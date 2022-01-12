@@ -226,9 +226,7 @@ export namespace DateUtil {
   }
 
   export function parseByUtc(d: DateType): Date {
-    if (d instanceof Date) {
-      d = d.getTime() - d.getTimezoneOffset() * ONE_SECOND * ONE_MINUTE_IN_SECOND;
-    } else if (typeof d === 'string' && !/UTC|GMT|Z|z$/.test(d)) {
+    if (typeof d === 'string' && !/UTC|GMT|Z|z$/.test(d)) {
       d = d + 'Z';
     }
     return parse(d);
