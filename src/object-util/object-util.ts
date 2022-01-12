@@ -96,20 +96,26 @@ export namespace ObjectUtil {
     return result;
   }
 
-  // TODO: number, symbol 타입의 key를 포함하도록 수정
-  export function omit<Type extends ObjectType>(obj: Type, omitKeys: string[]): Type | Record<string, never> {
-    if (Object.keys(obj).length <= 0) {
+  export function omit(obj: ObjectType, omitKeys: ObjectKeyType[]): ObjectType {
+    const keys: ObjectKeyType[] = Object.getOwnPropertyNames(obj);
+    keys.push(...Object.getOwnPropertySymbols(obj));
+
+    if (keys.length <= 0) {
       return {};
     }
     if (omitKeys.length <= 0) {
       return obj;
     }
 
-    const resultObj = deepClone<Type>(obj);
+    const resultObj = deepClone(obj);
 
     for (const key of omitKeys) {
-      const nestedKeys = key.split('.');
       let tempObj = resultObj;
+      let nestedKeys: ObjectKeyType[] = [key];
+
+      if (typeof key === 'string') {
+        nestedKeys = key.split('.');
+      }
       for (let i = 0; i < nestedKeys.length; i++) {
         if (i === nestedKeys.length - 1) {
           delete tempObj[nestedKeys[i]];

@@ -170,20 +170,21 @@ describe('ObjectUtil', () => {
       bar: 2;
       baz?: unknown;
     }
+
     it('should return object with given keys deleted', () => {
       const testObj1: TestObj = { foo: 1, bar: 2, baz: 3 };
       const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
       const testObj3: TestObj = { foo: 1, bar: 2, baz: [1, 2, 3] };
-      expect(ObjectUtil.omit<TestObj>(testObj1, ['foo', 'bar'])).toEqual({ baz: 3 });
-      expect(ObjectUtil.omit<TestObj>(testObj2, ['baz'])).toEqual({ foo: 1, bar: 2 });
-      expect(ObjectUtil.omit<TestObj>(testObj3, ['baz'])).toEqual({ foo: 1, bar: 2 });
+      expect(ObjectUtil.omit(testObj1, ['foo', 'bar'])).toEqual({ baz: 3 });
+      expect(ObjectUtil.omit(testObj2, ['baz'])).toEqual({ foo: 1, bar: 2 });
+      expect(ObjectUtil.omit(testObj3, ['baz'])).toEqual({ foo: 1, bar: 2 });
     });
 
     it('should delete object keys flattened', () => {
       const testObj1: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
       const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: [1, 2], bar: { foo: 1, bar: 2 } } };
-      expect(ObjectUtil.omit<TestObj>(testObj1, ['baz.foo'])).toEqual({ foo: 1, bar: 2, baz: { bar: 2 } });
-      expect(ObjectUtil.omit<TestObj>(testObj2, ['foo', 'baz.bar.bar'])).toEqual({
+      expect(ObjectUtil.omit(testObj1, ['baz.foo'])).toEqual({ foo: 1, bar: 2, baz: { bar: 2 } });
+      expect(ObjectUtil.omit(testObj2, ['foo', 'baz.bar.bar'])).toEqual({
         bar: 2,
         baz: { foo: [1, 2], bar: { foo: 1 } },
       });
@@ -192,12 +193,29 @@ describe('ObjectUtil', () => {
     it('should not deform original object', () => {
       const testObj1: TestObj = { foo: 1, bar: 2 };
       const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } };
-      const testResult1 = ObjectUtil.omit<TestObj>(testObj1, ['bar']);
-      const testResult2 = ObjectUtil.omit<TestObj>(testObj2, ['bar', 'baz.foo', 'baz.baz.bar']);
+      const testResult1 = ObjectUtil.omit(testObj1, ['bar']);
+      const testResult2 = ObjectUtil.omit(testObj2, ['bar', 'baz.foo', 'baz.baz.bar']);
       expect(testObj1).toEqual({ foo: 1, bar: 2 });
       expect(testObj2).toEqual({ foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } });
       expect(testObj1).not.toEqual(testResult1);
       expect(testObj2).not.toEqual(testResult2);
+    });
+
+    it('should omit with number | symbol type key', () => {
+      const symbol1 = Symbol('foo');
+      const symbol2 = Symbol('bar');
+      const testObj1: { [key: symbol]: number } = {};
+      const testObj2: { [key: number]: number } = {};
+      testObj1[symbol1] = 1;
+      testObj1[symbol2] = 2;
+
+      const number1 = 1;
+      const number2 = 2;
+      testObj2[number1] = 1;
+      testObj2[number2] = 2;
+
+      expect(ObjectUtil.omit(testObj1, [symbol1])).toEqual({ [symbol2]: 2 });
+      expect(ObjectUtil.omit(testObj2, [1])).toEqual({ [2]: 2 });
     });
   });
 });
