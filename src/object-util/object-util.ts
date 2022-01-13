@@ -96,18 +96,16 @@ export namespace ObjectUtil {
     return result;
   }
 
+  // TODO: array에 대한 처리
   export function omit(obj: ObjectType, omitKeys: ObjectKeyType[]): ObjectType {
     const keys: ObjectKeyType[] = Object.getOwnPropertyNames(obj);
     keys.push(...Object.getOwnPropertySymbols(obj));
 
-    if (keys.length <= 0) {
-      return {};
-    }
-    if (omitKeys.length <= 0) {
-      return obj;
-    }
-
     const resultObj = deepClone(obj);
+
+    if (keys.length <= 0 || omitKeys.length <= 0) {
+      return resultObj;
+    }
 
     for (const key of omitKeys) {
       let tempObj = resultObj;
@@ -116,13 +114,17 @@ export namespace ObjectUtil {
       if (typeof key === 'string') {
         nestedKeys = key.split('.');
       }
-      for (let i = 0; i < nestedKeys.length; i++) {
-        if (i === nestedKeys.length - 1) {
-          delete tempObj[nestedKeys[i]];
-          break;
+      nestedKeys.forEach((tempKey, index) => {
+        if (isNullish(tempObj[tempKey])) {
+          return false;
         }
-        tempObj = tempObj[nestedKeys[i]];
-      }
+        if (index === nestedKeys.length - 1) {
+          delete tempObj[tempKey];
+          return false;
+        }
+        tempObj = tempObj[tempKey];
+        return true;
+      });
     }
     return resultObj;
   }
