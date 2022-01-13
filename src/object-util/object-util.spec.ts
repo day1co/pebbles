@@ -217,5 +217,28 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.omit(testObj1, [symbol1])).toEqual({ [symbol2]: 2 });
       expect(ObjectUtil.omit(testObj2, [1])).toEqual({ [2]: 2 });
     });
+
+    it('should skip with key which does not exist', () => {
+      const testObj1 = { foo: 1, bar: 2 };
+      const testObj2 = { foo: 1, bar: { foo: 1, bar: { foo: 1, bar: 2 } } };
+      const testObj3 = { [Symbol('foo')]: 1 };
+      const testObj4 = { [1]: 1, [2]: 2 };
+      expect(ObjectUtil.omit(testObj1, ['bar.foo.bar'])).toEqual(testObj1);
+      expect(ObjectUtil.omit(testObj2, ['bar.bar', 'bar.bar'])).toEqual({ foo: 1, bar: { foo: 1 } });
+      expect(ObjectUtil.omit(testObj3, [Symbol('bar')])).toEqual(testObj3);
+      expect(ObjectUtil.omit(testObj4, [3])).toEqual(testObj4);
+    });
+
+    it('should return obj as a new object when one of two parameters is empty', () => {
+      const testObj1 = {};
+      const testObj2 = new Map();
+      const testObj3 = new Set();
+      expect(ObjectUtil.omit(testObj1, ['foo'])).toEqual({});
+      expect(ObjectUtil.omit(testObj1, ['foo'])).not.toBe(testObj1);
+      expect(ObjectUtil.omit(testObj2, ['foo'])).toEqual(new Map());
+      expect(ObjectUtil.omit(testObj2, ['foo'])).not.toBe(testObj2);
+      expect(ObjectUtil.omit(testObj3, ['foo'])).toEqual(new Set());
+      expect(ObjectUtil.omit(testObj3, ['foo'])).not.toBe(testObj3);
+    });
   });
 });
