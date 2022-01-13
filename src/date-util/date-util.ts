@@ -212,8 +212,14 @@ export namespace DateUtil {
   }
 
   export function parseUnixTime(unixTime: string | number): Date {
+    const MAX_SECOND = 8640000000000;
+    const MIN_SECOND = -8640000000000;
+
     if (typeof unixTime === 'string') {
       unixTime = parseInt(unixTime);
+    }
+    if (unixTime > MAX_SECOND || unixTime < MIN_SECOND) {
+      throw new Error(`"${unixTime}" exceeds range of possible date value`);
     }
     unixTime *= ONE_SECOND;
     return parse(unixTime);
