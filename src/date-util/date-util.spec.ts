@@ -275,11 +275,18 @@ describe('DateUtil', () => {
       expect(DateUtil.parseUnixTime('1000000000')).toEqual(new Date('2001-09-09T10:46:40+09:00'));
       expect(DateUtil.parseUnixTime('0')).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
       expect(DateUtil.parseUnixTime('-1000000000')).toEqual(new Date('1938-04-25T07:13:20+09:00'));
+      expect(DateUtil.parseUnixTime(1000000000)).toEqual(new Date('2001-09-09T10:46:40+09:00'));
+      expect(DateUtil.parseUnixTime(0)).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
+      expect(DateUtil.parseUnixTime(-1000000000)).toEqual(new Date('1938-04-25T07:13:20+09:00'));
     });
 
     it('should throw with invalid parameter', () => {
       expect(() => DateUtil.parseUnixTime(Number.NEGATIVE_INFINITY)).toThrow();
       expect(() => DateUtil.parseUnixTime(Number.POSITIVE_INFINITY)).toThrow();
+      expect(() => DateUtil.parseUnixTime(Number.MAX_SAFE_INTEGER)).toThrow();
+      expect(() => DateUtil.parseUnixTime(Number.MIN_SAFE_INTEGER)).toThrow();
+      expect(() => DateUtil.parseUnixTime(8640000000001)).toThrow();
+      expect(() => DateUtil.parseUnixTime(-8640000000001)).toThrow();
       expect(() => DateUtil.parseUnixTime('')).toThrow();
     });
   });
