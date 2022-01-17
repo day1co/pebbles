@@ -52,9 +52,7 @@ export namespace ObjectUtil {
     }
 
     const clonedObj = new constructorFunc();
-    const keys: ObjectKeyType[] = Object.getOwnPropertyNames(obj);
-    keys.push(...Object.getOwnPropertySymbols(obj));
-    keys.forEach((key) => {
+    getAllPropertyKeys(obj).forEach((key) => {
       let value;
       if (obj[key] instanceof Object) {
         value = deepClone(obj[key]);
@@ -78,9 +76,7 @@ export namespace ObjectUtil {
     const result = deepClone<ObjectType>(obj);
 
     args.forEach((arg) => {
-      const keys: ObjectKeyType[] = Object.getOwnPropertyNames(arg);
-      keys.push(...Object.getOwnPropertySymbols(arg));
-      argKeysArray.push(keys);
+      argKeysArray.push(getAllPropertyKeys(arg));
     });
 
     for (let ix = 0; ix < args.length; ix++) {
@@ -98,12 +94,9 @@ export namespace ObjectUtil {
 
   // TODO: array에 대한 처리
   export function omit(obj: ObjectType, omitKeys: ObjectKeyType[]): ObjectType {
-    const keys: ObjectKeyType[] = Object.getOwnPropertyNames(obj);
-    keys.push(...Object.getOwnPropertySymbols(obj));
-
     const resultObj = deepClone(obj);
 
-    if (keys.length <= 0 || omitKeys.length <= 0) {
+    if (getAllPropertyKeys(obj).length <= 0 || omitKeys.length <= 0) {
       return resultObj;
     }
 
@@ -127,5 +120,9 @@ export namespace ObjectUtil {
       });
     }
     return resultObj;
+  }
+
+  export function getAllPropertyKeys(obj: ObjectType): ObjectKeyType[] {
+    return [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)];
   }
 }
