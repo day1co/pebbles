@@ -53,7 +53,6 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isEmpty(new Set())).toBe(true);
       expect(ObjectUtil.isEmpty(new Set([]))).toBe(true);
       expect(ObjectUtil.isEmpty(new Map())).toBe(true);
-      expect(ObjectUtil.isEmpty(Buffer.alloc(0))).toBe(true);
       expect(ObjectUtil.isEmpty(new Date('2021-10-10'))).toBe(true);
     });
     it('should return false', async () => {
@@ -138,10 +137,6 @@ describe('ObjectUtil', () => {
       const clonedSymbolKey = ObjectUtil.deepClone<SymbolKeyObj>(symbolKeyObj);
       expect(clonedSymbolKey).not.toBe(symbolKeyObj);
       expect(clonedSymbolKey).toEqual(symbolKeyObj);
-    });
-    it('should throw error', () => {
-      const buffer = Buffer.alloc(10);
-      expect(() => ObjectUtil.deepClone<Buffer>(buffer)).toThrow();
     });
   });
 
@@ -239,6 +234,16 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.omit(testObj2, ['foo'])).not.toBe(testObj2);
       expect(ObjectUtil.omit(testObj3, ['foo'])).toEqual(new Set());
       expect(ObjectUtil.omit(testObj3, ['foo'])).not.toBe(testObj3);
+    });
+  });
+
+  describe('getAllPropertyKeys', () => {
+    it('should return true', async () => {
+      const symbol = Symbol('bar');
+      const obj: { [key: string | symbol]: unknown } = { foo: 1 };
+      obj[symbol] = 'baz';
+      expect(ObjectUtil.getAllPropertyKeys(obj)).toEqual(['foo', symbol]);
+      expect(ObjectUtil.getAllPropertyKeys(['foo', 'bar', 'baz'])).toEqual(['0', '1', '2', 'length']);
     });
   });
 });
