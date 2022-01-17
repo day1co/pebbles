@@ -19,6 +19,12 @@ describe('DateUtil', () => {
       expect(DateUtil.parse('2021-01-01T01:01:01Z').getTime()).toBe(new Date('2021-01-01T01:01:01Z').getTime());
       expect(DateUtil.parse('2021-10-10').getTime()).toEqual(new Date('2021-10-10').getTime());
     });
+    test('original input value is maintained', () => {
+      const testDate = new Date();
+      const parsedDate = DateUtil.parse(testDate);
+      parsedDate.setHours(parsedDate.getHours() + 1);
+      expect(parsedDate.getTime()).not.toEqual(testDate.getTime());
+    });
   });
 
   describe('calcDatetime', () => {
