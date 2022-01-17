@@ -24,7 +24,7 @@ export namespace DateUtil {
       throw new Error(`Invalid Date: ${originalD.toString()}`);
     }
 
-    return d;
+    return new Date(d.getTime());
   }
 
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
