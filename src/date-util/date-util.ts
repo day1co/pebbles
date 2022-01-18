@@ -1,4 +1,4 @@
-import type { CalcDatetimeOpts, DateFormatOpts } from './date-util.interface';
+import type { CalcDatetimeOpts, DateFormatOpts, LocalDateTimeFormatOpts } from './date-util.interface';
 import type { DateType, DatePropertyType, ISO8601FormatType } from './date-util.type';
 import { LoggerFactory } from '../logger';
 
@@ -345,6 +345,61 @@ export namespace DateUtil {
       .padStart(2, '0');
     const ss = (seconds % 60).toString().padStart(2, '0');
     return `${hh}:${mm}:${ss}`;
+  }
+
+  export function formatInTwoDigitLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
+    d = subtractDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
+
+    const options: Intl.DateTimeFormatOptions = {
+      year: opts.withYear ? '2-digit' : undefined,
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      weekday: 'short',
+      hour12: false,
+      timeZone: opts.timeZone,
+    };
+
+    let formatResult = new Intl.DateTimeFormat(opts.locale, options).format(d);
+
+    formatResult = formatResult.replace(/[.]\s(?=.*[.])|[.]/g, (match) => {
+      switch (match) {
+        case '. ':
+          return '/';
+        case '.':
+          return '';
+        default:
+          return match;
+      }
+    });
+    return format12HourInLocale(formatResult, opts.locale);
+  }
+}
+
+function subtractDayIfLocalTimeIsMidnight(d: Date, timeZone: string) {
+  const isMidnight =
+    new Intl.DateTimeFormat('default', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(d) === '24';
+  if (isMidnight) {
+    return DateUtil.calcDatetime(d, { date: -1 });
+  }
+  return d;
+}
+
+function format12HourInLocale(str: string, locale: string): string {
+  const INTL_MIDNIGHT_OR_NOON_KOR_REGEXP = /(24시|12시)/g;
+
+  // TODO: 별도 enum으로 관리?
+  const ReplaceMap: { [key: string]: string } = {
+    '24시': '자정',
+    '12시': '정오',
+  };
+
+  switch (locale) {
+    case 'ko-KR':
+    case 'ko':
+      return str.replace(INTL_MIDNIGHT_OR_NOON_KOR_REGEXP, (match) => ReplaceMap[match]);
+    default:
+      return str;
   }
 }
 
