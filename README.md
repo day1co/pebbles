@@ -2,58 +2,20 @@
 Backend / Frontend 공통 Utility package
 
 ## 세부 설명
-* HttpClient
-* Logger
+* [BooleanUtil]
+* [DateUtil]
+* [HttpClient]
+* [Logger]
+* [MiscUtil]
+* [NumberUtil]
+* [ObjectUtil]
+* [StringUtil]
 
-### HttpClient
-Signature
-```ts
-const httpClient = new HttpClient();
-httpClient.baseUrl = 'baseUrl';
-httpClient.sendGetRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>>;
-httpClient.sendPostRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>>;
-httpClient.sendPutRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>>;
-httpClient.sendDeleteRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>>;
-```
-
-Examples
-```ts
-import { HttpClient } from "@day1co/common-util/http-client";
-import type { HttpReqConfig, HttpRes } from "@day1co/common-util/http-client";
-
-const httpClient = new HttpClient();
-const config: HttpReqConfig = {}; // Optional
-httpClient.baseUrl = 'baseUrl';
-// The full url will be 'baseUrl' + 'url'
-const getResult: HttpRes<ResType> = await httpClient.sendGetRequest<ResType>('url', config);
-const postResult: HttpRes<ResType> = await httpClient.sendPostRequest<ResType>('url', data);
-```
-
-### Logger
-Signature
-```ts
-LoggerFactory.getLogger(name: string);
-logger.logLevel = 'deubg' | 'info' | 'warn' | 'error';
-logger.debug(msgTemplate: string, ...args): void;
-logger.info(msgTemplate: string, ...args): void;
-logger.warn(msgTemplate: string, ...args): void;
-logger.error(msgTemplate: string, ...args): void;
-```
-
-Examples
-
-```ts
-import { LoggerFactory } from "@day1co/common-util/logger";
-
-const logger = LoggerFactory.getLogger('test');
-logger.debug('test %s %d', 'message', 1);
-logger.logLevel = 'error';
-logger.debug('test %s %d', 'message', 2);
-logger.error('test %s %d', 'message', 3);
-```
-
-This produces
-```
-{"level":20,"time":1631672920154,"pid":4731,"hostname":"your-server.local","name":"test","msg":"test message 1"}
-{"level":50,"time":1631672920154,"pid":4731,"hostname":"your-server.local","name":"test","msg":"test message 3"}
-```
+[BooleanUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021621817/BooleanUtil
+[DateUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021457931/DateUtil
+[HttpClient]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021392400/HttpClient
+[Logger]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021032005/Logger
+[MiscUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021097584/MiscUtil
+[NumberUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021064827/NumberUtil
+[ObjectUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021195869/ObjectUtil
+[StringUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2020966461/StringUtil
