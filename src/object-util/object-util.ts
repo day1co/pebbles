@@ -122,6 +122,39 @@ export namespace ObjectUtil {
     return resultObj;
   }
 
+  export function isEqual(obj: ObjectType, other: ObjectType): boolean {
+    if (obj.constructor !== other.constructor) {
+      return false;
+    }
+    if (obj instanceof Map || obj instanceof Set) {
+      const assertedOther = other as Map<unknown, unknown> | Set<unknown>;
+      if (obj.size !== other.size) {
+        return false;
+      }
+      const objArr = Array.from(obj);
+      const otherArr = Array.from(assertedOther);
+      return isEqual(objArr.sort(), otherArr.sort());
+    } else if (obj instanceof Date) {
+      return obj.getTime() === (other as Date).getTime();
+    } else if (obj instanceof RegExp) {
+      return obj.toString() === (other as RegExp).toString();
+    }
+    const objKeys = getAllPropertyKeys(obj);
+    const otherKeys = getAllPropertyKeys(other);
+    if (objKeys.length !== otherKeys.length) {
+      return false;
+    }
+
+    for (const key of objKeys) {
+      if (obj[key] instanceof Object && other[key] instanceof Object) {
+        if (!isEqual(obj[key], other[key])) return false;
+      } else {
+        if (obj[key] !== other[key]) return false;
+      }
+    }
+    return true;
+  }
+
   export function getAllPropertyKeys(obj: ObjectType): ObjectKeyType[] {
     return [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)];
   }

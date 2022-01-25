@@ -246,4 +246,40 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.getAllPropertyKeys(['foo', 'bar', 'baz'])).toEqual(['0', '1', '2', 'length']);
     });
   });
+
+  describe('isEqual', () => {
+    it('should return true', async () => {
+      expect(ObjectUtil.isEqual({ foo: 1 }, { foo: 1 })).toBe(true);
+      expect(ObjectUtil.isEqual({ foo: { bar: 'baz' } }, { foo: { bar: 'baz' } })).toBe(true);
+      expect(ObjectUtil.isEqual({}, {})).toBe(true);
+      expect(ObjectUtil.isEqual([], [])).toBe(true);
+      expect(ObjectUtil.isEqual([null], [null])).toBe(true);
+      expect(ObjectUtil.isEqual(new Set([1, 2, 3]), new Set([3, 2, 1]))).toBe(true);
+      expect(ObjectUtil.isEqual([new Set([1, 2, 3, 'foo', {}])], [new Set([1, 2, 3, 'foo', {}])])).toBe(true);
+      expect(ObjectUtil.isEqual([new Date(2021, 5, 23)], [new Date(2021, 5, 23)])).toBe(true);
+      expect(ObjectUtil.isEqual(new Set([1, 2, 3, 'foo', {}]), new Set([1, 2, 3, 'foo', {}]))).toBe(true);
+      expect(ObjectUtil.isEqual(new Map(), new Map())).toBe(true);
+      expect(ObjectUtil.isEqual(new RegExp('ab+c'), new RegExp('ab+c'))).toBe(true);
+    });
+
+    it('should return false', async () => {
+      expect(ObjectUtil.isEqual(new RegExp('ab+c'), new RegExp('ab+d'))).toBe(false);
+      expect(ObjectUtil.isEqual({ foo: 1 }, { foo: 2 })).toBe(false);
+      expect(ObjectUtil.isEqual({ one: 1, two: 2 }, { one: 1, two: 2, three: 3 })).toBe(false);
+      expect(ObjectUtil.isEqual([1, 2], [1, 2, 3])).toBe(false);
+      expect(ObjectUtil.isEqual([undefined], [null])).toBe(false);
+      expect(ObjectUtil.isEqual([], {})).toBe(false);
+      expect(ObjectUtil.isEqual([new Date(2021, 5, 23)], [new Date(2021, 3, 23)])).toBe(false);
+      expect(ObjectUtil.isEqual([new Set([1, { a: new Set([1, {}]) }])], [new Set([1, { a: new Set([1, []]) }])])).toBe(
+        false
+      );
+      expect(ObjectUtil.isEqual(new Map([['foo', { a: 'foo' }]]), new Map([['foo', { a: 'bar' }]]))).toBe(false);
+      function fn(str: string) {
+        return str;
+      }
+      expect(ObjectUtil.isEqual({ foo: fn('a') }, { foo: fn('b') })).toBe(false);
+      const symbol = Symbol('a');
+      expect(ObjectUtil.isEqual({ [symbol]: { a: 'foo' } }, { [symbol]: { a: 'bar' } })).toBe(false);
+    });
+  });
 });
