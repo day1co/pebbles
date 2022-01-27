@@ -1,6 +1,19 @@
 import { DateUtil } from './date-util';
 
 describe('DateUtil', () => {
+  describe('isValidDate', () => {
+    it('should return true with valid date', () => {
+      expect(DateUtil.isValidDate(new Date())).toBe(true);
+      expect(DateUtil.isValidDate(new Date(1))).toBe(true);
+      expect(DateUtil.isValidDate(new Date('2000-01-01'))).toBe(true);
+    });
+    it('should return false with invalid date', () => {
+      expect(DateUtil.isValidDate(new Date(''))).toBe(false);
+      expect(DateUtil.isValidDate(new Date('abc'))).toBe(false);
+      expect(DateUtil.isValidDate(new Date('2000년 01월 01일'))).toBe(false);
+    });
+  });
+
   describe('parse', () => {
     test('invalid date input throws error', () => {
       expect(() => {

@@ -17,6 +17,10 @@ const TIMESTAMP_FORMAT = 'YYYYMMDDHHmmssSSS';
 const logger = LoggerFactory.getLogger('pebbles:date-util');
 
 export namespace DateUtil {
+  export function isValidDate(d: Date): boolean {
+    return !isNaN(d.valueOf());
+  }
+
   export function parse(d: DateType): Date {
     const originalD = d;
     if (!(d instanceof Date)) {
@@ -354,10 +358,6 @@ function getLocaleTimezoneOffset(d: Date): string {
   const offsetHours = String(Math.floor(localeTimezoneOffset / 60)).padStart(2, '0');
   const offsetMinutes = String(Math.floor(localeTimezoneOffset % 60)).padStart(2, '0');
   return `${sign}${offsetHours}:${offsetMinutes}`;
-}
-
-function isValidDate(d: Date): boolean {
-  return !isNaN(d.valueOf());
 }
 
 function diffMonth(since: Date, until: Date): number {
