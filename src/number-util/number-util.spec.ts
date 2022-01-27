@@ -33,8 +33,8 @@ describe('NumberUtil', () => {
       expect(NumberUtil.valueOf('0')).toEqual(0);
       expect(NumberUtil.valueOf('1.2')).toEqual(1.2);
       expect(NumberUtil.valueOf('-1.2')).toEqual(-1.2);
-      expect(NumberUtil.valueOf('-93339.22888374786').toString()).toEqual(`-93339.22888374786`);
-      expect(NumberUtil.valueOf('9488848.290000048').toString()).toEqual(`9488848.290000048`);
+      expect(NumberUtil.valueOf('-93339.228883747849').toString()).toEqual(`-93339.22888374786`);
+      expect(NumberUtil.valueOf('9488848.29000004833').toString()).toEqual(`9488848.290000048`);
     });
   });
 });
