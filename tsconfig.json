@@ -6,7 +6,7 @@
     "strict": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "types": ["node", "jest"],
+    "types": ["jest"],
     "declaration": true,
     "newLine": "lf",
     "outDir": "./lib",
@@ -18,5 +18,5 @@
     "target": "es2021"
   },
   "include": ["./src"],
-  "exclude": ["./lib", "./node_modules", "./**/*.spec.ts"]
+  "exclude": ["./lib", "./node_modules"]
 }
