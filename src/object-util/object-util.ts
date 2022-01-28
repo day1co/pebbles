@@ -158,4 +158,15 @@ export namespace ObjectUtil {
   export function getAllPropertyKeys(obj: ObjectType): ObjectKeyType[] {
     return [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)];
   }
+
+  export function pick(obj: ObjectType, keyList: ObjectKeyType[]): ObjectType {
+    const ret: ObjectType = {};
+    keyList.forEach((key) => {
+      if (obj[key] !== undefined) {
+        ret[key] = obj[key];
+      }
+    });
+
+    return ret;
+  }
 }

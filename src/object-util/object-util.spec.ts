@@ -3,12 +3,12 @@ import { ObjectType } from './object-util.type';
 
 describe('ObjectUtil', () => {
   describe('serialize', () => {
-    it('should return string', async () => {
+    it('should return string', () => {
       const obj = { test: 123 };
       const result = ObjectUtil.serialize(obj);
       expect(typeof result).toBe('string');
     });
-    it('should return null for invalid', async () => {
+    it('should return null for invalid', () => {
       const obj: { test: number; obj?: Record<string, unknown> } = { test: 123 };
       obj.obj = obj;
       const result = ObjectUtil.serialize(obj);
@@ -16,12 +16,12 @@ describe('ObjectUtil', () => {
     });
   });
   describe('deserialize', () => {
-    it('should return object', async () => {
+    it('should return object', () => {
       const str = '{ "test": 123 }';
       const result = ObjectUtil.deserialize(str);
       expect(result).toBeInstanceOf(Object);
     });
-    it('should return null for invalid', async () => {
+    it('should return null for invalid', () => {
       const str = '__invalid__';
       const result = ObjectUtil.deserialize(str);
       expect(result).toBeNull();
@@ -42,7 +42,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('isEmpty', () => {
-    it('should return true', async () => {
+    it('should return true', () => {
       expect(ObjectUtil.isEmpty(null)).toBe(true);
       expect(ObjectUtil.isEmpty(undefined)).toBe(true);
       expect(ObjectUtil.isEmpty(0)).toBe(true);
@@ -55,7 +55,7 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isEmpty(new Map())).toBe(true);
       expect(ObjectUtil.isEmpty(new Date('2021-10-10'))).toBe(true);
     });
-    it('should return false', async () => {
+    it('should return false', () => {
       expect(ObjectUtil.isEmpty(['foo'])).toBe(false);
       expect(ObjectUtil.isEmpty({ length: 0 })).toBe(false);
       expect(ObjectUtil.isEmpty({ 1: 0 })).toBe(false);
@@ -104,13 +104,11 @@ describe('ObjectUtil', () => {
 
       const array = ['foo', { bar: 1 }];
       const clonedArray = ObjectUtil.deepClone<(string | Bar)[]>(array);
-      expect(clonedArray instanceof Array).toBe(true);
       expect(clonedArray).not.toBe(array);
       expect(clonedArray).toEqual(array);
 
       const date = new Date();
       const clonedDate = ObjectUtil.deepClone<Date>(date);
-      expect(clonedDate instanceof Date).toBe(true);
       expect(clonedDate).not.toBe(date);
       expect(clonedDate).toEqual(date);
 
@@ -118,7 +116,6 @@ describe('ObjectUtil', () => {
       map.set('foo', 1);
       map.set('bar', { bar: 2 });
       const clonedMap = ObjectUtil.deepClone<Map<string, number | Bar>>(map);
-      expect(clonedMap instanceof Map).toBe(true);
       expect(clonedMap).not.toBe(map);
       expect(clonedMap).toEqual(map);
 
@@ -126,7 +123,6 @@ describe('ObjectUtil', () => {
       set.add('foo');
       set.add({ bar: 1 });
       const clonedSet = ObjectUtil.deepClone<Set<string | Bar>>(set);
-      expect(clonedSet instanceof Set).toBe(true);
       expect(clonedSet).not.toBe(set);
       expect(clonedSet).toEqual(set);
 
@@ -238,7 +234,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('getAllPropertyKeys', () => {
-    it('should return true', async () => {
+    it('should return true', () => {
       const symbol = Symbol('bar');
       const obj: { [key: string | symbol]: unknown } = { foo: 1 };
       obj[symbol] = 'baz';
@@ -248,7 +244,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('isEqual', () => {
-    it('should return true', async () => {
+    it('should return true', () => {
       expect(ObjectUtil.isEqual({ foo: 1 }, { foo: 1 })).toBe(true);
       expect(ObjectUtil.isEqual({ foo: { bar: 'baz' } }, { foo: { bar: 'baz' } })).toBe(true);
       expect(ObjectUtil.isEqual({}, {})).toBe(true);
@@ -262,7 +258,7 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isEqual(new RegExp('ab+c'), new RegExp('ab+c'))).toBe(true);
     });
 
-    it('should return false', async () => {
+    it('should return false', () => {
       expect(ObjectUtil.isEqual(new RegExp('ab+c'), new RegExp('ab+d'))).toBe(false);
       expect(ObjectUtil.isEqual({ foo: 1 }, { foo: 2 })).toBe(false);
       expect(ObjectUtil.isEqual({ one: 1, two: 2 }, { one: 1, two: 2, three: 3 })).toBe(false);
@@ -280,6 +276,19 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isEqual({ foo: fn('a') }, { foo: fn('b') })).toBe(false);
       const symbol = Symbol('a');
       expect(ObjectUtil.isEqual({ [symbol]: { a: 'foo' } }, { [symbol]: { a: 'bar' } })).toBe(false);
+    });
+  });
+
+  describe('pick', () => {
+    it('should return picked object', () => {
+      expect(ObjectUtil.pick({ foo: 1, bar: '2', baz: 3 }, ['foo', 'bar'])).toEqual({ foo: 1, bar: '2' });
+      expect(ObjectUtil.pick({ foo: 1 }, ['bar'])).toEqual({});
+      expect(ObjectUtil.pick({ foo: 1 }, [])).toEqual({});
+      expect(ObjectUtil.pick({ foo: 1, bar: '2', baz: { foo: 3, bar: 4, baz: 5 } }, ['foo', 'baz', 'qux'])).toEqual({
+        foo: 1,
+        baz: { foo: 3, bar: 4, baz: 5 },
+      });
+      expect(ObjectUtil.pick(['foo', 2, { bar: 3 }], [0, 1, 2, 3])).toEqual({ 0: 'foo', 1: 2, 2: { bar: 3 } });
     });
   });
 });
