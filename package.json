@@ -1,6 +1,8 @@
 {
   "name": "@day1co/pebbles",
   "version": "0.1.0",
+  "author": "Day1Company",
+  "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "repository": {
