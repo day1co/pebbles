@@ -2,7 +2,7 @@ import type { CalcDatetimeOpts, DateFormatOpts } from './date-util.interface';
 import type { DateType, DatePropertyType, ISO8601FormatType } from './date-util.type';
 import { LoggerFactory } from '../logger';
 
-const ONE_SECOND = 1000;
+const ONE_SECOND_IN_MILLI = 1000;
 const ONE_DAY_IN_SECOND = 60 * 60 * 24;
 const ONE_HOUR_IN_SECOND = 60 * 60;
 const ONE_MINUTE_IN_SECOND = 60;
@@ -22,16 +22,13 @@ export namespace DateUtil {
   }
 
   export function parse(d: DateType): Date {
-    const originalD = d;
-    if (!(d instanceof Date)) {
-      d = new Date(d);
+    const parsedDate = new Date(d);
+
+    if (!isValidDate(parsedDate)) {
+      throw new Error(`Invalid Date: ${d.toString()}`);
     }
 
-    if (!isValidDate(d)) {
-      throw new Error(`Invalid Date: ${originalD.toString()}`);
-    }
-
-    return new Date(d.getTime());
+    return parsedDate;
   }
 
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
@@ -92,7 +89,7 @@ export namespace DateUtil {
       return -diff(until, since, type);
     }
 
-    const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND;
+    const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND_IN_MILLI;
 
     let result = 0;
     switch (type) {
@@ -228,12 +225,12 @@ export namespace DateUtil {
     if (unixTime > MAX_SECOND || unixTime < MIN_SECOND) {
       throw new Error(`"${unixTime}" exceeds range of possible date value`);
     }
-    unixTime *= ONE_SECOND;
+    unixTime *= ONE_SECOND_IN_MILLI;
     return parse(unixTime);
   }
 
   export function setUTCOffset(d: DateType, offsetMinute: number): Date {
-    return new Date(parse(d).getTime() + offsetMinute * ONE_SECOND * ONE_MINUTE_IN_SECOND);
+    return new Date(parse(d).getTime() + offsetMinute * ONE_SECOND_IN_MILLI * ONE_MINUTE_IN_SECOND);
   }
 
   export function format(d: Date, opts?: DateFormatOpts): string {
