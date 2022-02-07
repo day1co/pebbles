@@ -1,4 +1,5 @@
 import { DateUtil } from './date-util';
+import type { LocalDateTimeFormatOpts } from './date-util.interface';
 
 describe('DateUtil', () => {
   describe('parse', () => {
@@ -496,24 +497,24 @@ describe('DateUtil', () => {
     const testDate4 = new Date(testDate3).getTime();
 
     it('should format date in two digit with year', () => {
-      const testOption1 = {
+      const testOption: LocalDateTimeFormatOpts = {
         locale: 'ko',
         timeZone: 'Asia/Seoul',
         withYear: true,
       };
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate1, testOption1)).toBe('99/12/31 (금) 자정');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate2, testOption1)).toBe('00/01/01 (토) 정오');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate3, testOption1)).toBe('00/01/01 (토) 21시');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate4, testOption1)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatInTwoDigitLocalTime(testDate1, testOption)).toBe('99/12/31 (금) 자정');
+      expect(DateUtil.formatInTwoDigitLocalTime(testDate2, testOption)).toBe('00/01/01 (토) 정오');
+      expect(DateUtil.formatInTwoDigitLocalTime(testDate3, testOption)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatInTwoDigitLocalTime(testDate4, testOption)).toBe('00/01/01 (토) 21시');
 
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate1), testOption1)).toBe('99/12/31 (금) 자정');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate2), testOption1)).toBe('00/01/01 (토) 정오');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate3), testOption1)).toBe('00/01/01 (토) 21시');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate4), testOption1)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate1), testOption)).toBe('99/12/31 (금) 자정');
+      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate2), testOption)).toBe('00/01/01 (토) 정오');
+      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate3), testOption)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate4), testOption)).toBe('00/01/01 (토) 21시');
     });
 
     it('should format date in two digit without year', () => {
-      const testOption = {
+      const testOption: LocalDateTimeFormatOpts = {
         locale: 'ko-KR',
         timeZone: 'Asia/Seoul',
       };
