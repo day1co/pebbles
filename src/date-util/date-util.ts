@@ -1,5 +1,10 @@
-import type { CalcDatetimeOpts, DateFormatOpts, LocalDateTimeFormatOpts } from './date-util.interface';
-import type { DateType, DatePropertyType, ISO8601FormatType } from './date-util.type';
+import type {
+  CalcDatetimeOpts,
+  DateFormatOpts,
+  ISODateFormatOpts,
+  LocalDateTimeFormatOpts,
+} from './date-util.interface';
+import type { DateType, DatePropertyType } from './date-util.type';
 import { LoggerFactory } from '../logger';
 
 const ONE_SECOND_IN_MILLI = 1000;
@@ -91,7 +96,7 @@ export namespace DateUtil {
 
     const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND_IN_MILLI;
 
-    let result = 0;
+    let result: number;
     switch (type) {
       case 'year':
         result = diffMonth(sinceDate, untilDate) / 12;
@@ -108,12 +113,9 @@ export namespace DateUtil {
       case 'minute':
         result = diffSeconds / ONE_MINUTE_IN_SECOND;
         break;
-      case 'second':
-        result = diffSeconds;
-        break;
       default:
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const _: never = type;
+        // second
+        result = diffSeconds;
     }
 
     return Math.floor(result);
@@ -139,12 +141,10 @@ export namespace DateUtil {
     }
 
     function substrByMatch(match: RegExpMatchArray): string {
-      const val = str.substr(<number>match.index, match[0].length);
-      if (val.length > 0) {
-        return val;
-      } else {
-        return '0';
-      }
+      const from = match.index ? match.index : 0;
+      const end = from + match[0].length;
+      const val = str.substring(from, end);
+      return val.length > 0 ? val : '0';
     }
 
     const tokenCallbackMap = new Map<string, Callback>([
@@ -313,10 +313,7 @@ export namespace DateUtil {
     return formatTarget;
   }
 
-  export function formatToISOString(
-    d: Date,
-    opts: Omit<DateFormatOpts, 'format'> & { format: ISO8601FormatType }
-  ): string {
+  export function formatToISOString(d: Date, opts: ISODateFormatOpts): string {
     const ISOFormat = opts.format;
     const isUTC = opts.isUTC ?? false;
     return format(d, { format: ISOFormat, isUTC: isUTC });
@@ -376,7 +373,7 @@ export namespace DateUtil {
   }
 }
 
-function subtractDayIfLocalTimeIsMidnight(d: Date, timeZone: string) {
+function subtractDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
   const isMidnight =
     new Intl.DateTimeFormat('default', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(d) === '24';
   if (isMidnight) {
