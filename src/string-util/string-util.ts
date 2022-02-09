@@ -13,7 +13,8 @@ export namespace StringUtil {
   }
 
   export function getNonce(nonceLength: number, nonceEncoding: number): string {
-    return Math.random().toString(nonceEncoding).substr(-nonceLength);
+    const nonceString = Math.random().toString(nonceEncoding);
+    return nonceString.substring(nonceString.length - nonceLength);
   }
 
   export function renderTemplate(templateOpts: TemplateOpts): string {
@@ -41,7 +42,7 @@ export namespace StringUtil {
 
   export function isValidEmail(str: string): boolean {
     const EMAIL_REGEXP =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return EMAIL_REGEXP.test(str);
   }
 
