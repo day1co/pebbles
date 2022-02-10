@@ -14,13 +14,13 @@ export class LoggerFactory {
       this.instance = new LoggerFactory();
     }
 
-    let result: Logger | undefined = this.instance.loggerMap.get(name);
+    let logger: Logger | undefined = this.instance.loggerMap.get(name);
 
-    if (!result) {
-      result = new PinoLogger(name);
-      this.instance.loggerMap.set(name, result);
+    if (!logger) {
+      logger = new PinoLogger(name);
+      this.instance.loggerMap.set(name, logger);
     }
 
-    return result;
+    return logger;
   }
 }

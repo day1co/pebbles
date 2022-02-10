@@ -4,7 +4,7 @@ import { ObjectKeyType, ObjectType } from './object-util.type';
 const logger = LoggerFactory.getLogger('pebbles:object-util');
 
 export namespace ObjectUtil {
-  export function serialize(obj: Record<string, unknown>): string | null {
+  export function serialize(obj: ObjectType): string | null {
     try {
       return JSON.stringify(obj);
     } catch (exception) {
@@ -13,7 +13,7 @@ export namespace ObjectUtil {
     }
   }
 
-  export function deserialize(str: string): Record<string, unknown> | null {
+  export function deserialize(str: string): ObjectType | null {
     try {
       return JSON.parse(str);
     } catch (exception) {
@@ -38,20 +38,22 @@ export namespace ObjectUtil {
     return true;
   }
 
-  // Todo: 누락된 type들이 있을 것
   export function deepClone<Type extends ObjectType>(obj: Type): Type {
-    const constructor = obj.constructor;
-    const constructorFunc = constructor as new (...arg: unknown[]) => Type;
+    const constructor = obj.constructor as new (...arg: unknown[]) => Type;
 
     if (obj instanceof Date) {
-      return new constructorFunc(obj.getTime());
+      return new constructor(obj.getTime());
     } else if (obj instanceof Map || obj instanceof Set || obj instanceof RegExp) {
-      return new constructorFunc(obj);
+      return new constructor(obj);
+    } else if (obj instanceof ArrayBuffer) {
+      const clonedBuf = new constructor(obj.byteLength);
+      new Uint8Array(clonedBuf as unknown as ArrayBuffer).set(new Uint8Array(obj));
+      return clonedBuf;
     } else if (Array.isArray(obj)) {
-      return new constructorFunc(...obj);
+      return new constructor(...obj);
     }
 
-    const clonedObj = new constructorFunc();
+    const clonedObj = new constructor();
     getAllPropertyKeys(obj).forEach((key) => {
       let value;
       if (obj[key] instanceof Object) {
@@ -73,7 +75,7 @@ export namespace ObjectUtil {
 
   export function merge(obj: ObjectType, ...args: ObjectType[]): ObjectType {
     const argKeysArray: ObjectKeyType[][] = [];
-    const result = deepClone<ObjectType>(obj);
+    const mergedObj = deepClone<ObjectType>(obj);
 
     args.forEach((arg) => {
       argKeysArray.push(getAllPropertyKeys(arg));
@@ -81,15 +83,15 @@ export namespace ObjectUtil {
 
     for (let ix = 0; ix < args.length; ix++) {
       argKeysArray[ix].forEach((key) => {
-        if (result[key] instanceof Object && args[ix][key] instanceof Object) {
-          result[key] = merge(result[key], args[ix][key]);
+        if (mergedObj[key] instanceof Object && args[ix][key] instanceof Object) {
+          mergedObj[key] = merge(mergedObj[key], args[ix][key]);
         } else {
-          result[key] = args[ix][key];
+          mergedObj[key] = args[ix][key];
         }
       });
     }
 
-    return result;
+    return mergedObj;
   }
 
   // TODO: array에 대한 처리
