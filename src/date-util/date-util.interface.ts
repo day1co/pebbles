@@ -15,10 +15,11 @@ export interface DateFormatOpts {
 }
 
 export interface ISODateFormatOpts {
-  readonly format: ISO8601FormatType;
+  readonly format?: ISO8601FormatType;
   readonly isUTC?: boolean;
 }
 
+// Todo: timezone과 locale에 리터럴 타입 적용
 export interface LocalDateTimeFormatOpts {
   readonly withYear?: boolean;
   readonly timeZone: string;

@@ -133,6 +133,15 @@ describe('ObjectUtil', () => {
       const clonedSymbolKey = ObjectUtil.deepClone<SymbolKeyObj>(symbolKeyObj);
       expect(clonedSymbolKey).not.toBe(symbolKeyObj);
       expect(clonedSymbolKey).toEqual(symbolKeyObj);
+
+      const buf = new ArrayBuffer(16);
+      const float64Array = new Float64Array(buf);
+      float64Array[0] = 0.5;
+      float64Array[1] = 1.5;
+      const clonedBuf = ObjectUtil.deepClone(buf);
+      const clonedFloat64Array = new Float64Array(clonedBuf);
+      expect(clonedFloat64Array).not.toBe(float64Array);
+      expect(clonedFloat64Array).toEqual(float64Array);
     });
   });
 

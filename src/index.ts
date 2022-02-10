@@ -9,5 +9,6 @@ export { MiscUtil } from './misc-util';
 export type { PageInfo, Pagination, PageDetail } from './misc-util';
 export { NumberUtil } from './number-util';
 export { ObjectUtil } from './object-util';
+export type { ObjectType, ObjectKeyType } from './object-util';
 export { StringUtil } from './string-util';
 export type { Tag } from './string-util';

@@ -375,7 +375,7 @@ export namespace DateUtil {
 
 function subtractDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
   const isMidnight =
-    new Intl.DateTimeFormat('default', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(d) === '24';
+    new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(d) === '24';
   if (isMidnight) {
     return DateUtil.calcDatetime(d, { date: -1 });
   }
