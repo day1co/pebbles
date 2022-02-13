@@ -345,7 +345,7 @@ export namespace DateUtil {
   }
 
   export function formatInTwoDigitLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
-    d = subtractDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
+    d = subtractOneDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
 
     const options: Intl.DateTimeFormatOptions = {
       year: opts.withYear ? '2-digit' : undefined,
@@ -371,9 +371,26 @@ export namespace DateUtil {
     });
     return format12HourInLocale(formatResult, opts.locale);
   }
+
+  export function formatInLongLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
+    d = subtractOneDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
+
+    const options: Intl.DateTimeFormatOptions = {
+      year: opts.withYear ? 'numeric' : undefined,
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      weekday: 'long',
+      hour12: false,
+      timeZone: opts.timeZone,
+    };
+
+    const formatResult = new Intl.DateTimeFormat(opts.locale, options).format(d);
+    return format12HourInLocale(formatResult, opts.locale);
+  }
 }
 
-function subtractDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
+function subtractOneDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
   const isMidnight =
     new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(d) === '24';
   if (isMidnight) {
