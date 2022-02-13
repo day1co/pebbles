@@ -80,6 +80,8 @@ describe('ObjectUtil', () => {
       const clonedInterfaceObj = ObjectUtil.deepClone<TestInterface>(interfaceObj);
       expect(clonedInterfaceObj).not.toBe(interfaceObj);
       expect(clonedInterfaceObj).toEqual(interfaceObj);
+      expect(clonedInterfaceObj.foo).not.toBe(interfaceObj.foo);
+      expect(clonedInterfaceObj.foo).toEqual(interfaceObj.foo);
 
       class TestClass {
         private _foo: number;
@@ -106,6 +108,8 @@ describe('ObjectUtil', () => {
       const clonedArray = ObjectUtil.deepClone<(string | Bar)[]>(array);
       expect(clonedArray).not.toBe(array);
       expect(clonedArray).toEqual(array);
+      expect(clonedArray[1]).not.toBe(array[1]);
+      expect(clonedArray[1]).toEqual(array[1]);
 
       const date = new Date();
       const clonedDate = ObjectUtil.deepClone<Date>(date);
@@ -118,13 +122,17 @@ describe('ObjectUtil', () => {
       const clonedMap = ObjectUtil.deepClone<Map<string, number | Bar>>(map);
       expect(clonedMap).not.toBe(map);
       expect(clonedMap).toEqual(map);
+      expect(clonedMap.get('bar')).not.toBe(map.get('bar'));
+      expect(clonedMap.get('bar')).toEqual(map.get('bar'));
 
       const set = new Set<string | { bar: number }>();
+      const bar = { bar: 1 };
       set.add('foo');
-      set.add({ bar: 1 });
+      set.add(bar);
       const clonedSet = ObjectUtil.deepClone<Set<string | Bar>>(set);
       expect(clonedSet).not.toBe(set);
       expect(clonedSet).toEqual(set);
+      expect(clonedSet.has(bar)).toBe(false);
 
       type SymbolKeyObj = { [key: symbol]: string };
       const symbolKeyObj: SymbolKeyObj = {};
@@ -165,6 +173,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('omit', () => {
+    const omit = ObjectUtil.omit;
     interface TestObj {
       foo: 1;
       bar: 2;
@@ -175,16 +184,16 @@ describe('ObjectUtil', () => {
       const testObj1: TestObj = { foo: 1, bar: 2, baz: 3 };
       const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
       const testObj3: TestObj = { foo: 1, bar: 2, baz: [1, 2, 3] };
-      expect(ObjectUtil.omit(testObj1, ['foo', 'bar'])).toEqual({ baz: 3 });
-      expect(ObjectUtil.omit(testObj2, ['baz'])).toEqual({ foo: 1, bar: 2 });
-      expect(ObjectUtil.omit(testObj3, ['baz'])).toEqual({ foo: 1, bar: 2 });
+      expect(omit(testObj1, ['foo', 'bar'])).toEqual({ baz: 3 });
+      expect(omit(testObj2, ['baz'])).toEqual({ foo: 1, bar: 2 });
+      expect(omit(testObj3, ['baz'])).toEqual({ foo: 1, bar: 2 });
     });
 
     it('should delete object keys flattened', () => {
       const testObj1: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
       const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: [1, 2], bar: { foo: 1, bar: 2 } } };
-      expect(ObjectUtil.omit(testObj1, ['baz.foo'])).toEqual({ foo: 1, bar: 2, baz: { bar: 2 } });
-      expect(ObjectUtil.omit(testObj2, ['foo', 'baz.bar.bar'])).toEqual({
+      expect(omit(testObj1, ['baz.foo'])).toEqual({ foo: 1, bar: 2, baz: { bar: 2 } });
+      expect(omit(testObj2, ['foo', 'baz.bar.bar'])).toEqual({
         bar: 2,
         baz: { foo: [1, 2], bar: { foo: 1 } },
       });
@@ -193,8 +202,8 @@ describe('ObjectUtil', () => {
     it('should not deform original object', () => {
       const testObj1: TestObj = { foo: 1, bar: 2 };
       const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } };
-      const testResult1 = ObjectUtil.omit(testObj1, ['bar']);
-      const testResult2 = ObjectUtil.omit(testObj2, ['bar', 'baz.foo', 'baz.baz.bar']);
+      const testResult1 = omit(testObj1, ['bar']);
+      const testResult2 = omit(testObj2, ['bar', 'baz.foo', 'baz.baz.bar']);
       expect(testObj1).toEqual({ foo: 1, bar: 2 });
       expect(testObj2).toEqual({ foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } });
       expect(testObj1).not.toEqual(testResult1);
@@ -214,8 +223,15 @@ describe('ObjectUtil', () => {
       testObj2[number1] = 1;
       testObj2[number2] = 2;
 
-      expect(ObjectUtil.omit(testObj1, [symbol1])).toEqual({ [symbol2]: 2 });
-      expect(ObjectUtil.omit(testObj2, [1])).toEqual({ [2]: 2 });
+      expect(omit(testObj1, [symbol1])).toEqual({ [symbol2]: 2 });
+      expect(omit(testObj2, [1])).toEqual({ [2]: 2 });
+    });
+
+    it('should return array without indices to omit', () => {
+      const testArray1 = ['foo', 'bar', { baz: 'qux' }];
+      const testArray2 = ['foo', { bar: ['baz'] }];
+      expect(omit(testArray1, [0, 2])).toEqual(['bar']);
+      expect(omit(testArray2, ['1.bar.0'])).toEqual(['foo', { bar: [] }]);
     });
 
     it('should skip with key which does not exist', () => {
@@ -223,10 +239,10 @@ describe('ObjectUtil', () => {
       const testObj2 = { foo: 1, bar: { foo: 1, bar: { foo: 1, bar: 2 } } };
       const testObj3 = { [Symbol('foo')]: 1 };
       const testObj4 = { [1]: 1, [2]: 2 };
-      expect(ObjectUtil.omit(testObj1, ['bar.foo.bar'])).toEqual(testObj1);
-      expect(ObjectUtil.omit(testObj2, ['bar.bar', 'bar.bar'])).toEqual({ foo: 1, bar: { foo: 1 } });
-      expect(ObjectUtil.omit(testObj3, [Symbol('bar')])).toEqual(testObj3);
-      expect(ObjectUtil.omit(testObj4, [3])).toEqual(testObj4);
+      expect(omit(testObj1, ['bar.foo.bar'])).toEqual(testObj1);
+      expect(omit(testObj2, ['bar.bar', 'bar.bar'])).toEqual({ foo: 1, bar: { foo: 1 } });
+      expect(omit(testObj3, [Symbol('bar')])).toEqual(testObj3);
+      expect(omit(testObj4, [3])).toEqual(testObj4);
     });
 
     it('should return obj as a new object when one of two parameters is empty', () => {

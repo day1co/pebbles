@@ -1,3 +1,3 @@
-jest.config.cjs
+jest.config.js
 tsconfig.json
 .*
