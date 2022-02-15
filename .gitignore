@@ -1,9 +1,9 @@
 # Compiled output
-node_modules
-lib
+node_modules/
+lib/
 
 # Test
-/coverage
+coverage/
 
 # OS
 .DS_Store
