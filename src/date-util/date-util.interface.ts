@@ -24,4 +24,5 @@ export interface LocalDateTimeFormatOpts {
   readonly withYear?: boolean;
   readonly timeZone: string;
   readonly locale: string;
+  readonly formatStyle: 'long' | '2-digit';
 }

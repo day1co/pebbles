@@ -344,21 +344,37 @@ export namespace DateUtil {
     return `${hh}:${mm}:${ss}`;
   }
 
-  export function formatInTwoDigitLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
+  export function formatLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
     d = subtractOneDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
+    let options: Intl.DateTimeFormatOptions;
 
-    const options: Intl.DateTimeFormatOptions = {
-      year: opts.withYear ? '2-digit' : undefined,
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      weekday: 'short',
-      hour12: false,
-      timeZone: opts.timeZone,
-    };
+    switch (opts.formatStyle) {
+      case '2-digit':
+        options = {
+          year: opts.withYear ? '2-digit' : undefined,
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          weekday: 'short',
+          hour12: false,
+          timeZone: opts.timeZone,
+        };
+        break;
+
+      case 'long':
+        options = {
+          year: opts.withYear ? 'numeric' : undefined,
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          weekday: 'long',
+          hour12: false,
+          timeZone: opts.timeZone,
+        };
+        break;
+    }
 
     let formatResult = new Intl.DateTimeFormat(opts.locale, options).format(d);
-
     formatResult = formatResult.replace(/[.]\s(?=.*[.])|[.]/g, (match) => {
       switch (match) {
         case '. ':
@@ -369,23 +385,6 @@ export namespace DateUtil {
           return match;
       }
     });
-    return format12HourInLocale(formatResult, opts.locale);
-  }
-
-  export function formatInLongLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
-    d = subtractOneDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
-
-    const options: Intl.DateTimeFormatOptions = {
-      year: opts.withYear ? 'numeric' : undefined,
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      weekday: 'long',
-      hour12: false,
-      timeZone: opts.timeZone,
-    };
-
-    const formatResult = new Intl.DateTimeFormat(opts.locale, options).format(d);
     return format12HourInLocale(formatResult, opts.locale);
   }
 }

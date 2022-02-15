@@ -491,7 +491,7 @@ describe('DateUtil', () => {
     });
   });
 
-  describe('formatInTwoDigitLocalTime', () => {
+  describe('formatLocalTime', () => {
     const testDate1 = '2000-01-01 00:00:00+09:00';
     const testDate2 = '2000-01-01 12:00:00+09:00';
     const testDate3 = '2000-01-01 12:00:00Z';
@@ -501,52 +501,48 @@ describe('DateUtil', () => {
       const testOption: LocalDateTimeFormatOpts = {
         locale: 'ko',
         timeZone: 'Asia/Seoul',
+        formatStyle: '2-digit',
         withYear: true,
       };
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate1, testOption)).toBe('99/12/31 (금) 자정');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate2, testOption)).toBe('00/01/01 (토) 정오');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate3, testOption)).toBe('00/01/01 (토) 21시');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate4, testOption)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(testDate1, testOption)).toBe('99/12/31 (금) 자정');
+      expect(DateUtil.formatLocalTime(testDate2, testOption)).toBe('00/01/01 (토) 정오');
+      expect(DateUtil.formatLocalTime(testDate3, testOption)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(testDate4, testOption)).toBe('00/01/01 (토) 21시');
 
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate1), testOption)).toBe('99/12/31 (금) 자정');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate2), testOption)).toBe('00/01/01 (토) 정오');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate3), testOption)).toBe('00/01/01 (토) 21시');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate4), testOption)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(new Date(testDate1), testOption)).toBe('99/12/31 (금) 자정');
+      expect(DateUtil.formatLocalTime(new Date(testDate2), testOption)).toBe('00/01/01 (토) 정오');
+      expect(DateUtil.formatLocalTime(new Date(testDate3), testOption)).toBe('00/01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(new Date(testDate4), testOption)).toBe('00/01/01 (토) 21시');
     });
 
     it('should format date in two digit without year', () => {
       const testOption: LocalDateTimeFormatOpts = {
         locale: 'ko-KR',
         timeZone: 'Asia/Seoul',
+        formatStyle: '2-digit',
       };
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate1, testOption)).toBe('12/31 (금) 자정');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate2, testOption)).toBe('01/01 (토) 정오');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate3, testOption)).toBe('01/01 (토) 21시');
-      expect(DateUtil.formatInTwoDigitLocalTime(testDate4, testOption)).toBe('01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(testDate1, testOption)).toBe('12/31 (금) 자정');
+      expect(DateUtil.formatLocalTime(testDate2, testOption)).toBe('01/01 (토) 정오');
+      expect(DateUtil.formatLocalTime(testDate3, testOption)).toBe('01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(testDate4, testOption)).toBe('01/01 (토) 21시');
 
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate1), testOption)).toBe('12/31 (금) 자정');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate2), testOption)).toBe('01/01 (토) 정오');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate3), testOption)).toBe('01/01 (토) 21시');
-      expect(DateUtil.formatInTwoDigitLocalTime(new Date(testDate4), testOption)).toBe('01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(new Date(testDate1), testOption)).toBe('12/31 (금) 자정');
+      expect(DateUtil.formatLocalTime(new Date(testDate2), testOption)).toBe('01/01 (토) 정오');
+      expect(DateUtil.formatLocalTime(new Date(testDate3), testOption)).toBe('01/01 (토) 21시');
+      expect(DateUtil.formatLocalTime(new Date(testDate4), testOption)).toBe('01/01 (토) 21시');
     });
-  });
-
-  describe('formatInLongLocalTime', () => {
-    const testDate1 = '2000-01-01 00:00:00+09:00';
-    const testDate2 = '2000-01-01 12:00:00+09:00';
-    const testDate3 = '2000-01-01 12:00:00Z';
-    const testDate4 = new Date(testDate3).getTime();
 
     it('should format date in long description format without year', () => {
       const testOption: LocalDateTimeFormatOpts = {
         locale: 'ko-KR',
         timeZone: 'Asia/Seoul',
+        formatStyle: 'long',
       };
 
-      expect(DateUtil.formatInLongLocalTime(testDate1, testOption)).toBe('12월 31일 금요일 자정');
-      expect(DateUtil.formatInLongLocalTime(testDate2, testOption)).toBe('1월 1일 토요일 정오');
-      expect(DateUtil.formatInLongLocalTime(testDate3, testOption)).toBe('1월 1일 토요일 21시');
-      expect(DateUtil.formatInLongLocalTime(testDate4, testOption)).toBe('1월 1일 토요일 21시');
+      expect(DateUtil.formatLocalTime(testDate1, testOption)).toBe('12월 31일 금요일 자정');
+      expect(DateUtil.formatLocalTime(testDate2, testOption)).toBe('1월 1일 토요일 정오');
+      expect(DateUtil.formatLocalTime(testDate3, testOption)).toBe('1월 1일 토요일 21시');
+      expect(DateUtil.formatLocalTime(testDate4, testOption)).toBe('1월 1일 토요일 21시');
     });
 
     it('should format date in long description format with year', () => {
@@ -554,12 +550,13 @@ describe('DateUtil', () => {
         locale: 'ko-KR',
         timeZone: 'Asia/Seoul',
         withYear: true,
+        formatStyle: 'long',
       };
 
-      expect(DateUtil.formatInLongLocalTime(testDate1, testOption)).toBe('1999년 12월 31일 금요일 자정');
-      expect(DateUtil.formatInLongLocalTime(testDate2, testOption)).toBe('2000년 1월 1일 토요일 정오');
-      expect(DateUtil.formatInLongLocalTime(testDate3, testOption)).toBe('2000년 1월 1일 토요일 21시');
-      expect(DateUtil.formatInLongLocalTime(testDate4, testOption)).toBe('2000년 1월 1일 토요일 21시');
+      expect(DateUtil.formatLocalTime(testDate1, testOption)).toBe('1999년 12월 31일 금요일 자정');
+      expect(DateUtil.formatLocalTime(testDate2, testOption)).toBe('2000년 1월 1일 토요일 정오');
+      expect(DateUtil.formatLocalTime(testDate3, testOption)).toBe('2000년 1월 1일 토요일 21시');
+      expect(DateUtil.formatLocalTime(testDate4, testOption)).toBe('2000년 1월 1일 토요일 21시');
     });
   });
 });
