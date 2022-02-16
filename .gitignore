@@ -1,6 +1,6 @@
 # Compiled output
 node_modules/
-lib/
+/lib/
 
 # Test
 coverage/

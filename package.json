@@ -18,7 +18,7 @@
     "lint": "eslint .",
     "prebuild": "rimraf ./lib && npm run lint",
     "prepublishOnly": "npm run build",
-    "test": "jest --detectOpenHandles --forceExit ./src"
+    "test": "jest --coverage --detectOpenHandles --forceExit ./src"
   },
   "dependencies": {
     "axios": "^0.21.4",
