@@ -1,3 +1,9 @@
+export interface PageDetail {
+  readonly page: number;
+  readonly offset: number;
+  readonly active: boolean;
+}
+
 export interface PageInfo {
   readonly count: number;
   readonly limit: number;
@@ -7,14 +13,8 @@ export interface PageInfo {
 }
 
 export interface Pagination {
-  currentPage: number;
-  firstPage: number;
-  lastPage: number;
-  pages: PageDetail[];
-}
-
-export interface PageDetail {
-  page: number;
-  offset: number;
-  active: boolean;
+  readonly currentPage: number;
+  readonly firstPage: number;
+  readonly lastPage: number;
+  readonly pages: PageDetail[];
 }
