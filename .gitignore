@@ -1,5 +1,7 @@
-# Compiled output
+# Node Modules
 node_modules/
+
+# Compiled output
 /lib/
 
 # Test
