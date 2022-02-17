@@ -346,45 +346,42 @@ export namespace DateUtil {
 
   export function formatLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
     d = subtractOneDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
-    let options: Intl.DateTimeFormatOptions;
 
+    const options: Intl.DateTimeFormatOptions = {};
     switch (opts.formatStyle) {
       case '2-digit':
-        options = {
-          year: opts.withYear ? '2-digit' : undefined,
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          weekday: 'short',
-          hour12: false,
-          timeZone: opts.timeZone,
-        };
+        options.year = opts.withYear ? '2-digit' : undefined;
+        options.month = '2-digit';
+        options.day = '2-digit';
+        options.hour = '2-digit';
+        options.weekday = 'short';
+        options.hour12 = false;
+        options.timeZone = opts.timeZone;
         break;
 
       case 'long':
-        options = {
-          year: opts.withYear ? 'numeric' : undefined,
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          weekday: 'long',
-          hour12: false,
-          timeZone: opts.timeZone,
-        };
+        options.year = opts.withYear ? 'numeric' : undefined;
+        options.month = 'long';
+        options.day = 'numeric';
+        options.hour = '2-digit';
+        options.weekday = 'long';
+        options.hour12 = false;
+        options.timeZone = opts.timeZone;
         break;
     }
 
-    let formatResult = new Intl.DateTimeFormat(opts.locale, options).format(d);
-    formatResult = formatResult.replace(/[.]\s(?=.*[.])|[.]/g, (match) => {
-      switch (match) {
-        case '. ':
-          return '/';
-        case '.':
-          return '';
-        default:
-          return match;
-      }
-    });
+    const formatResult = new Intl.DateTimeFormat(opts.locale, options)
+      .format(d)
+      .replace(/[.]\s(?=.*[.])|[.]/g, (match) => {
+        switch (match) {
+          case '. ':
+            return '/';
+          case '.':
+            return '';
+          default:
+            return match;
+        }
+      });
     return format12HourInLocale(formatResult, opts.locale);
   }
 }
