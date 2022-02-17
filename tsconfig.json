@@ -15,7 +15,7 @@
     "checkJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "target": "es2021"
+    "target": "esnext"
   },
   "include": ["./src"],
   "exclude": ["./lib", "./node_modules"]

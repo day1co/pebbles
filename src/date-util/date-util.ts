@@ -5,7 +5,6 @@ import type {
   LocalDateTimeFormatOpts,
 } from './date-util.interface';
 import type { DateType, DatePropertyType } from './date-util.type';
-import { LoggerFactory } from '../logger';
 
 const ONE_SECOND_IN_MILLI = 1000;
 const ONE_DAY_IN_SECOND = 60 * 60 * 24;
@@ -18,8 +17,6 @@ const DEFAULT_LOCALE_TIMEZONE_FORMAT = '[Z]';
 const DATE_FORMAT = 'YYYY-MM-DD';
 const DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 const TIMESTAMP_FORMAT = 'YYYYMMDDHHmmssSSS';
-
-const logger = LoggerFactory.getLogger('pebbles:date-util');
 
 export namespace DateUtil {
   export function isValidDate(d: Date): boolean {
@@ -37,38 +34,33 @@ export namespace DateUtil {
   }
 
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
-    try {
-      const date = parse(d);
+    const date = parse(d);
 
-      if (opts.year) {
-        date.setFullYear(date.getFullYear() + opts.year);
-      }
-
-      if (opts.month) {
-        date.setMonth(date.getMonth() + opts.month);
-      }
-
-      if (opts.date) {
-        date.setDate(date.getDate() + opts.date);
-      }
-
-      if (opts.hour) {
-        date.setHours(date.getHours() + opts.hour);
-      }
-
-      if (opts.minute) {
-        date.setMinutes(date.getMinutes() + opts.minute);
-      }
-
-      if (opts.second) {
-        date.setSeconds(date.getSeconds() + opts.second);
-      }
-
-      return date;
-    } catch (err) {
-      logger.error('calcDatetime error: %s, %s, %o', err, d, opts);
-      throw err;
+    if (opts.year) {
+      date.setFullYear(date.getFullYear() + opts.year);
     }
+
+    if (opts.month) {
+      date.setMonth(date.getMonth() + opts.month);
+    }
+
+    if (opts.date) {
+      date.setDate(date.getDate() + opts.date);
+    }
+
+    if (opts.hour) {
+      date.setHours(date.getHours() + opts.hour);
+    }
+
+    if (opts.minute) {
+      date.setMinutes(date.getMinutes() + opts.minute);
+    }
+
+    if (opts.second) {
+      date.setSeconds(date.getSeconds() + opts.second);
+    }
+
+    return date;
   }
 
   export function beginOfMonth(date: DateType = new Date()): Date {

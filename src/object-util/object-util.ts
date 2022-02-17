@@ -1,14 +1,10 @@
-import { LoggerFactory } from '../logger';
 import { ObjectKeyType, ObjectType } from './object-util.type';
-
-const logger = LoggerFactory.getLogger('pebbles:object-util');
 
 export namespace ObjectUtil {
   export function serialize(obj: ObjectType): string | null {
     try {
       return JSON.stringify(obj);
     } catch (exception) {
-      logger.warn('Error occurred while serializing - %s', exception);
       return null;
     }
   }
@@ -17,7 +13,6 @@ export namespace ObjectUtil {
     try {
       return JSON.parse(str);
     } catch (exception) {
-      logger.warn('Error occurred while deserializing - %s', exception);
       return null;
     }
   }
