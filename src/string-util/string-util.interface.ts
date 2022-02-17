@@ -1,7 +1,7 @@
 import { ObjectType } from '../object-util';
 
 export interface Tag {
-  text: string;
+  readonly text: string;
 }
 
 export interface TemplateOpts {

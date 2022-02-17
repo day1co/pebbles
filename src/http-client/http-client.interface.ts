@@ -21,10 +21,10 @@ export interface HttpReqConfig {
 }
 
 export interface HttpRes<Type> {
-  data: Type;
-  status: number;
-  statusText: string;
-  headers: unknown;
-  config: HttpReqConfig;
-  request?: unknown;
+  readonly data: Type;
+  readonly status: number;
+  readonly statusText: string;
+  readonly headers: unknown;
+  readonly config: HttpReqConfig;
+  readonly request?: unknown;
 }
