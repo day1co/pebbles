@@ -11,8 +11,6 @@
     "newLine": "lf",
     "outDir": "./lib",
     "sourceMap": true,
-    "allowJs": true,
-    "checkJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "target": "esnext"

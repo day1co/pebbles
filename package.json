@@ -14,12 +14,12 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf ./lib ./node_modules",
+    "clean": "rimraf ./coverage ./lib ./node_modules",
     "clean:build": "rimraf ./lib",
     "lint": "eslint .",
     "prebuild": "npm-run-all clean:build lint",
     "prepublishOnly": "npm run build",
-    "test": "jest --coverage --detectOpenHandles --forceExit ./src"
+    "test": "jest --coverage --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "axios": "^0.21.4",
