@@ -7,6 +7,18 @@ export type {
   ISODateFormatOpts,
   LocalDateTimeFormatOpts,
 } from './date-util';
+export {
+  BadRequestException,
+  ChangedCredentialException,
+  ClientException,
+  CustomException,
+  DataException,
+  ForbiddenException,
+  InternalServerException,
+  NotFoundException,
+  ServerException,
+  UnauthorizedException,
+} from './exception';
 export { HttpClient, HttpState } from './http-client';
 export type { HttpReqConfig, HttpRes } from './http-client';
 export { LoggerFactory } from './logger';
