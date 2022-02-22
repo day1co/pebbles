@@ -13,7 +13,7 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "target": "esnext"
+    "target": "es2021"
   },
   "include": ["./src"],
   "exclude": ["./lib", "./node_modules"]
