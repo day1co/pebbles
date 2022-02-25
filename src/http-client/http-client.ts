@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { HttpReqConfig, HttpRes } from './http-client.interface';
+import type { HttpReqConfig, HttpRes } from './http-client.type';
 
 export class HttpClient {
   private _baseUrl = '';

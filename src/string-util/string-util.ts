@@ -19,7 +19,7 @@ export namespace StringUtil {
 
   export function renderTemplate(templateOpts: TemplateOpts): string {
     const { template, view, partial, customTag } = templateOpts;
-    return Mustache.render(template, view, partial, customTag as [string, string]);
+    return Mustache.render(template, view, partial, customTag);
   }
 
   export function normalizePhoneNumber(str: string): string {

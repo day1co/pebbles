@@ -1,6 +1,6 @@
 import pino from 'pino';
 import type { Logger } from '../logger.interface';
-import { LogLevel } from '../logger.type';
+import type { LogLevel } from '../logger.type';
 
 export class PinoLogger implements Logger {
   private readonly logger: pino.Logger;

@@ -1,4 +1,5 @@
 import { StringUtil } from './string-util';
+import { TemplateOpts } from './string-util.interface';
 
 describe('StringUtil', () => {
   describe('midMask', () => {
@@ -96,7 +97,7 @@ describe('StringUtil', () => {
     });
 
     it('should render a template with custom tags', () => {
-      const testOpt = {
+      const testOpt: TemplateOpts = {
         template: '%{hello}, {{name}}',
         view: { hello: '안녕하세요' },
         customTag: ['%{', '}'],

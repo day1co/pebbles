@@ -1,4 +1,4 @@
-import { LogLevel } from './logger.type';
+import type { LogLevel } from './logger.type';
 
 export interface Logger {
   set logLevel(level: LogLevel);
