@@ -1,7 +1,6 @@
 module.exports = {
   env: { jest: true },
   extends: ['plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended'],
-  ignorePatterns: ['/lib'],
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: '2021', sourceType: 'module' },
   plugins: ['import', '@typescript-eslint'],

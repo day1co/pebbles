@@ -8,5 +8,5 @@ export interface TemplateOpts {
   readonly template: string;
   readonly view: ObjectType;
   readonly partial?: Record<string, string>;
-  readonly customTag?: string[];
+  readonly customTag?: [string, string];
 }

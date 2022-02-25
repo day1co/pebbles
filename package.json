@@ -16,10 +16,13 @@
     "build": "tsc",
     "clean": "rimraf ./coverage ./lib ./node_modules",
     "clean:build": "rimraf ./lib",
-    "lint": "eslint .",
+    "lint": "eslint ./src",
     "prebuild": "npm-run-all clean:build lint",
     "prepublishOnly": "npm run build",
-    "test": "jest --coverage --detectOpenHandles --forceExit"
+    "serve": "echo no serve",
+    "start": "npm run serve",
+    "test": "jest --coverage --detectOpenHandles --forceExit",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "axios": "^0.21.4",
