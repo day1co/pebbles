@@ -7,9 +7,12 @@ import type {
 import type { DateType, DatePropertyType } from './date-util.type';
 
 const ONE_SECOND_IN_MILLI = 1000;
-const ONE_DAY_IN_SECOND = 60 * 60 * 24;
-const ONE_HOUR_IN_SECOND = 60 * 60;
 const ONE_MINUTE_IN_SECOND = 60;
+const ONE_HOUR_IN_SECOND = 60 * ONE_MINUTE_IN_SECOND;
+const ONE_DAY_IN_SECOND = 24 * ONE_HOUR_IN_SECOND;
+const ONE_MINUTE_IN_MILLI = ONE_MINUTE_IN_SECOND * ONE_SECOND_IN_MILLI;
+const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_MINUTE_IN_MILLI;
+const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_HOUR_IN_MILLI;
 
 const DEFAULT_UTC_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 const DEFAULT_LOCALE_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss[Z]';
@@ -34,7 +37,7 @@ export namespace DateUtil {
   }
 
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
-    const date = parse(d);
+    const date = DateUtil.parse(d);
 
     if (opts.year) {
       date.setFullYear(date.getFullYear() + opts.year);
@@ -44,23 +47,15 @@ export namespace DateUtil {
       date.setMonth(date.getMonth() + opts.month);
     }
 
-    if (opts.date) {
-      date.setDate(date.getDate() + opts.date);
-    }
+    const result = new Date(
+      date.getTime() +
+        (opts.date ?? 0) * ONE_DAY_IN_MILLI +
+        (opts.hour ?? 0) * ONE_HOUR_IN_MILLI +
+        (opts.minute ?? 0) * ONE_MINUTE_IN_MILLI +
+        (opts.second ?? 0) * ONE_SECOND_IN_MILLI
+    );
 
-    if (opts.hour) {
-      date.setHours(date.getHours() + opts.hour);
-    }
-
-    if (opts.minute) {
-      date.setMinutes(date.getMinutes() + opts.minute);
-    }
-
-    if (opts.second) {
-      date.setSeconds(date.getSeconds() + opts.second);
-    }
-
-    return date;
+    return result;
   }
 
   export function beginOfDay(date: DateType = new Date()): Date {
