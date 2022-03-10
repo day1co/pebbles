@@ -11,8 +11,8 @@ const ONE_MINUTE_IN_SECOND = 60;
 const ONE_HOUR_IN_SECOND = 60 * ONE_MINUTE_IN_SECOND;
 const ONE_DAY_IN_SECOND = 24 * ONE_HOUR_IN_SECOND;
 const ONE_MINUTE_IN_MILLI = ONE_MINUTE_IN_SECOND * ONE_SECOND_IN_MILLI;
-const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_MINUTE_IN_MILLI;
-const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_HOUR_IN_MILLI;
+const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_SECOND_IN_MILLI;
+const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_SECOND_IN_MILLI;
 
 const DEFAULT_UTC_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 const DEFAULT_LOCALE_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss[Z]';
@@ -37,7 +37,7 @@ export namespace DateUtil {
   }
 
   export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
-    const date = DateUtil.parse(d);
+    const date = parse(d);
 
     if (opts.year) {
       date.setFullYear(date.getFullYear() + opts.year);
