@@ -47,15 +47,13 @@ export namespace DateUtil {
       date.setMonth(date.getMonth() + opts.month);
     }
 
-    const result = new Date(
+    return new Date(
       date.getTime() +
         (opts.date ?? 0) * ONE_DAY_IN_MILLI +
         (opts.hour ?? 0) * ONE_HOUR_IN_MILLI +
         (opts.minute ?? 0) * ONE_MINUTE_IN_MILLI +
         (opts.second ?? 0) * ONE_SECOND_IN_MILLI
     );
-
-    return result;
   }
 
   export function beginOfMonth(date: DateType = new Date()): Date {
