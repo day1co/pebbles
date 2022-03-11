@@ -299,24 +299,6 @@ describe('DateUtil', () => {
     });
   });
 
-  describe('setUTCOffset', () => {
-    const testDate1 = '2020-01-01 01:01:01Z';
-    const testDate2 = '2020-01-01 00:00:00-09:00';
-    const testDate3 = '2020-01-01 00:00:00+09:00';
-
-    it('should set given date`s utc time by given offset', () => {
-      expect(DateUtil.setUTCOffset(new Date(testDate1), 180)).toEqual(new Date('2020-01-01 04:01:01Z'));
-      expect(DateUtil.setUTCOffset(new Date(testDate2), 180)).toEqual(new Date('2020-01-01 12:00:00Z'));
-      expect(DateUtil.setUTCOffset(new Date(testDate3), 540)).toEqual(new Date('2020-01-01 00:00:00Z'));
-    });
-
-    it('should parse string to date and set it`s utc time by given offset', () => {
-      expect(DateUtil.setUTCOffset(testDate1, 180)).toEqual(new Date('2020-01-01 04:01:01Z'));
-      expect(DateUtil.setUTCOffset(testDate2, 180)).toEqual(new Date('2020-01-01 12:00:00Z'));
-      expect(DateUtil.setUTCOffset(testDate3, 540)).toEqual(new Date('2020-01-01 00:00:00Z'));
-    });
-  });
-
   describe('format', () => {
     it('should throw with invalid format string', () => {
       expect(() => DateUtil.format(new Date(), { format: 'y년 m월 d일' })).toThrow();

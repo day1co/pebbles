@@ -57,18 +57,18 @@ export namespace DateUtil {
   }
 
   export function beginOfMonth(date: DateType = new Date()): Date {
-    date = parse(date);
-    return new Date(date.getFullYear(), date.getMonth(), 1);
+    const parsedDate = parse(date);
+    return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1);
   }
 
   export function endOfMonth(date: DateType = new Date()): Date {
-    date = parse(date);
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
+    const parsedDate = parse(date);
+    return new Date(parsedDate.getFullYear(), parsedDate.getMonth() + 1, 0, 23, 59, 59, 999);
   }
 
   export function lastDayOfMonth(date: DateType = new Date()): Date {
-    date = parse(date);
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const parsedDate = parse(date);
+    return new Date(parsedDate.getFullYear(), parsedDate.getMonth() + 1, 0);
   }
 
   export function diff(since: DateType, until: DateType, type: DatePropertyType): number {
@@ -212,10 +212,6 @@ export namespace DateUtil {
     }
     unixTime *= ONE_SECOND_IN_MILLI;
     return parse(unixTime);
-  }
-
-  export function setUTCOffset(d: DateType, offsetMinute: number): Date {
-    return new Date(parse(d).getTime() + offsetMinute * ONE_SECOND_IN_MILLI * ONE_MINUTE_IN_SECOND);
   }
 
   export function format(d: Date, opts?: DateFormatOpts): string {
