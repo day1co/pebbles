@@ -559,4 +559,15 @@ describe('DateUtil', () => {
       expect(DateUtil.formatLocalTime(testDate4, testOption)).toBe('2000년 1월 1일 토요일 21시');
     });
   });
+
+  describe('isValidLastDay', () => {
+    test('valid last day', () => {
+      const testDate1 = '2020-02-28';
+      const testDate2 = '2020-02-29';
+      const testDate3 = '2021-02-28';
+      expect(DateUtil.isValidLastDay(new Date(testDate1))).toBe(false);
+      expect(DateUtil.isValidLastDay(new Date(testDate2))).toBe(true);
+      expect(DateUtil.isValidLastDay(new Date(testDate3))).toBe(true);
+    });
+  });
 });
