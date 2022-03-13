@@ -376,6 +376,11 @@ export namespace DateUtil {
       });
     return format12HourInLocale(formatResult, opts.locale);
   }
+
+  export function isValidLastDay(d: Date): boolean {
+    const date = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    return date.getDate() === 1;
+  }
 }
 
 function subtractOneDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
