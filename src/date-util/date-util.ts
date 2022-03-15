@@ -78,6 +78,11 @@ export namespace DateUtil {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
+  export function isLastDateOfMonth(date: DateType): boolean {
+    date = parse(date);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getDate() === 1;
+  }
+
   export function diff(since: DateType, until: DateType, type: DatePropertyType): number {
     const sinceDate = parse(since);
     const untilDate = parse(until);
@@ -375,11 +380,6 @@ export namespace DateUtil {
         }
       });
     return format12HourInLocale(formatResult, opts.locale);
-  }
-
-  export function isValidLastDay(d: Date): boolean {
-    const date = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
-    return date.getDate() === 1;
   }
 }
 
