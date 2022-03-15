@@ -3,11 +3,9 @@ import { MiscUtil } from './misc-util';
 describe('Miscellaneous Util', () => {
   describe('sleep', () => {
     it('allow 10ms error', async () => {
-      console.time('sleep');
       const startTime = Date.now();
       await MiscUtil.sleep(500);
       const finishTime = Date.now();
-      console.timeEnd('sleep');
       expect(finishTime - startTime).toBeLessThan(500 + 15);
       expect(finishTime - startTime).toBeGreaterThanOrEqual(500);
     });
