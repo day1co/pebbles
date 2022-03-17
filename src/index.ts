@@ -20,7 +20,7 @@ export {
   UnauthorizedException,
 } from './exception';
 export { HttpClient, HttpState } from './http-client';
-export type { HttpReqConfig, HttpRes } from './http-client';
+export type { HttpReqConfig, HttpRes, HttpResponse } from './http-client';
 export { LoggerFactory } from './logger';
 export type { Logger, LogLevel } from './logger';
 export { MiscUtil } from './misc-util';

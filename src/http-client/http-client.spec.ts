@@ -2,20 +2,21 @@ import http from 'http';
 import { HttpClient } from './http-client';
 
 describe('HttpClient', () => {
-  const httpClient = new HttpClient();
-  const testPort = 9999;
+  const TEST_SERVER = 'http://localhost:9999';
+  const TEST_PORT = 9999;
   const server = http.createServer((req, res) => {
     res.end(JSON.stringify('HttpClient test is OK'));
   });
 
   test('Base URL get/set', () => {
-    httpClient.baseUrl = 'http://localhost:9999';
-    expect(httpClient.baseUrl === 'http://localhost:9999').toBe(true);
+    const httpClient = new HttpClient();
+    httpClient.baseUrl = TEST_SERVER;
+    expect(httpClient.baseUrl === TEST_SERVER).toBe(true);
   });
 
   describe('Http communication', () => {
     beforeAll((done) => {
-      server.listen(testPort, done);
+      server.listen(TEST_PORT, done);
       server.on('clientError', (err, socket) => {
         socket.end();
       });
@@ -24,6 +25,8 @@ describe('HttpClient', () => {
     afterAll((done) => {
       server.close(done);
     });
+
+    const httpClient = new HttpClient(TEST_SERVER);
 
     it('Http GET test', async () => {
       const result = await httpClient.sendGetRequest('/');
