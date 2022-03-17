@@ -1,8 +1,12 @@
 import axios from 'axios';
-import type { HttpReqConfig, HttpRes } from './http-client.type';
+import type { HttpReqConfig, HttpResponse } from './http-client.type';
 
 export class HttpClient {
   private _baseUrl = '';
+
+  constructor(baseUrl?: string) {
+    this._baseUrl = baseUrl ?? '';
+  }
 
   get baseUrl(): string {
     return this._baseUrl;
@@ -12,24 +16,24 @@ export class HttpClient {
     this._baseUrl = baseUrl;
   }
 
-  sendGetRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>> {
+  sendGetRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
-    return axios.get<Type, HttpRes<Type>>(fullUrl, config);
+    return axios.get<Type, HttpResponse<Type>>(fullUrl, config);
   }
 
-  sendPostRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>> {
+  sendPostRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
-    return axios.post<Type, HttpRes<Type>>(fullUrl, data, config);
+    return axios.post<Type, HttpResponse<Type>>(fullUrl, data, config);
   }
 
-  sendPutRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpRes<Type>> {
+  sendPutRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
-    return axios.put<Type, HttpRes<Type>>(fullUrl, data, config);
+    return axios.put<Type, HttpResponse<Type>>(fullUrl, data, config);
   }
 
-  sendDeleteRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpRes<Type>> {
+  sendDeleteRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
-    return axios.delete<Type, HttpRes<Type>>(fullUrl, config);
+    return axios.delete<Type, HttpResponse<Type>>(fullUrl, config);
   }
 
   private getFullUrl(url: string): string {
