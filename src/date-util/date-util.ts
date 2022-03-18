@@ -63,6 +63,16 @@ export namespace DateUtil {
     return date;
   }
 
+  export function beginOfDay(date: DateType = new Date()): Date {
+    date = parse(date);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  export function endOfDay(date: DateType = new Date()): Date {
+    date = parse(date);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+  }
+
   export function beginOfMonth(date: DateType = new Date()): Date {
     date = parse(date);
     return new Date(date.getFullYear(), date.getMonth(), 1);
