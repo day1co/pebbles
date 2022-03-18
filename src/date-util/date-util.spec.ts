@@ -68,6 +68,48 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('beginOfDay', () => {
+    it('should throw error when invalid Date given', () => {
+      const described_function = DateUtil.beginOfDay;
+      expect(() => described_function('zzzzz')).toThrow();
+      expect(() => described_function('2021-13-01 00:00:00')).toThrow();
+      expect(() => described_function(new Date('zzzzz'))).toThrow();
+    });
+
+    it('should accept Date object and return 00:00:00 of the day', () => {
+      expect(DateUtil.beginOfDay(new Date('2021-06-03 00:00:00'))).toEqual(new Date('2021-06-03 00:00:00'));
+      expect(DateUtil.beginOfDay(new Date('2021-07-23 12:00:00'))).toEqual(new Date('2021-07-23 00:00:00'));
+      expect(DateUtil.beginOfDay(new Date('2021-08-31 23:59:59'))).toEqual(new Date('2021-08-31 00:00:00'));
+    });
+
+    it('should accept string date and return 00:00:00 of the day', () => {
+      expect(DateUtil.beginOfDay('2021-06-03 00:00:00')).toEqual(new Date('2021-06-03 00:00:00'));
+      expect(DateUtil.beginOfDay('2021-07-23 12:00:00')).toEqual(new Date('2021-07-23 00:00:00'));
+      expect(DateUtil.beginOfDay('2021-08-31 23:59:59')).toEqual(new Date('2021-08-31 00:00:00'));
+    });
+  });
+
+  describe('endOfDay', () => {
+    it('should throw error when invalid Date given', () => {
+      const described_function = DateUtil.endOfDay;
+      expect(() => described_function('zzzzz')).toThrow();
+      expect(() => described_function('2021-13-01 00:00:00')).toThrow();
+      expect(() => described_function(new Date('zzzzz'))).toThrow();
+    });
+
+    it('should accept Date object and return 23:59:59 of the day', () => {
+      expect(DateUtil.endOfDay(new Date('2021-06-03 00:00:00'))).toEqual(new Date('2021-06-03 23:59:59.999'));
+      expect(DateUtil.endOfDay(new Date('2021-07-23 12:00:00'))).toEqual(new Date('2021-07-23 23:59:59.999'));
+      expect(DateUtil.endOfDay(new Date('2021-08-31 23:59:59'))).toEqual(new Date('2021-08-31 23:59:59.999'));
+    });
+
+    it('should accept string date and return 23:59:59 of the day', () => {
+      expect(DateUtil.endOfDay('2021-06-03 00:00:00')).toEqual(new Date('2021-06-03 23:59:59.999'));
+      expect(DateUtil.endOfDay('2021-07-23 12:00:00')).toEqual(new Date('2021-07-23 23:59:59.999'));
+      expect(DateUtil.endOfDay('2021-08-31 23:59:59')).toEqual(new Date('2021-08-31 23:59:59.999'));
+    });
+  });
+
   describe('beginOfMonth', () => {
     const beginOfMonth = DateUtil.beginOfMonth;
     it('should throw error when invalid Date given', () => {
