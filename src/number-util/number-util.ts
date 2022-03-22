@@ -17,8 +17,7 @@ export namespace NumberUtil {
     return result;
   }
 
-  export function isNumeric(value: any): boolean {
-    const result = !isNaN(value - parseFloat(value));
-    return result;
+  export function isNumeric(numStr: string): boolean {
+    return !isNaN(Number(numStr)) && isFinite(Number(numStr));
   }
 }
