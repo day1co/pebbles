@@ -37,4 +37,23 @@ describe('NumberUtil', () => {
       expect(NumberUtil.valueOf('9488848.29000004833')).toEqual(9488848.290000048);
     });
   });
+
+  describe('isNumeric', () => {
+    it('should equal to all', () => {
+      expect(NumberUtil.isNumeric('0')).toEqual(true);
+      expect(NumberUtil.isNumeric('1')).toEqual(true);
+      expect(NumberUtil.isNumeric('01')).toEqual(true);
+      expect(NumberUtil.isNumeric('0.1')).toEqual(true);
+      expect(NumberUtil.isNumeric('-10')).toEqual(true);
+      expect(NumberUtil.isNumeric('-10.1231234')).toEqual(true);
+      expect(NumberUtil.isNumeric('0xa')).toEqual(true);
+    });
+    it('should not equal to all', () => {
+      expect(NumberUtil.isNumeric('a')).toEqual(false);
+      expect(NumberUtil.isNumeric('0a')).toEqual(false);
+      expect(NumberUtil.isNumeric('sdfsdfsdfa')).toEqual(false);
+      expect(NumberUtil.isNumeric('\\http')).toEqual(false);
+      expect(NumberUtil.isNumeric('1.2.3')).toEqual(false);
+    });
+  });
 });
