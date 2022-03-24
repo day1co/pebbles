@@ -16,22 +16,22 @@ export class HttpClient {
     this._baseUrl = baseUrl;
   }
 
-  sendGetRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
+  sendGetRequest<Type>(url: string, config?: Readonly<HttpReqConfig>): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
     return axios.get<Type, HttpResponse<Type>>(fullUrl, config);
   }
 
-  sendPostRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
+  sendPostRequest<Type>(url: string, data: unknown, config?: Readonly<HttpReqConfig>): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
     return axios.post<Type, HttpResponse<Type>>(fullUrl, data, config);
   }
 
-  sendPutRequest<Type>(url: string, data: unknown, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
+  sendPutRequest<Type>(url: string, data: unknown, config?: Readonly<HttpReqConfig>): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
     return axios.put<Type, HttpResponse<Type>>(fullUrl, data, config);
   }
 
-  sendDeleteRequest<Type>(url: string, config?: HttpReqConfig): Promise<HttpResponse<Type>> {
+  sendDeleteRequest<Type>(url: string, config?: Readonly<HttpReqConfig>): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
     return axios.delete<Type, HttpResponse<Type>>(fullUrl, config);
   }

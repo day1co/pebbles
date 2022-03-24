@@ -17,7 +17,7 @@ export namespace StringUtil {
     return nonceString.substring(nonceString.length - nonceLength);
   }
 
-  export function renderTemplate(templateOpts: TemplateOpts): string {
+  export function renderTemplate(templateOpts: Readonly<TemplateOpts>): string {
     const { template, view, partial, customTag } = templateOpts;
     return Mustache.render(template, view, partial, customTag);
   }
@@ -62,7 +62,7 @@ export namespace StringUtil {
     }, []);
   }
 
-  export function joinTags(tags: Tag[], separator = ','): string {
+  export function joinTags(tags: Readonly<Tag[]>, separator = ','): string {
     const textList = tags.map((tag) => {
       return tag.text;
     });
