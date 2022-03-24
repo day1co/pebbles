@@ -149,7 +149,7 @@ export namespace ObjectUtil {
     return omitObject(resultObj, omitKeys);
   }
 
-  export function isEqual(obj: Readonly<ObjectType>, other: Readonly<ObjectType>): boolean {
+  export function isEqual(obj: ObjectType, other: Readonly<ObjectType>): boolean {
     if (obj.constructor !== other.constructor) {
       return false;
     }

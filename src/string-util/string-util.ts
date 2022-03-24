@@ -13,7 +13,12 @@ export namespace StringUtil {
   }
 
   export function getNonce(nonceLength: number, nonceEncoding: number): string {
-    const nonceString = Math.random().toString(nonceEncoding);
+    let nonceString = '';
+
+    while (nonceString.length < nonceLength) {
+      nonceString += Math.random().toString(nonceEncoding).substring(2);
+    }
+
     return nonceString.substring(nonceString.length - nonceLength);
   }
 
