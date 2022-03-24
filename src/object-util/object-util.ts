@@ -1,7 +1,7 @@
 import { ObjectKeyType, ObjectType } from './object-util.type';
 
 export namespace ObjectUtil {
-  export function serialize(obj: ObjectType): string | null {
+  export function serialize(obj: Readonly<ObjectType>): string | null {
     try {
       return JSON.stringify(obj);
     } catch (exception) {
@@ -83,7 +83,7 @@ export namespace ObjectUtil {
     return clonedObj;
   }
 
-  export function merge(obj: ObjectType, ...args: ObjectType[]): ObjectType {
+  export function merge(obj: Readonly<ObjectType>, ...args: Readonly<ObjectType[]>): ObjectType {
     const argKeysArray: ObjectKeyType[][] = [];
     const mergedObj = deepClone<ObjectType>(obj);
 
@@ -104,8 +104,8 @@ export namespace ObjectUtil {
     return mergedObj;
   }
 
-  export function omit(obj: ObjectType, omitKeys: ObjectKeyType[]): ObjectType {
-    function omitObject(obj: ObjectType, omitKeys: ObjectKeyType[]): ObjectType {
+  export function omit(obj: Readonly<ObjectType>, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
+    function omitObject(obj: ObjectType, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
       for (const omitKey of omitKeys) {
         const nestedKeys: ObjectKeyType[] = [omitKey];
 
@@ -149,7 +149,7 @@ export namespace ObjectUtil {
     return omitObject(resultObj, omitKeys);
   }
 
-  export function isEqual(obj: ObjectType, other: ObjectType): boolean {
+  export function isEqual(obj: Readonly<ObjectType>, other: Readonly<ObjectType>): boolean {
     if (obj.constructor !== other.constructor) {
       return false;
     }
@@ -182,11 +182,11 @@ export namespace ObjectUtil {
     return true;
   }
 
-  export function getAllPropertyKeys(obj: ObjectType): ObjectKeyType[] {
+  export function getAllPropertyKeys(obj: Readonly<ObjectType>): ObjectKeyType[] {
     return [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)];
   }
 
-  export function pick(obj: ObjectType, keyList: ObjectKeyType[]): ObjectType {
+  export function pick(obj: Readonly<ObjectType>, keyList: Readonly<ObjectKeyType[]>): Readonly<ObjectType> {
     const ret: ObjectType = {};
     keyList.forEach((key) => {
       if (obj[key] !== undefined) {

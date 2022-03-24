@@ -11,7 +11,7 @@ export namespace MiscUtil {
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
   }
 
-  export function getPagination(pageInfo: PageInfo): Pagination {
+  export function getPagination(pageInfo: Readonly<PageInfo>): Pagination {
     const { count, limit, offset, range = 10, firstPage = 1 } = pageInfo;
 
     if (limit <= 0) throw new Error('limit must be bigger than 0');
