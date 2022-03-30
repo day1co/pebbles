@@ -1,6 +1,6 @@
 {
   "name": "@day1co/pebbles",
-  "version": "3.0.6",
+  "version": "3.1.0",
   "author": "Day1Company",
   "license": "MIT",
   "main": "./lib/index.js",
@@ -21,7 +21,7 @@
     "prepublishOnly": "npm run build",
     "serve": "echo no serve",
     "start": "npm run serve",
-    "test": "jest --coverage --detectOpenHandles --forceExit",
+    "test": "jest --coverage --detectOpenHandles --forceExit --ci --silent --runInBand",
     "watch": "tsc -w"
   },
   "dependencies": {

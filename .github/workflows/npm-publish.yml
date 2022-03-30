@@ -51,7 +51,7 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - uses: 8BitJonny/gh-get-current-pr@1.1.0
@@ -67,7 +67,7 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 100 # 최근 100개 커밋에서 package.json 버전변경 확인
           token: ${{ env.PUSH_TOKEN }}
