@@ -57,44 +57,21 @@ export namespace DateUtil {
 
   export function startOf(date: DateType, property: DatePropertyType): Date {
     const parsedDate = parse(date);
+    const result = new Date(parsedDate.getFullYear(), 0, 1, 0, 0, 0, 0);
 
     switch (property) {
-      case 'year':
-        return new Date(parsedDate.getFullYear(), 0, 1, 0, 0, 0, 0);
-      case 'month':
-        return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1, 0, 0, 0, 0);
-      case 'day':
-        return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
-      case 'hour':
-        return new Date(
-          parsedDate.getFullYear(),
-          parsedDate.getMonth(),
-          parsedDate.getDate(),
-          parsedDate.getHours(),
-          0,
-          0,
-          0
-        );
-      case 'minute':
-        return new Date(
-          parsedDate.getFullYear(),
-          parsedDate.getMonth(),
-          parsedDate.getDate(),
-          parsedDate.getHours(),
-          parsedDate.getMinutes(),
-          0,
-          0
-        );
       case 'second':
-        return new Date(
-          parsedDate.getFullYear(),
-          parsedDate.getMonth(),
-          parsedDate.getDate(),
-          parsedDate.getHours(),
-          parsedDate.getMinutes(),
-          parsedDate.getSeconds(),
-          0
-        );
+        result.setSeconds(parsedDate.getSeconds());
+      case 'minute':
+        result.setMinutes(parsedDate.getMinutes());
+      case 'hour':
+        result.setHours(parsedDate.getHours());
+      case 'day':
+        result.setDate(parsedDate.getDate());
+      case 'month':
+        result.setMonth(parsedDate.getMonth());
+      case 'year':
+        return result;
     }
   }
 
@@ -110,44 +87,24 @@ export namespace DateUtil {
 
   export function endOf(date: DateType, property: DatePropertyType): Date {
     const parsedDate = parse(date);
+    const result = new Date(parsedDate.getFullYear(), 11, 31, 23, 59, 59, 999);
+    let flag = true;
 
     switch (property) {
-      case 'year':
-        return new Date(parsedDate.getFullYear(), 11, 31, 23, 59, 59, 999);
-      case 'month':
-        return new Date(parsedDate.getFullYear(), parsedDate.getMonth() + 1, 0, 23, 59, 59, 999);
-      case 'day':
-        return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 23, 59, 59, 999);
-      case 'hour':
-        return new Date(
-          parsedDate.getFullYear(),
-          parsedDate.getMonth(),
-          parsedDate.getDate(),
-          parsedDate.getHours(),
-          59,
-          59,
-          999
-        );
-      case 'minute':
-        return new Date(
-          parsedDate.getFullYear(),
-          parsedDate.getMonth(),
-          parsedDate.getDate(),
-          parsedDate.getHours(),
-          parsedDate.getMinutes(),
-          59,
-          999
-        );
       case 'second':
-        return new Date(
-          parsedDate.getFullYear(),
-          parsedDate.getMonth(),
-          parsedDate.getDate(),
-          parsedDate.getHours(),
-          parsedDate.getMinutes(),
-          parsedDate.getSeconds(),
-          999
-        );
+        result.setSeconds(parsedDate.getSeconds());
+      case 'minute':
+        result.setMinutes(parsedDate.getMinutes());
+      case 'hour':
+        result.setHours(parsedDate.getHours());
+      case 'day':
+        result.setDate(parsedDate.getDate());
+        flag = false;
+      case 'month':
+        if (flag) result.setMonth(parsedDate.getMonth() + 1, 0);
+        else result.setMonth(parsedDate.getMonth());
+      case 'year':
+        return result;
     }
   }
 
@@ -167,8 +124,7 @@ export namespace DateUtil {
   }
 
   export function isLastDateOfMonth(date: DateType): boolean {
-    date = parse(date);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getDate() === 1;
+    return calcDatetime(date, { day: 1 }).getDate() === 1;
   }
 
   export function diff(since: DateType, until: DateType, type: DatePropertyType): number {
