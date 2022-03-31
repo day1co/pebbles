@@ -1,183 +1,176 @@
 import { DateUtil } from './date-util';
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
 
+const now = new Date();
+const testDateStr = '2022-02-23';
+const testDatetimeStr1 = '2022-02-23 01:23';
+const testDatetimeStr2 = '2022-02-23T01:23';
+const testDatetimeStr3 = '2022-02-23 01:23Z';
+const testDatetimeStr4 = '2022-02-23T01:23Z';
+const testDatetimeStr5 = '2022-02-23 01:23:45';
+const testDatetimeStr6 = '2022-02-23T01:23:45';
+const testDatetimeStr7 = '2022-02-23 01:23:45Z';
+const testDatetimeStr8 = '2022-02-23T01:23:45Z';
+const testDatetimeStr9 = '2022-02-23 01:23:45.678';
+const testDatetimeStr10 = '2022-02-23T01:23:45.678';
+const testDatetimeStr11 = '2022-02-23 01:23:45.678Z';
+const testDatetimeStr12 = '2022-02-23T01:23:45.678Z';
+
 describe('DateUtil', () => {
   describe('isValidDate', () => {
+    const isValidDate = DateUtil.isValidDate;
     it('should return true with valid date', () => {
-      expect(DateUtil.isValidDate(new Date())).toBe(true);
-      expect(DateUtil.isValidDate(new Date(1))).toBe(true);
-      expect(DateUtil.isValidDate(new Date('2000-01-01'))).toBe(true);
+      expect(isValidDate(new Date())).toBe(true);
+      expect(isValidDate(new Date(1))).toBe(true);
+      expect(isValidDate(new Date('2000-01-01'))).toBe(true);
     });
     it('should return false with invalid date', () => {
-      expect(DateUtil.isValidDate(new Date(''))).toBe(false);
-      expect(DateUtil.isValidDate(new Date('abc'))).toBe(false);
-      expect(DateUtil.isValidDate(new Date('2000년 01월 01일'))).toBe(false);
+      expect(isValidDate(new Date(''))).toBe(false);
+      expect(isValidDate(new Date('abc'))).toBe(false);
+      expect(isValidDate(new Date('2000년 01월 01일'))).toBe(false);
     });
   });
 
   describe('parse', () => {
+    const parse = DateUtil.parse;
     test('invalid date input throws error', () => {
-      expect(() => DateUtil.parse('')).toThrow();
-      expect(() => DateUtil.parse('abc')).toThrow();
-      expect(() => DateUtil.parse('3월 9일')).toThrow();
+      expect(() => parse('')).toThrow();
+      expect(() => parse('abc')).toThrow();
+      expect(() => parse('3월 9일')).toThrow();
     });
     test('valid date input returns instance of Date', () => {
-      const testDate = new Date();
-      expect(DateUtil.parse(testDate).getTime()).toEqual(testDate.getTime());
-      expect(DateUtil.parse('2021-01-01T01:01:01Z').getTime()).toBe(new Date('2021-01-01T01:01:01Z').getTime());
-      expect(DateUtil.parse('2021-10-10').getTime()).toEqual(new Date('2021-10-10').getTime());
+      expect(parse(now).getTime()).toEqual(now.getTime());
+      expect(parse(testDateStr).getTime()).toEqual(new Date('2022-02-23 00:00').getTime());
+      expect(parse(testDatetimeStr1).getTime()).toEqual(new Date(testDatetimeStr1).getTime());
+      expect(parse(testDatetimeStr2).getTime()).toEqual(new Date(testDatetimeStr2).getTime());
+      expect(parse(testDatetimeStr3).getTime()).toEqual(new Date(testDatetimeStr3).getTime());
+      expect(parse(testDatetimeStr4).getTime()).toEqual(new Date(testDatetimeStr4).getTime());
+      expect(parse(testDatetimeStr5).getTime()).toEqual(new Date(testDatetimeStr5).getTime());
+      expect(parse(testDatetimeStr6).getTime()).toEqual(new Date(testDatetimeStr6).getTime());
+      expect(parse(testDatetimeStr7).getTime()).toEqual(new Date(testDatetimeStr7).getTime());
+      expect(parse(testDatetimeStr8).getTime()).toEqual(new Date(testDatetimeStr8).getTime());
+      expect(parse(testDatetimeStr9).getTime()).toEqual(new Date(testDatetimeStr9).getTime());
+      expect(parse(testDatetimeStr10).getTime()).toEqual(new Date(testDatetimeStr10).getTime());
+      expect(parse(testDatetimeStr11).getTime()).toEqual(new Date(testDatetimeStr11).getTime());
+      expect(parse(testDatetimeStr12).getTime()).toEqual(new Date(testDatetimeStr12).getTime());
     });
     test('original input value is maintained', () => {
       const testDate = new Date();
-      const parsedDate = DateUtil.parse(testDate);
+      const parsedDate = parse(testDate);
       parsedDate.setHours(parsedDate.getHours() + 1);
-      expect(parsedDate.getTime()).not.toEqual(testDate.getTime());
+      expect(parsedDate.getTime()).not.toBe(testDate.getTime());
     });
   });
 
   describe('calcDatetime', () => {
+    const calcDatetime = DateUtil.calcDatetime;
     test('should return error', () => {
-      expect(() => DateUtil.calcDatetime('string', { year: 3 })).toThrow();
-      expect(() => DateUtil.calcDatetime('20209999', { year: 3 })).toThrow();
-      expect(() => DateUtil.calcDatetime('', { year: 3 })).toThrow();
+      expect(() => calcDatetime('string', { year: 3 })).toThrow();
+      expect(() => calcDatetime('20209999', { year: 3 })).toThrow();
+      expect(() => calcDatetime('', { year: 3 })).toThrow();
     });
     test('add, sub year, month, date, ...', () => {
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { year: 1 })).toEqual(new Date('2021-02-20 00:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { month: 1 })).toEqual(new Date('2020-03-20 00:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { date: 1 })).toEqual(new Date('2020-02-21 00:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { hour: 1 })).toEqual(new Date('2020-02-20 01:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { minute: 1 })).toEqual(new Date('2020-02-20 00:01:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { second: 1 })).toEqual(new Date('2020-02-20 00:00:01'));
+      expect(calcDatetime(testDatetimeStr9, { year: 1 })).toEqual(new Date('2023-02-23 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { month: 1 })).toEqual(new Date('2022-03-23 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { day: 1 })).toEqual(new Date('2022-02-24 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { hour: 1 })).toEqual(new Date('2022-02-23 02:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { minute: 1 })).toEqual(new Date('2022-02-23 01:24:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { second: 1 })).toEqual(new Date('2022-02-23 01:23:46.678'));
 
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { year: -1 })).toEqual(new Date('2019-02-20 00:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { month: -1 })).toEqual(new Date('2020-01-20 00:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { date: -1 })).toEqual(new Date('2020-02-19 00:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { hour: -1 })).toEqual(new Date('2020-02-19 23:00:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { minute: -1 })).toEqual(new Date('2020-02-19 23:59:00'));
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { second: -1 })).toEqual(new Date('2020-02-19 23:59:59'));
+      expect(calcDatetime(testDatetimeStr9, { year: -1 })).toEqual(new Date('2021-02-23 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { month: -1 })).toEqual(new Date('2022-01-23 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { day: -1 })).toEqual(new Date('2022-02-22 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { hour: -1 })).toEqual(new Date('2022-02-23 00:23:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { minute: -1 })).toEqual(new Date('2022-02-23 01:22:45.678'));
+      expect(calcDatetime(testDatetimeStr9, { second: -1 })).toEqual(new Date('2022-02-23 01:23:44.678'));
     });
 
     test('60이상의 숫자도 계산이 가능해야 함', () => {
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { hour: 100 })).toEqual(new Date('2020-02-24 04:00:00')); // 100시간 => 4일 4시간
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { minute: 100 })).toEqual(new Date('2020-02-20 01:40:00')); // 100분 => 1시간 40분
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { second: 100 })).toEqual(new Date('2020-02-20 00:01:40')); // 100초 => 1분 40초
+      expect(calcDatetime(testDatetimeStr9, { hour: 100 })).toEqual(new Date('2022-02-27 05:23:45.678')); // 100시간 => 4일 4시간
+      expect(calcDatetime(testDatetimeStr9, { minute: 100 })).toEqual(new Date('2022-02-23 03:03:45.678')); // 100분 => 1시간 40분
+      expect(calcDatetime(testDatetimeStr9, { second: 100 })).toEqual(new Date('2022-02-23 01:25:25.678')); // 100초 => 1분 40초
 
-      expect(DateUtil.calcDatetime('2020-02-20 00:00:00', { hour: 100, minute: 100, second: 100 })).toEqual(
-        new Date('2020-02-24 05:41:40')
+      expect(calcDatetime(testDatetimeStr9, { hour: 100, minute: 100, second: 100 })).toEqual(
+        new Date('2022-02-27 07:05:25.678')
       ); // 100시간 + 100분 + 100초 => 4일 5시간 41분 40초
     });
   });
 
-  describe('beginOfDay', () => {
+  describe('startOf', () => {
+    const startOf = DateUtil.startOf;
     it('should throw error when invalid Date given', () => {
-      const described_function = DateUtil.beginOfDay;
-      expect(() => described_function('zzzzz')).toThrow();
-      expect(() => described_function('2021-13-01 00:00:00')).toThrow();
-      expect(() => described_function(new Date('zzzzz'))).toThrow();
+      expect(() => startOf('zzzzz', 'year')).toThrow();
+      expect(() => startOf('2021-13-01 00:00:00', 'month')).toThrow();
+      expect(() => startOf(new Date('zzzzz'), 'day')).toThrow();
     });
 
-    it('should accept Date object and return 00:00:00 of the day', () => {
-      expect(DateUtil.beginOfDay(new Date('2021-06-03 00:00:00'))).toEqual(new Date('2021-06-03 00:00:00'));
-      expect(DateUtil.beginOfDay(new Date('2021-07-23 12:00:00'))).toEqual(new Date('2021-07-23 00:00:00'));
-      expect(DateUtil.beginOfDay(new Date('2021-08-31 23:59:59'))).toEqual(new Date('2021-08-31 00:00:00'));
+    it('should return start of the year', () => {
+      expect(startOf(testDatetimeStr9, 'year')).toEqual(new Date('2022-01-01 00:00:00.000'));
+      expect(startOf(new Date(testDatetimeStr9), 'year')).toEqual(new Date('2022-01-01 00:00:00.000'));
     });
 
-    it('should accept string date and return 00:00:00 of the day', () => {
-      expect(DateUtil.beginOfDay('2021-06-03 00:00:00')).toEqual(new Date('2021-06-03 00:00:00'));
-      expect(DateUtil.beginOfDay('2021-07-23 12:00:00')).toEqual(new Date('2021-07-23 00:00:00'));
-      expect(DateUtil.beginOfDay('2021-08-31 23:59:59')).toEqual(new Date('2021-08-31 00:00:00'));
+    it('should return start of the month', () => {
+      expect(startOf(testDatetimeStr9, 'month')).toEqual(new Date('2022-02-01 00:00:00.000'));
+      expect(startOf(new Date(testDatetimeStr9), 'month')).toEqual(new Date('2022-02-01 00:00:00.000'));
+    });
+
+    it('should return start of the day', () => {
+      expect(startOf(testDatetimeStr9, 'day')).toEqual(new Date('2022-02-23 00:00:00.000'));
+      expect(startOf(new Date(testDatetimeStr9), 'day')).toEqual(new Date('2022-02-23 00:00:00.000'));
+    });
+
+    it('should return start of the hour', () => {
+      expect(startOf(testDatetimeStr9, 'hour')).toEqual(new Date('2022-02-23 01:00:00.000'));
+      expect(startOf(new Date(testDatetimeStr9), 'hour')).toEqual(new Date('2022-02-23 01:00:00.000'));
+    });
+
+    it('should return start of the minute', () => {
+      expect(startOf(testDatetimeStr9, 'minute')).toEqual(new Date('2022-02-23 01:23:00.000'));
+      expect(startOf(new Date(testDatetimeStr9), 'minute')).toEqual(new Date('2022-02-23 01:23:00.000'));
+    });
+
+    it('should return start of the second', () => {
+      expect(startOf(testDatetimeStr9, 'second')).toEqual(new Date('2022-02-23 01:23:45.000'));
+      expect(startOf(new Date(testDatetimeStr9), 'second')).toEqual(new Date('2022-02-23 01:23:45.000'));
     });
   });
 
-  describe('endOfDay', () => {
+  describe('endOf', () => {
+    const endOf = DateUtil.endOf;
     it('should throw error when invalid Date given', () => {
-      const described_function = DateUtil.endOfDay;
-      expect(() => described_function('zzzzz')).toThrow();
-      expect(() => described_function('2021-13-01 00:00:00')).toThrow();
-      expect(() => described_function(new Date('zzzzz'))).toThrow();
+      expect(() => endOf('zzzzz', 'year')).toThrow();
+      expect(() => endOf('2021-13-01 00:00:00', 'month')).toThrow();
+      expect(() => endOf(new Date('zzzzz'), 'day')).toThrow();
     });
 
-    it('should accept Date object and return 23:59:59 of the day', () => {
-      expect(DateUtil.endOfDay(new Date('2021-06-03 00:00:00'))).toEqual(new Date('2021-06-03 23:59:59.999'));
-      expect(DateUtil.endOfDay(new Date('2021-07-23 12:00:00'))).toEqual(new Date('2021-07-23 23:59:59.999'));
-      expect(DateUtil.endOfDay(new Date('2021-08-31 23:59:59'))).toEqual(new Date('2021-08-31 23:59:59.999'));
+    it('should return end of the year', () => {
+      expect(endOf(testDatetimeStr9, 'year')).toEqual(new Date('2022-12-31 23:59:59.999'));
+      expect(endOf(new Date(testDatetimeStr9), 'year')).toEqual(new Date('2022-12-31 23:59:59.999'));
     });
 
-    it('should accept string date and return 23:59:59 of the day', () => {
-      expect(DateUtil.endOfDay('2021-06-03 00:00:00')).toEqual(new Date('2021-06-03 23:59:59.999'));
-      expect(DateUtil.endOfDay('2021-07-23 12:00:00')).toEqual(new Date('2021-07-23 23:59:59.999'));
-      expect(DateUtil.endOfDay('2021-08-31 23:59:59')).toEqual(new Date('2021-08-31 23:59:59.999'));
-    });
-  });
-
-  describe('beginOfMonth', () => {
-    const beginOfMonth = DateUtil.beginOfMonth;
-    it('should throw error when invalid Date given', () => {
-      expect(() => beginOfMonth('zzzzz')).toThrow();
-      expect(() => beginOfMonth('2021-13-01 00:00:00')).toThrow();
-      expect(() => beginOfMonth(new Date('zzzzz'))).toThrow();
+    it('should return end of the month', () => {
+      expect(endOf(testDatetimeStr9, 'month')).toEqual(new Date('2022-02-28 23:59:59.999'));
+      expect(endOf(new Date(testDatetimeStr9), 'month')).toEqual(new Date('2022-02-28 23:59:59.999'));
     });
 
-    it('should accept Date object and return beginning of the month 00:00:00', () => {
-      expect(beginOfMonth(new Date('2021-06-03 00:00:00'))).toEqual(new Date('2021-06-01 00:00:00'));
-      expect(beginOfMonth(new Date('2021-07-23 00:00:00'))).toEqual(new Date('2021-07-01 00:00:00'));
-      expect(beginOfMonth(new Date('2021-08-31 00:00:00'))).toEqual(new Date('2021-08-01 00:00:00'));
+    it('should return end of the day', () => {
+      expect(endOf(testDatetimeStr9, 'day')).toEqual(new Date('2022-02-23 23:59:59.999'));
+      expect(endOf(new Date(testDatetimeStr9), 'day')).toEqual(new Date('2022-02-23 23:59:59.999'));
     });
 
-    it('should accept string date and return first day of the month 00:00:00', () => {
-      expect(beginOfMonth('2021-06-03 00:00:00')).toEqual(new Date('2021-06-01 00:00:00'));
-      expect(beginOfMonth('2021-07-23 00:00:00')).toEqual(new Date('2021-07-01 00:00:00'));
-      expect(beginOfMonth('2021-08-31 00:00:00')).toEqual(new Date('2021-08-01 00:00:00'));
-    });
-  });
-
-  describe('endOfMonth', () => {
-    const endOfMonth = DateUtil.endOfMonth;
-    it('should throw error when invalid Date given', () => {
-      expect(() => endOfMonth('zzzzz')).toThrow();
-      expect(() => endOfMonth('2021-13-01 00:00:00')).toThrow();
-      expect(() => endOfMonth(new Date('zzzzz'))).toThrow();
+    it('should return end of the hour', () => {
+      expect(endOf(testDatetimeStr9, 'hour')).toEqual(new Date('2022-02-23 01:59:59.999'));
+      expect(endOf(new Date(testDatetimeStr9), 'hour')).toEqual(new Date('2022-02-23 01:59:59.999'));
     });
 
-    it('should accept Date object and return last day of the month 23:59:59', () => {
-      expect(endOfMonth(new Date('2020-02-03 00:00:00'))).toEqual(new Date('2020-02-29 23:59:59.999'));
-      expect(endOfMonth(new Date('2021-02-13 00:00:00'))).toEqual(new Date('2021-02-28 23:59:59.999'));
-      expect(endOfMonth(new Date('2021-08-31 00:00:00'))).toEqual(new Date('2021-08-31 23:59:59.999'));
-      expect(endOfMonth(new Date('2021-09-12 00:00:00'))).toEqual(new Date('2021-09-30 23:59:59.999'));
-      expect(endOfMonth(new Date('2021-12-01 00:00:00'))).toEqual(new Date('2021-12-31 23:59:59.999'));
+    it('should return end of the minute', () => {
+      expect(endOf(testDatetimeStr9, 'minute')).toEqual(new Date('2022-02-23 01:23:59.999'));
+      expect(endOf(new Date(testDatetimeStr9), 'minute')).toEqual(new Date('2022-02-23 01:23:59.999'));
     });
 
-    it('should accept string and return last day of the month 23:59:59', () => {
-      expect(endOfMonth('2020-02-03 00:00:00')).toEqual(new Date('2020-02-29 23:59:59.999'));
-      expect(endOfMonth('2021-02-13 00:00:00')).toEqual(new Date('2021-02-28 23:59:59.999'));
-      expect(endOfMonth('2021-08-31 00:00:00')).toEqual(new Date('2021-08-31 23:59:59.999'));
-      expect(endOfMonth('2021-09-12 00:00:00')).toEqual(new Date('2021-09-30 23:59:59.999'));
-      expect(endOfMonth('2021-12-01 00:00:00')).toEqual(new Date('2021-12-31 23:59:59.999'));
-    });
-  });
-
-  describe('lastDayOfMonth', () => {
-    const lastDayOfMonth = DateUtil.lastDayOfMonth;
-    it('should throw error when invalid Date given', () => {
-      expect(() => lastDayOfMonth('zzzzz')).toThrow();
-      expect(() => lastDayOfMonth('2021-13-01 00:00:00')).toThrow();
-      expect(() => lastDayOfMonth(new Date('zzzzz'))).toThrow();
-    });
-
-    it('should accept Date object and return last day of the month 00:00:00', () => {
-      expect(lastDayOfMonth(new Date('2020-02-03 00:00:00'))).toEqual(new Date('2020-02-29 00:00:00'));
-      expect(lastDayOfMonth(new Date('2021-02-13 00:00:00'))).toEqual(new Date('2021-02-28 00:00:00'));
-      expect(lastDayOfMonth(new Date('2021-08-31 00:00:00'))).toEqual(new Date('2021-08-31 00:00:00'));
-      expect(lastDayOfMonth(new Date('2021-09-12 00:00:00'))).toEqual(new Date('2021-09-30 00:00:00'));
-      expect(lastDayOfMonth(new Date('2021-12-01 00:00:00'))).toEqual(new Date('2021-12-31 00:00:00'));
-    });
-
-    it('should accept string and return last day of the month 00:00:00', () => {
-      expect(lastDayOfMonth('2020-02-03 00:00:00')).toEqual(new Date('2020-02-29 00:00:00'));
-      expect(lastDayOfMonth('2021-02-13 00:00:00')).toEqual(new Date('2021-02-28 00:00:00'));
-      expect(lastDayOfMonth('2021-08-31 00:00:00')).toEqual(new Date('2021-08-31 00:00:00'));
-      expect(lastDayOfMonth('2021-09-12 00:00:00')).toEqual(new Date('2021-09-30 00:00:00'));
-      expect(lastDayOfMonth('2021-12-01 00:00:00')).toEqual(new Date('2021-12-31 00:00:00'));
+    it('should return end of the second', () => {
+      expect(endOf(testDatetimeStr9, 'second')).toEqual(new Date('2022-02-23 01:23:45.999'));
+      expect(endOf(new Date(testDatetimeStr9), 'second')).toEqual(new Date('2022-02-23 01:23:45.999'));
     });
   });
 

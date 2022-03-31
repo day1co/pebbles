@@ -1,28 +1,28 @@
 import { ISO8601FormatType } from './date-util.type';
 
-export interface CalcDatetimeOpts {
-  readonly year?: number;
-  readonly month?: number;
-  readonly date?: number;
-  readonly hour?: number;
-  readonly minute?: number;
-  readonly second?: number;
+export interface DatetimeOpts {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
 }
 
 export interface DateFormatOpts {
-  readonly format?: string;
-  readonly isUTC?: boolean;
+  format?: string;
+  isUTC?: boolean;
 }
 
 export interface ISODateFormatOpts {
-  readonly format?: ISO8601FormatType;
-  readonly isUTC?: boolean;
+  format?: ISO8601FormatType;
+  isUTC?: boolean;
 }
 
 // Todo: timezone과 locale에 리터럴 타입 적용
 export interface LocalDateTimeFormatOpts {
-  readonly withYear?: boolean;
-  readonly timeZone: string;
-  readonly locale: string;
-  readonly formatStyle: 'long' | '2-digit';
+  withYear?: boolean;
+  timeZone: string;
+  locale: string;
+  formatStyle: 'long' | '2-digit';
 }
