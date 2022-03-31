@@ -1,18 +1,5 @@
-import type {
-  CalcDatetimeOpts,
-  DateFormatOpts,
-  ISODateFormatOpts,
-  LocalDateTimeFormatOpts,
-} from './date-util.interface';
-import type { DateType, DatePropertyType } from './date-util.type';
-
-const ONE_SECOND_IN_MILLI = 1000;
-const ONE_MINUTE_IN_SECOND = 60;
-const ONE_HOUR_IN_SECOND = 60 * ONE_MINUTE_IN_SECOND;
-const ONE_DAY_IN_SECOND = 24 * ONE_HOUR_IN_SECOND;
-const ONE_MINUTE_IN_MILLI = ONE_MINUTE_IN_SECOND * ONE_SECOND_IN_MILLI;
-const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_SECOND_IN_MILLI;
-const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_SECOND_IN_MILLI;
+import type { DateFormatOpts, ISODateFormatOpts, LocalDateTimeFormatOpts } from './date-util.interface';
+import type { CalcDatetimeOpts, DateType, DatePropertyType } from './date-util.type';
 
 const DEFAULT_UTC_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 const DEFAULT_LOCALE_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss[Z]';
@@ -22,63 +9,161 @@ const DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 const TIMESTAMP_FORMAT = 'YYYYMMDDHHmmssSSS';
 
 export namespace DateUtil {
+  export const ONE_SECOND_IN_MILLI = 1000;
+  export const ONE_MINUTE_IN_SECOND = 60;
+  export const ONE_HOUR_IN_SECOND = 60 * ONE_MINUTE_IN_SECOND;
+  export const ONE_DAY_IN_SECOND = 24 * ONE_HOUR_IN_SECOND;
+  export const ONE_MINUTE_IN_MILLI = ONE_MINUTE_IN_SECOND * ONE_SECOND_IN_MILLI;
+  export const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_SECOND_IN_MILLI;
+  export const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_SECOND_IN_MILLI;
+
   export function isValidDate(d: Date): boolean {
     return !isNaN(d.valueOf());
   }
 
-  export function parse(d: DateType): Date {
-    const parsedDate = new Date(d);
+  export function parse(date: DateType): Date {
+    if (typeof date === 'string' && date.split(/[ T]/).length === 1) {
+      date = date.concat('T00:00:00.000');
+    }
+
+    const parsedDate = new Date(date);
 
     if (!isValidDate(parsedDate)) {
-      throw new Error(`Invalid Date: ${d.toString()}`);
+      throw new Error(`Invalid input argument: ${date}`);
     }
 
     return parsedDate;
   }
 
-  export function calcDatetime(d: DateType, opts: CalcDatetimeOpts): Date {
-    const date = parse(d);
+  export function calcDatetime(date: DateType, opts: Readonly<CalcDatetimeOpts>): Date {
+    const oarsedDate = parse(date);
 
     if (opts.year) {
-      date.setFullYear(date.getFullYear() + opts.year);
+      oarsedDate.setFullYear(oarsedDate.getFullYear() + opts.year);
     }
 
     if (opts.month) {
-      date.setMonth(date.getMonth() + opts.month);
+      oarsedDate.setMonth(oarsedDate.getMonth() + opts.month);
     }
 
     return new Date(
-      date.getTime() +
-        (opts.date ?? 0) * ONE_DAY_IN_MILLI +
+      oarsedDate.getTime() +
+        (opts.day ?? 0) * ONE_DAY_IN_MILLI +
         (opts.hour ?? 0) * ONE_HOUR_IN_MILLI +
         (opts.minute ?? 0) * ONE_MINUTE_IN_MILLI +
         (opts.second ?? 0) * ONE_SECOND_IN_MILLI
     );
   }
 
-  export function beginOfDay(date: DateType = new Date()): Date {
-    date = parse(date);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  export function startOf(date: DateType, property: DatePropertyType): Date {
+    const parsedDate = parse(date);
+
+    switch (property) {
+      case 'year':
+        return new Date(parsedDate.getFullYear(), 0, 1, 0, 0, 0, 0);
+      case 'month':
+        return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1, 0, 0, 0, 0);
+      case 'day':
+        return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 0, 0, 0, 0);
+      case 'hour':
+        return new Date(
+          parsedDate.getFullYear(),
+          parsedDate.getMonth(),
+          parsedDate.getDate(),
+          parsedDate.getHours(),
+          0,
+          0,
+          0
+        );
+      case 'minute':
+        return new Date(
+          parsedDate.getFullYear(),
+          parsedDate.getMonth(),
+          parsedDate.getDate(),
+          parsedDate.getHours(),
+          parsedDate.getMinutes(),
+          0,
+          0
+        );
+      case 'second':
+        return new Date(
+          parsedDate.getFullYear(),
+          parsedDate.getMonth(),
+          parsedDate.getDate(),
+          parsedDate.getHours(),
+          parsedDate.getMinutes(),
+          parsedDate.getSeconds(),
+          0
+        );
+    }
   }
 
-  export function endOfDay(date: DateType = new Date()): Date {
-    date = parse(date);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
-  }
-
+  /** @deprecated */
   export function beginOfMonth(date: DateType = new Date()): Date {
-    const parsedDate = parse(date);
-    return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1);
+    return startOf(date, 'month');
   }
 
+  /** @deprecated */
+  export function beginOfDay(date: DateType = new Date()): Date {
+    return startOf(date, 'day');
+  }
+
+  export function endOf(date: DateType, property: DatePropertyType): Date {
+    const parsedDate = parse(date);
+
+    switch (property) {
+      case 'year':
+        return new Date(parsedDate.getFullYear(), 11, 31, 23, 59, 59, 999);
+      case 'month':
+        return new Date(parsedDate.getFullYear(), parsedDate.getMonth() + 1, 0, 23, 59, 59, 999);
+      case 'day':
+        return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(), 23, 59, 59, 999);
+      case 'hour':
+        return new Date(
+          parsedDate.getFullYear(),
+          parsedDate.getMonth(),
+          parsedDate.getDate(),
+          parsedDate.getHours(),
+          59,
+          59,
+          999
+        );
+      case 'minute':
+        return new Date(
+          parsedDate.getFullYear(),
+          parsedDate.getMonth(),
+          parsedDate.getDate(),
+          parsedDate.getHours(),
+          parsedDate.getMinutes(),
+          59,
+          999
+        );
+      case 'second':
+        return new Date(
+          parsedDate.getFullYear(),
+          parsedDate.getMonth(),
+          parsedDate.getDate(),
+          parsedDate.getHours(),
+          parsedDate.getMinutes(),
+          parsedDate.getSeconds(),
+          999
+        );
+    }
+  }
+
+  /** @deprecated */
   export function endOfMonth(date: DateType = new Date()): Date {
-    const parsedDate = parse(date);
-    return new Date(parsedDate.getFullYear(), parsedDate.getMonth() + 1, 0, 23, 59, 59, 999);
+    return endOf(date, 'month');
   }
 
+  /** @deprecated */
+  export function endOfDay(date: DateType = new Date()): Date {
+    return endOf(date, 'day');
+  }
+
+  /** @deprecated */
   export function lastDayOfMonth(date: DateType = new Date()): Date {
-    const parsedDate = parse(date);
-    return new Date(parsedDate.getFullYear(), parsedDate.getMonth() + 1, 0);
+    return startOf(endOf(date, 'month'), 'day');
   }
 
   export function isLastDateOfMonth(date: DateType): boolean {
@@ -229,7 +314,7 @@ export namespace DateUtil {
     return parse(unixTime);
   }
 
-  export function format(d: Date, opts?: DateFormatOpts): string {
+  export function format(d: Date, opts?: Readonly<DateFormatOpts>): string {
     // format의 기본 기준은 로컬 런타임으로 한다.
     const isUTC = opts?.isUTC ?? false;
     let formatTarget = opts?.format ? opts.format : isUTC ? DEFAULT_UTC_DATE_FORMAT : DEFAULT_LOCALE_DATE_FORMAT;
@@ -309,7 +394,7 @@ export namespace DateUtil {
     return formatTarget;
   }
 
-  export function formatToISOString(d: Date, opts: ISODateFormatOpts): string {
+  export function formatToISOString(d: Date, opts: Readonly<ISODateFormatOpts>): string {
     const ISOFormat = opts.format;
     const isUTC = opts.isUTC ?? false;
     return format(d, { format: ISOFormat, isUTC: isUTC });
@@ -340,7 +425,7 @@ export namespace DateUtil {
     return `${hh}:${mm}:${ss}`;
   }
 
-  export function formatLocalTime(d: DateType, opts: LocalDateTimeFormatOpts): string {
+  export function formatLocalTime(d: DateType, opts: Readonly<LocalDateTimeFormatOpts>): string {
     d = subtractOneDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
 
     const options: Intl.DateTimeFormatOptions = {};
@@ -386,7 +471,7 @@ function subtractOneDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
   const isMidnight =
     new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(d) === '24';
   if (isMidnight) {
-    return DateUtil.calcDatetime(d, { date: -1 });
+    return DateUtil.calcDatetime(d, { day: -1 });
   }
   return d;
 }

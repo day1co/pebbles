@@ -1,4 +1,7 @@
+import { DatetimeOpts } from './date-util.interface';
+
 export type DateType = string | number | Date;
+export type CalcDatetimeOpts = Partial<DatetimeOpts>;
 
 export type DatePropertyType = 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second';
 
