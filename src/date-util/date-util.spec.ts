@@ -92,7 +92,7 @@ describe('DateUtil', () => {
   describe('parseUnixTime', () => {
     it('should return Date instance of given unix time', () => {
       // see https://www.epochconverter.com/
-      expect(DateUtil.parseUnixTime(1645547025)).toEqual(new Date(testDatetimeStr5));
+      expect(DateUtil.parseUnixTime(1645579425)).toEqual(new Date(testDatetimeStr8));
       expect(DateUtil.parseUnixTime(0)).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
       expect(DateUtil.parseUnixTime(-1000000000)).toEqual(new Date('1938-04-25T07:13:20+09:00'));
     });
