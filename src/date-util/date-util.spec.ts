@@ -62,6 +62,51 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('parseByFormat', () => {
+    it('should throw error when invalid arguments given', () => {
+      expect(() => DateUtil.parseByFormat('20210131', 'YYYYM')).toThrow();
+      expect(() => DateUtil.parseByFormat('20210131', 'YYYYMMDDHHmmssSSSS')).not.toThrow();
+    });
+
+    it('should return valid date', () => {
+      expect(DateUtil.parseByFormat('20220223012345', 'YYYYMMDDHHmmss')).toEqual(new Date(testDatetimeStr5));
+      expect(DateUtil.parseByFormat('02202223012345', 'MMYYYYDDHHmmss')).toEqual(new Date(testDatetimeStr5));
+      expect(DateUtil.parseByFormat('20220223012345678', 'YYYYMMDDHHmmssSSS')).toEqual(new Date(testDatetimeStr9));
+      expect(DateUtil.parseByFormat('23/02/2022 01:23:45', 'DD/MM/YYYY HH:mm:ss')).toEqual(new Date(testDatetimeStr5));
+    });
+  });
+
+  describe('parseTimestamp', () => {
+    it('should throw error when invalid arguments given', () => {
+      expect(() => DateUtil.parseTimestamp('20210131')).not.toThrow();
+      expect(() => DateUtil.parseTimestamp('2021013111223344112233')).toThrow();
+    });
+
+    it('should return valid date', () => {
+      expect(DateUtil.parseTimestamp('20220223')).toEqual(DateUtil.parse(testDateStr));
+      expect(DateUtil.parseTimestamp('20220223012345')).toEqual(new Date(testDatetimeStr5));
+      expect(DateUtil.parseTimestamp('20220223012345678')).toEqual(new Date(testDatetimeStr9));
+    });
+  });
+
+  describe('parseUnixTime', () => {
+    it('should return Date instance of given unix time', () => {
+      // see https://www.epochconverter.com/
+      expect(DateUtil.parseUnixTime(1645547025)).toEqual(new Date(testDatetimeStr5));
+      expect(DateUtil.parseUnixTime(0)).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
+      expect(DateUtil.parseUnixTime(-1000000000)).toEqual(new Date('1938-04-25T07:13:20+09:00'));
+    });
+
+    it('should throw with invalid parameter', () => {
+      expect(() => DateUtil.parseUnixTime(Number.NEGATIVE_INFINITY)).toThrow();
+      expect(() => DateUtil.parseUnixTime(Number.POSITIVE_INFINITY)).toThrow();
+      expect(() => DateUtil.parseUnixTime(Number.MAX_SAFE_INTEGER)).toThrow();
+      expect(() => DateUtil.parseUnixTime(Number.MIN_SAFE_INTEGER)).toThrow();
+      expect(() => DateUtil.parseUnixTime(8640000000001)).toThrow();
+      expect(() => DateUtil.parseUnixTime(-8640000000001)).toThrow();
+    });
+  });
+
   describe('calcDatetime', () => {
     const calcDatetime = DateUtil.calcDatetime;
     test('should return error', () => {
@@ -294,58 +339,6 @@ describe('DateUtil', () => {
       expect(minDate('2021-08-01 00:00:02', '2021-08-01 00:00:01', '2021-08-01 00:00:00')).toEqual(
         new Date('2021-08-01 00:00:00')
       );
-    });
-  });
-
-  describe('parseByFormat', () => {
-    it('should throw error when invalid arguments given', () => {
-      expect(() => DateUtil.parseByFormat('20210131', 'YYYYM')).toThrow();
-      expect(() => DateUtil.parseByFormat('20210131', 'YYYYMMDDHHmmssSSSS')).not.toThrow();
-    });
-
-    it('should return valid date', () => {
-      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmssSSS')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseByFormat('20210821001122', 'YYYYMMDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseByFormat('08202121001122', 'MMYYYYDDHHmmss')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseByFormat('24/12/2019 11:15:00', 'DD/MM/YYYY HH:mm:ss')).toEqual(
-        new Date('2019-12-24 11:15:00')
-      );
-    });
-  });
-
-  describe('parseTimestamp', () => {
-    it('should throw error when invalid arguments given', () => {
-      expect(() => DateUtil.parseTimestamp('20210131')).not.toThrow();
-      expect(() => DateUtil.parseTimestamp('2021013111223344112233')).toThrow();
-    });
-
-    it('should return valid date', () => {
-      expect(DateUtil.parseTimestamp('20210821')).toEqual(new Date('2021-08-21 00:00:00'));
-      expect(DateUtil.parseTimestamp('20210821001122')).toEqual(new Date('2021-08-21 00:11:22'));
-      expect(DateUtil.parseTimestamp('20210821001122123')).toEqual(new Date('2021-08-21 00:11:22.123'));
-    });
-  });
-
-  describe('parseUnixTime', () => {
-    it('should return Date instance of given unix time', () => {
-      // see https://www.epochconverter.com/
-      expect(DateUtil.parseUnixTime('1000000000')).toEqual(new Date('2001-09-09T10:46:40+09:00'));
-      expect(DateUtil.parseUnixTime('0')).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
-      expect(DateUtil.parseUnixTime('-1000000000')).toEqual(new Date('1938-04-25T07:13:20+09:00'));
-      expect(DateUtil.parseUnixTime(1000000000)).toEqual(new Date('2001-09-09T10:46:40+09:00'));
-      expect(DateUtil.parseUnixTime(0)).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
-      expect(DateUtil.parseUnixTime(-1000000000)).toEqual(new Date('1938-04-25T07:13:20+09:00'));
-    });
-
-    it('should throw with invalid parameter', () => {
-      expect(() => DateUtil.parseUnixTime(Number.NEGATIVE_INFINITY)).toThrow();
-      expect(() => DateUtil.parseUnixTime(Number.POSITIVE_INFINITY)).toThrow();
-      expect(() => DateUtil.parseUnixTime(Number.MAX_SAFE_INTEGER)).toThrow();
-      expect(() => DateUtil.parseUnixTime(Number.MIN_SAFE_INTEGER)).toThrow();
-      expect(() => DateUtil.parseUnixTime(8640000000001)).toThrow();
-      expect(() => DateUtil.parseUnixTime(-8640000000001)).toThrow();
-      expect(() => DateUtil.parseUnixTime('')).toThrow();
     });
   });
 
