@@ -35,6 +35,66 @@ export namespace DateUtil {
     return parsedDate;
   }
 
+  // Todo: format 형식에 제약을 줘야 하지 않을까?
+  // Todo: Timezone 파싱?
+  export function parseByFormat(str: string, fmt: string): Date {
+    if (str.length > fmt.length) {
+      throw new Error(`Invalid Arguments: str and fmt are not matched. str: ${str}, fmt: ${fmt}`);
+    }
+
+    const patterns = [/YYYY/, /M?M/, /D?D/, /H?H/, /m?m/, /s?s/, /S?S?S/];
+    const retDate = new Date(0);
+    for (const pattern of patterns) {
+      // 각 패턴별로 한번만 파싱 하면 됨
+      const match = fmt.match(pattern);
+      if (!match) continue;
+
+      const from = match.index ?? 0;
+      const end = from + match[0].length;
+      const value = from >= str.length || from === end ? 0 : parseInt(str.substring(from, end));
+      switch (pattern.toString()) {
+        case '/YYYY/':
+          retDate.setFullYear(value);
+          break;
+        case '/M?M/':
+          retDate.setMonth(value - 1);
+          break;
+        case '/D?D/':
+          retDate.setDate(value);
+          break;
+        case '/H?H/':
+          retDate.setHours(value);
+          break;
+        case '/m?m/':
+          retDate.setMinutes(value);
+          break;
+        case '/s?s/':
+          retDate.setSeconds(value);
+          break;
+        case '/S?S?S/':
+          retDate.setMilliseconds(value);
+          break;
+      }
+    }
+
+    return retDate;
+  }
+
+  export function parseTimestamp(str: string): Date {
+    return parseByFormat(str, TIMESTAMP_FORMAT);
+  }
+
+  export function parseUnixTime(unixTime: number): Date {
+    const MAX_SECOND = 8640000000000;
+    const MIN_SECOND = -8640000000000;
+
+    if (unixTime > MAX_SECOND || unixTime < MIN_SECOND) {
+      throw new Error(`"${unixTime}" exceeds range of possible date value`);
+    }
+
+    return parse(unixTime * ONE_SECOND_IN_MILLI);
+  }
+
   export function calcDatetime(date: DateType, opts: Readonly<CalcDatetimeOpts>): Date {
     const oarsedDate = parse(date);
 
@@ -170,104 +230,6 @@ export namespace DateUtil {
       min = item < min ? item : min;
     }
     return min;
-  }
-
-  export function parseByFormat(str: string, fmt: string): Date {
-    if (str.length > fmt.length) {
-      throw new Error(`Invalid Arguments: str and fmt are not matched. str: ${str}, fmt: ${fmt}`);
-    }
-
-    interface Callback {
-      (matched: RegExpMatchArray, date: Date): Date;
-    }
-
-    function substrByMatch(match: RegExpMatchArray): string {
-      const from = match.index ? match.index : 0;
-      const end = from + match[0].length;
-      const val = str.substring(from, end);
-      return val.length > 0 ? val : '0';
-    }
-
-    const tokenCallbackMap = new Map<string, Callback>([
-      [
-        'YYYY',
-        (match, date) => {
-          date.setFullYear(parseInt(substrByMatch(match)));
-          return date;
-        },
-      ],
-      [
-        'M?M',
-        (match, date) => {
-          date.setMonth(parseInt(substrByMatch(match)) - 1);
-          return date;
-        },
-      ],
-      [
-        'D?D',
-        (match, date) => {
-          date.setDate(parseInt(substrByMatch(match)));
-          return date;
-        },
-      ],
-      [
-        'H?H',
-        (match, date) => {
-          date.setHours(parseInt(substrByMatch(match)));
-          return date;
-        },
-      ],
-      [
-        'm?m',
-        (match, date) => {
-          date.setMinutes(parseInt(substrByMatch(match)));
-          return date;
-        },
-      ],
-      [
-        's?s',
-        (match, date) => {
-          date.setSeconds(parseInt(substrByMatch(match)));
-          return date;
-        },
-      ],
-      [
-        'S?S?S',
-        (match, date) => {
-          date.setMilliseconds(parseInt(substrByMatch(match)));
-          return date;
-        },
-      ],
-    ]);
-
-    let retDate = new Date(0);
-    for (const [token, callback] of tokenCallbackMap.entries()) {
-      const pattern = new RegExp(token, 'g');
-
-      for (const match of fmt.matchAll(pattern)) {
-        retDate = callback(match, retDate);
-      }
-    }
-
-    return retDate;
-  }
-
-  export function parseTimestamp(str: string): Date {
-    return parseByFormat(str, TIMESTAMP_FORMAT);
-  }
-
-  export function parseUnixTime(unixTime: string | number): Date {
-    const MAX_SECOND = 8640000000000;
-    const MIN_SECOND = -8640000000000;
-
-    if (typeof unixTime === 'string') {
-      unixTime = parseInt(unixTime);
-    }
-    if (unixTime > MAX_SECOND || unixTime < MIN_SECOND) {
-      throw new Error(`"${unixTime}" exceeds range of possible date value`);
-    }
-    unixTime *= ONE_SECOND_IN_MILLI;
-    return parse(unixTime);
   }
 
   export function format(d: Date, opts?: Readonly<DateFormatOpts>): string {
