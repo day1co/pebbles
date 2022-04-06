@@ -1,12 +1,6 @@
 import { DateUtil } from './date-util';
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
-import {
-  DATE_FORMAT,
-  DATETIME_FORMAT,
-  DATETIME_FORMAT_WITH_MILLIS,
-  LOCAL_DATETIME_FORMAT,
-  TIMESTAMP_FORMAT,
-} from './date-util.const';
+import { DATE_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_WITH_MILLIS, TIMESTAMP_FORMAT } from './date-util.const';
 
 const testDateStr = '2022-02-23';
 const testDatetimeStr1 = '2022-02-23 01:23';
@@ -20,8 +14,8 @@ const testDatetimeStr8 = '2022-02-23T01:23:45.678';
 const testTimestampStr = '20220223012345678';
 const testDate = new Date(`${testDateStr} 00:00`);
 
-function getOffsetString(separatorFlag: boolean): string {
-  const offset = new Date().getTimezoneOffset();
+function getOffsetString(date: Date, separatorFlag: boolean): string {
+  const offset = date.getTimezoneOffset();
   const sign = offset > 0 ? '-' : '+';
   const timezoneOffset = Math.abs(offset);
   const offsetMinutes = timezoneOffset % 60;
@@ -235,9 +229,9 @@ describe('DateUtil', () => {
   describe('isLastDateOfMonth', () => {
     const isLastDateOfMonth = DateUtil.isLastDateOfMonth;
     it('should accept Date object and check last date of the month', () => {
-      expect(isLastDateOfMonth(new Date('2020-02-28'))).toBe(false);
-      expect(isLastDateOfMonth(new Date('2020-02-29'))).toBe(true);
-      expect(isLastDateOfMonth(new Date('2021-02-28'))).toBe(true);
+      expect(isLastDateOfMonth(DateUtil.parse('2020-02-28'))).toBe(false);
+      expect(isLastDateOfMonth(DateUtil.parse('2020-02-29'))).toBe(true);
+      expect(isLastDateOfMonth(DateUtil.parse('2021-02-28'))).toBe(true);
     });
 
     it('should accept string and check last date of the month', () => {
@@ -256,7 +250,6 @@ describe('DateUtil', () => {
     });
     test('get date diff', () => {
       // year
-      expect(diff('2020-02-10 15:00:00', '2021-02-08 15:00:00', 'year')).toBe(0);
       expect(diff('2020-02-10 15:00:00', '2021-02-09 15:00:00', 'year')).toBe(0);
       expect(diff('2020-02-10 15:00:00', '2021-02-10 15:00:00', 'year')).toBe(1);
       expect(diff('2020-02-10 15:00:00', '2022-02-09 15:00:00', 'year')).toBe(1);
@@ -319,17 +312,6 @@ describe('DateUtil', () => {
       expect(diff(since1, until1, 'second')).toBe(-diff(until1, since1, 'second'));
       expect(diff(since2, until2, 'second')).toBe(-diff(until2, since2, 'second'));
     });
-
-    test('since와 until이 같은 경우', () => {
-      const since = '2020-02-10 15:00:00';
-
-      expect(diff(since, since, 'year')).toBe(diff(since, since, 'year'));
-      expect(diff(since, since, 'month')).toBe(diff(since, since, 'month'));
-      expect(diff(since, since, 'day')).toBe(diff(since, since, 'day'));
-      expect(diff(since, since, 'hour')).toBe(diff(since, since, 'hour'));
-      expect(diff(since, since, 'minute')).toBe(diff(since, since, 'minute'));
-      expect(diff(since, since, 'second')).toBe(diff(since, since, 'second'));
-    });
   });
 
   describe('min', () => {
@@ -373,8 +355,8 @@ describe('DateUtil', () => {
     it('should return formatted date string of local time when isUtc is false', () => {
       const testDatetime = new Date(testDatetimeStr6);
       expect(format(testDatetime, { isUtc: false })).toBe(testDatetimeStr3);
-      expect(format(testDatetime, { format: 'YYYY-MM-DDTHH:mm:ssZZ', isUtc: false })).toEqual(
-        testDatetimeStr5 + getOffsetString(false)
+      expect(format(testDatetime, { format: 'YYYY-MM-DDTHH:mm:ss.SSSZZ', isUtc: false })).toEqual(
+        testDatetimeStr8 + getOffsetString(testDatetime, false)
       );
     });
   });
@@ -390,7 +372,7 @@ describe('DateUtil', () => {
     it('should return formatted date string of local time', () => {
       const testDatetime = new Date(testDatetimeStr6);
       expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT, isUtc: false })).toEqual(
-        testDatetimeStr5 + getOffsetString(true)
+        testDatetimeStr5 + getOffsetString(testDatetime, true)
       );
     });
   });

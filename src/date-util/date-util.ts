@@ -47,7 +47,7 @@ export namespace DateUtil {
     }
 
     const patterns = [/YYYY/, /M?M/, /D?D/, /H?H/, /m?m/, /s?s/, /S?S?S/];
-    const retDate = new Date(0);
+    const retDate = new Date(0, 0, 1);
     for (const pattern of patterns) {
       // 각 패턴별로 한번만 파싱 하면 됨
       const match = fmt.match(pattern);
