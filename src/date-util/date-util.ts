@@ -1,12 +1,12 @@
-import type { DateFormatOpts, ISODateFormatOpts, LocalDateTimeFormatOpts } from './date-util.interface';
-import type { CalcDatetimeOpts, DateType, DatePropertyType } from './date-util.type';
-
-const DEFAULT_UTC_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
-const DEFAULT_LOCALE_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss[Z]';
-const DEFAULT_LOCALE_TIMEZONE_FORMAT = '[Z]';
-const DATE_FORMAT = 'YYYY-MM-DD';
-const DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-const TIMESTAMP_FORMAT = 'YYYYMMDDHHmmssSSS';
+import { DATE_FORMAT, DATETIME_FORMAT, DEFAULT_DATETIME_FORMAT, TIMESTAMP_FORMAT } from './date-util.const';
+import type { LocalDateTimeFormatOpts } from './date-util.interface';
+import type {
+  CalcDatetimeOpts,
+  DatePropertyType,
+  DatetimeFormatOpts,
+  DateType,
+  IsoDatetimeFormatOpts,
+} from './date-util.type';
 
 export namespace DateUtil {
   export const ONE_SECOND_IN_MILLI = 1000;
@@ -72,7 +72,7 @@ export namespace DateUtil {
           retDate.setSeconds(value);
           break;
         case '/S?S?S/':
-          retDate.setMilliseconds(value);
+          retDate.setMilliseconds(value * Math.pow(10, 3 - Math.abs(end - from)));
           break;
       }
     }
@@ -96,18 +96,18 @@ export namespace DateUtil {
   }
 
   export function calcDatetime(date: DateType, opts: Readonly<CalcDatetimeOpts>): Date {
-    const oarsedDate = parse(date);
+    const parsedDate = parse(date);
 
     if (opts.year) {
-      oarsedDate.setFullYear(oarsedDate.getFullYear() + opts.year);
+      parsedDate.setFullYear(parsedDate.getFullYear() + opts.year);
     }
 
     if (opts.month) {
-      oarsedDate.setMonth(oarsedDate.getMonth() + opts.month);
+      parsedDate.setMonth(parsedDate.getMonth() + opts.month);
     }
 
     return new Date(
-      oarsedDate.getTime() +
+      parsedDate.getTime() +
         (opts.day ?? 0) * ONE_DAY_IN_MILLI +
         (opts.hour ?? 0) * ONE_HOUR_IN_MILLI +
         (opts.minute ?? 0) * ONE_MINUTE_IN_MILLI +
@@ -222,7 +222,7 @@ export namespace DateUtil {
     return Math.floor(result);
   }
 
-  export function minDate(first: DateType, ...rest: DateType[]): Date {
+  export function min(first: DateType, ...rest: DateType[]): Date {
     let min = parse(first);
 
     for (let item of rest) {
@@ -232,12 +232,16 @@ export namespace DateUtil {
     return min;
   }
 
-  export function format(d: Date, opts?: Readonly<DateFormatOpts>): string {
-    // format의 기본 기준은 로컬 런타임으로 한다.
-    const isUTC = opts?.isUTC ?? false;
-    let formatTarget = opts?.format ? opts.format : isUTC ? DEFAULT_UTC_DATE_FORMAT : DEFAULT_LOCALE_DATE_FORMAT;
+  /** @deprecated */
+  export function minDate(first: DateType, ...rest: DateType[]): Date {
+    return min(first, ...rest);
+  }
 
-    const dateInfo = isUTC
+  export function format(d: Date, opts?: Readonly<DatetimeFormatOpts>): string {
+    // format의 기본 기준은 로컬 런타임으로 한다.
+    const isUtc = opts?.isUtc ?? false;
+    const formatStr = opts?.format ?? DEFAULT_DATETIME_FORMAT;
+    const dateInfo = isUtc
       ? {
           year: d.getUTCFullYear(),
           month: d.getUTCMonth() + 1,
@@ -257,75 +261,82 @@ export namespace DateUtil {
           millisecond: d.getMilliseconds(),
         };
 
-    if (formatTarget === DEFAULT_LOCALE_DATE_FORMAT) {
-      formatTarget = formatTarget.replace(DEFAULT_LOCALE_TIMEZONE_FORMAT, getLocaleTimezoneOffset(d));
-    }
-
-    const FORMAT_RULE_REGEXP = /(Y{2,4}|M?M|D?D|H?H|m?m|s?s|S?S?S)/g;
-    const FORMAT_VERIFICATION_REGEXP = /(Y{2,4}|M?M|D?D|H?H|S?S?S)/gi;
-    formatTarget = formatTarget.replace(FORMAT_RULE_REGEXP, (match) => {
+    return formatStr.replace(/(Y{2,4}|M?M|D?D|H?H|m?m|s?s|S?S?S|Z?Z)/g, (match) => {
       switch (match) {
         case 'YYYY':
-          return String(dateInfo.year);
         case 'YY':
-          return String(dateInfo.year % 100).padStart(2, '0');
+          return String(dateInfo.year % Math.pow(10, match.length)).padStart(match.length, '0');
 
         case 'MM':
-          return String(dateInfo.month).padStart(2, '0');
         case 'M':
-          return String(dateInfo.month);
+          return String(dateInfo.month).padStart(match.length, '0');
 
         case 'DD':
-          return String(dateInfo.date).padStart(2, '0');
         case 'D':
-          return String(dateInfo.date);
+          return String(dateInfo.date).padStart(match.length, '0');
 
         case 'HH':
-          return String(dateInfo.hour).padStart(2, '0');
         case 'H':
-          return String(dateInfo.hour);
+          return String(dateInfo.hour).padStart(match.length, '0');
 
         case 'mm':
-          return String(dateInfo.minute).padStart(2, '0');
         case 'm':
-          return String(dateInfo.minute);
+          return String(dateInfo.minute).padStart(match.length, '0');
 
         case 'ss':
-          return String(dateInfo.second).padStart(2, '0');
         case 's':
-          return String(dateInfo.second);
+          return String(dateInfo.second).padStart(match.length, '0');
 
         case 'SSS':
-          return String(dateInfo.millisecond).padStart(3, '0');
         case 'SS':
-          return String(dateInfo.millisecond).padStart(2, '0');
         case 'S':
-          return String(dateInfo.millisecond);
+          return String(dateInfo.millisecond).padStart(match.length, '0');
+
+        case 'ZZ':
+          return getTimezoneOffsetString(d);
+        case 'Z':
+          return isUtc && !opts?.format ? match : getTimezoneOffsetString(d);
 
         default:
           return match;
       }
     });
-    if (FORMAT_VERIFICATION_REGEXP.test(formatTarget)) {
-      throw new Error(`Invalid format: ${formatTarget}`);
-    }
-    return formatTarget;
   }
 
-  export function formatToISOString(d: Date, opts: Readonly<ISODateFormatOpts>): string {
-    const ISOFormat = opts.format;
-    const isUTC = opts.isUTC ?? false;
-    return format(d, { format: ISOFormat, isUTC: isUTC });
+  export function formatInIso8601(date: Date, opts: Readonly<IsoDatetimeFormatOpts>): string {
+    return format(date, opts);
   }
 
-  export function formatDate(d: Date, isUTC = false): string {
-    return format(d, { format: DATE_FORMAT, isUTC });
+  export function getDateString(date: Date, isUtc = false): string {
+    return format(date, { format: DATE_FORMAT, isUtc: isUtc });
   }
-  export function formatDatetime(d: Date, isUTC = false): string {
-    return format(d, { format: DATETIME_FORMAT, isUTC });
+
+  export function getDatetimeString(date: Date, isUtc = false): string {
+    return format(date, { format: DATETIME_FORMAT, isUtc: isUtc });
   }
-  export function formatTimestamp(d: Date, isUTC = false): string {
-    return format(d, { format: TIMESTAMP_FORMAT, isUTC });
+
+  export function getTimestampString(date: Date, isUtc = false): string {
+    return format(date, { format: TIMESTAMP_FORMAT, isUtc: isUtc });
+  }
+
+  /** @deprecated */
+  export function formatToIsoString(d: Date, opts: Readonly<IsoDatetimeFormatOpts>): string {
+    return formatInIso8601(d, opts);
+  }
+
+  /** @deprecated */
+  export function formatDate(d: Date, isUtc = false): string {
+    return getDateString(d, isUtc);
+  }
+
+  /** @deprecated */
+  export function formatDatetime(d: Date, isUtc = false): string {
+    return getDatetimeString(d, isUtc);
+  }
+
+  /** @deprecated */
+  export function formatTimestamp(d: Date, isUtc = false): string {
+    return getTimestampString(d, isUtc);
   }
 
   export function secondsToTimeFormat(seconds: number): string {
@@ -412,29 +423,26 @@ function format12HourInLocale(str: string, locale: string): string {
   }
 }
 
-function getLocaleTimezoneOffset(d: Date): string {
-  const localeTimezoneOffset = Math.abs(d.getTimezoneOffset());
-  const sign = localeTimezoneOffset < 0 ? '-' : '+';
-
-  const offsetHours = String(Math.floor(localeTimezoneOffset / 60)).padStart(2, '0');
-  const offsetMinutes = String(Math.floor(localeTimezoneOffset % 60)).padStart(2, '0');
-  return `${sign}${offsetHours}:${offsetMinutes}`;
+function getTimezoneOffsetString(date: Date): string {
+  const sign = date.getTimezoneOffset() > 0 ? '-' : '+';
+  const timezoneOffset = Math.abs(date.getTimezoneOffset());
+  const offsetMinutes = timezoneOffset % 60;
+  const offsetHours = (timezoneOffset - offsetMinutes) / 60;
+  return `${sign}${String(offsetHours).padStart(2, '0')}:${String(offsetMinutes).padStart(2, '0')}`;
 }
 
 function diffMonth(since: Date, until: Date): number {
-  const diffYear = until.getFullYear() - since.getFullYear();
-  const diffMonth = diffYear * 12 + until.getMonth() - since.getMonth();
-
+  const diff = (until.getFullYear() - since.getFullYear()) * 12 + until.getMonth() - since.getMonth();
   const tempDate = new Date(since);
-  tempDate.setMonth(tempDate.getMonth() + diffMonth);
+  tempDate.setMonth(tempDate.getMonth() + diff);
 
   /*
     since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
     tempDate가 until보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
    */
   if (tempDate > until) {
-    return diffMonth - 1;
+    return diff - 1;
   }
 
-  return diffMonth;
+  return diff;
 }
