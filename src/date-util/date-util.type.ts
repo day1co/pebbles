@@ -1,18 +1,14 @@
-import { DatetimeOpts } from './date-util.interface';
+import { DatetimeProperties, FormatOpts } from './date-util.interface';
+import { DATE_FORMAT, DATETIME_FORMAT_WITH_MILLIS, DEFAULT_DATETIME_FORMAT } from './date-util.const';
 
 export type DateType = string | number | Date;
-export type CalcDatetimeOpts = Partial<DatetimeOpts>;
-
+export type CalcDatetimeOpts = Partial<DatetimeProperties>;
 export type DatePropertyType = 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second';
 
-export type ISO8601FormatType =
-  | 'YYYY'
-  | 'YYYYMMDD'
-  | 'YYYY-MM'
-  | 'YYYY-MM-DD'
-  | 'YYYY-MM-DDTHH:mm:ss'
-  | 'YYYY-MM-DDTHH:mm:ss.SSS'
-  | 'HH:mm:ss.SSS'
-  | 'HH:mm:ss'
-  | 'HH:mm'
-  | 'HH';
+export type Iso8601FormatType =
+  | typeof DEFAULT_DATETIME_FORMAT
+  | typeof DATE_FORMAT
+  | typeof DATETIME_FORMAT_WITH_MILLIS;
+
+export type DatetimeFormatOpts = Partial<FormatOpts<string>>;
+export type IsoDatetimeFormatOpts = Partial<FormatOpts<Iso8601FormatType>>;

@@ -1,0 +1,5 @@
+export const DATE_FORMAT = 'YYYY-MM-DD';
+export const DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const DATETIME_FORMAT_WITH_MILLIS = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+export const DEFAULT_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
+export const TIMESTAMP_FORMAT = 'YYYYMMDDHHmmssSSS';
