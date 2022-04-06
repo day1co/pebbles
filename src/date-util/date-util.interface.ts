@@ -1,6 +1,4 @@
-import { ISO8601FormatType } from './date-util.type';
-
-export interface DatetimeOpts {
+export interface DatetimeProperties {
   year: number;
   month: number;
   day: number;
@@ -9,14 +7,9 @@ export interface DatetimeOpts {
   second: number;
 }
 
-export interface DateFormatOpts {
-  format?: string;
-  isUTC?: boolean;
-}
-
-export interface ISODateFormatOpts {
-  format?: ISO8601FormatType;
-  isUTC?: boolean;
+export interface FormatOpts<Type extends string> {
+  format: Type;
+  isUtc: boolean;
 }
 
 // Todo: timezone과 locale에 리터럴 타입 적용

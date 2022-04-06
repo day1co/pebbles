@@ -1,10 +1,19 @@
 export { BooleanUtil } from './boolean-util';
-export { DateUtil } from './date-util';
+export {
+  DateUtil,
+  DATE_FORMAT,
+  DATETIME_FORMAT,
+  DATETIME_FORMAT_WITH_MILLIS,
+  DEFAULT_DATETIME_FORMAT,
+  TIMESTAMP_FORMAT,
+} from './date-util';
 export type {
   CalcDatetimeOpts,
+  DatePropertyType,
+  DatetimeFormatOpts,
+  DatetimeProperties,
   DateType,
-  DateFormatOpts,
-  ISODateFormatOpts,
+  IsoDatetimeFormatOpts,
   LocalDateTimeFormatOpts,
 } from './date-util';
 export {
