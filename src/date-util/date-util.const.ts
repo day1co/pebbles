@@ -1,6 +1,7 @@
-export const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
+export const DATE_FORMAT = 'YYYY-MM-DD';
+export const DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 export const DATETIME_FORMAT_WITH_MILLIS = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
-export const DEFAULT_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
+export const LOCAL_DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 export const TIMESTAMP_FORMAT = 'YYYYMMDDHHmmssSSS';
 
 export const ONE_SECOND_IN_MILLI = 1000;
