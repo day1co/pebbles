@@ -246,7 +246,7 @@ export namespace DateUtil {
 
   export function format(d: Date, opts?: Readonly<DatetimeFormatOpts>): string {
     // format의 기본 기준은 로컬 런타임으로 한다.
-    const isUtc = opts?.isUtc ?? false;
+    const isUtc = opts?.isUtc ?? true;
     const formatStr = opts?.format ?? DATETIME_FORMAT;
     const dateInfo = isUtc
       ? {
@@ -313,17 +313,17 @@ export namespace DateUtil {
     return format(date, opts);
   }
 
-  export function getDateString(date: Date, isUtc = false): string {
+  export function getDateString(date: Date, isUtc = true): string {
     return format(date, { format: DATE_FORMAT, isUtc });
   }
 
-  export function getDatetimeString(date: Date, isUtc = false): string {
+  export function getDatetimeString(date: Date, isUtc = true): string {
     return isUtc
       ? format(date, { format: DATETIME_FORMAT, isUtc })
       : format(date, { format: LOCAL_DATETIME_FORMAT, isUtc });
   }
 
-  export function getTimestampString(date: Date, isUtc = false): string {
+  export function getTimestampString(date: Date, isUtc = true): string {
     return format(date, { format: TIMESTAMP_FORMAT, isUtc });
   }
 
@@ -333,17 +333,17 @@ export namespace DateUtil {
   }
 
   /** @deprecated */
-  export function formatDate(d: Date, isUtc = false): string {
+  export function formatDate(d: Date, isUtc = true): string {
     return getDateString(d, isUtc);
   }
 
   /** @deprecated */
-  export function formatDatetime(d: Date, isUtc = false): string {
+  export function formatDatetime(d: Date, isUtc = true): string {
     return getDatetimeString(d, isUtc);
   }
 
   /** @deprecated */
-  export function formatTimestamp(d: Date, isUtc = false): string {
+  export function formatTimestamp(d: Date, isUtc = true): string {
     return getTimestampString(d, isUtc);
   }
 
