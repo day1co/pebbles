@@ -1,4 +1,15 @@
-import { DATE_FORMAT, DATETIME_FORMAT, DEFAULT_DATETIME_FORMAT, TIMESTAMP_FORMAT } from './date-util.const';
+import {
+  DEFAULT_DATE_FORMAT,
+  DEFAULT_DATETIME_FORMAT,
+  ONE_DAY_IN_MILLI,
+  ONE_DAY_IN_SECOND,
+  ONE_HOUR_IN_MILLI,
+  ONE_HOUR_IN_SECOND,
+  ONE_MINUTE_IN_MILLI,
+  ONE_MINUTE_IN_SECOND,
+  ONE_SECOND_IN_MILLI,
+  TIMESTAMP_FORMAT,
+} from './date-util.const';
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
 import type {
   CalcDatetimeOpts,
@@ -9,14 +20,6 @@ import type {
 } from './date-util.type';
 
 export namespace DateUtil {
-  export const ONE_SECOND_IN_MILLI = 1000;
-  export const ONE_MINUTE_IN_SECOND = 60;
-  export const ONE_HOUR_IN_SECOND = 60 * ONE_MINUTE_IN_SECOND;
-  export const ONE_DAY_IN_SECOND = 24 * ONE_HOUR_IN_SECOND;
-  export const ONE_MINUTE_IN_MILLI = ONE_MINUTE_IN_SECOND * ONE_SECOND_IN_MILLI;
-  export const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_SECOND_IN_MILLI;
-  export const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_SECOND_IN_MILLI;
-
   export function isValidDate(d: Date): boolean {
     return !isNaN(d.valueOf());
   }
@@ -72,6 +75,9 @@ export namespace DateUtil {
           retDate.setSeconds(value);
           break;
         case '/S?S?S/':
+          // 포맷이 S이고 값이 1인 경우 setMilliseconds(1 * 100)이 되어야 한다
+          // 포맷이 SS이고 값이 12인 경우 setMilliseconds(12 * 10)이 되어야 한다
+          // 포맷이 SSS이고 값이 123인 경우 setMilliseconds(123 * 1)이 되어야 한다
           retDate.setMilliseconds(value * Math.pow(10, 3 - Math.abs(end - from)));
           break;
       }
@@ -89,7 +95,7 @@ export namespace DateUtil {
     const MIN_SECOND = -8640000000000;
 
     if (unixTime > MAX_SECOND || unixTime < MIN_SECOND) {
-      throw new Error(`"${unixTime}" exceeds range of possible date value`);
+      throw new Error(`"${unixTime}" exceeds range of possible date value. MAX=${MAX_SECOND} and MIN=${MIN_SECOND}`);
     }
 
     return parse(unixTime * ONE_SECOND_IN_MILLI);
@@ -307,15 +313,15 @@ export namespace DateUtil {
   }
 
   export function getDateString(date: Date, isUtc = false): string {
-    return format(date, { format: DATE_FORMAT, isUtc: isUtc });
+    return format(date, { format: DEFAULT_DATE_FORMAT, isUtc });
   }
 
   export function getDatetimeString(date: Date, isUtc = false): string {
-    return format(date, { format: DATETIME_FORMAT, isUtc: isUtc });
+    return format(date, { format: DEFAULT_DATETIME_FORMAT, isUtc });
   }
 
   export function getTimestampString(date: Date, isUtc = false): string {
-    return format(date, { format: TIMESTAMP_FORMAT, isUtc: isUtc });
+    return format(date, { format: TIMESTAMP_FORMAT, isUtc });
   }
 
   /** @deprecated */

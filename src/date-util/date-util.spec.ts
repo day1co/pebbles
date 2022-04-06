@@ -1,6 +1,6 @@
 import { DateUtil } from './date-util';
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
-import { DATE_FORMAT, DATETIME_FORMAT_WITH_MILLIS, DEFAULT_DATETIME_FORMAT } from './date-util.const';
+import { DATETIME_FORMAT_WITH_MILLIS, DEFAULT_DATE_FORMAT, DEFAULT_DATETIME_FORMAT } from './date-util.const';
 
 const now = new Date();
 const testDateStr = '2022-02-23';
@@ -365,7 +365,7 @@ describe('DateUtil', () => {
     const formatInIso8601 = DateUtil.formatInIso8601;
     it('should return date to ISO format string', () => {
       const testDate = new Date(testDatetimeStr6);
-      expect(formatInIso8601(testDate, { format: DATE_FORMAT })).toEqual('2022-02-23');
+      expect(formatInIso8601(testDate, { format: DEFAULT_DATE_FORMAT })).toEqual('2022-02-23');
       expect(formatInIso8601(testDate, { format: DATETIME_FORMAT_WITH_MILLIS })).toEqual(
         testDatetimeStr8 + getOffsetString()
       );
