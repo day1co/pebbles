@@ -246,8 +246,7 @@ export namespace DateUtil {
 
   export function format(d: Date, opts?: Readonly<DatetimeFormatOpts>): string {
     // format의 기본 기준은 로컬 런타임으로 한다.
-    const isUtc = opts?.isUtc ?? true;
-    const formatStr = opts?.format ?? DATETIME_FORMAT;
+    const { format: formatStr = DATETIME_FORMAT, isUtc = true } = opts ?? {};
     const dateInfo = isUtc
       ? {
           year: d.getUTCFullYear(),
@@ -328,7 +327,7 @@ export namespace DateUtil {
   }
 
   /** @deprecated */
-  export function formatToIsoString(d: Date, opts: Readonly<IsoDatetimeFormatOpts>): string {
+  export function formatToISOString(d: Date, opts: Readonly<IsoDatetimeFormatOpts>): string {
     return formatInIso8601(d, opts);
   }
 
