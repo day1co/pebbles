@@ -293,9 +293,8 @@ export namespace DateUtil {
           return String(dateInfo.millisecond).padStart(match.length, '0');
 
         case 'ZZ':
-          return getTimezoneOffsetString(d);
         case 'Z':
-          return isUtc && !opts?.format ? match : getTimezoneOffsetString(d);
+          return isUtc ? 'Z' : getTimezoneOffsetString(d, match.length === 1);
 
         default:
           return match;
@@ -423,12 +422,13 @@ function format12HourInLocale(str: string, locale: string): string {
   }
 }
 
-function getTimezoneOffsetString(date: Date): string {
+function getTimezoneOffsetString(date: Date, separatorFlag: boolean): string {
   const sign = date.getTimezoneOffset() > 0 ? '-' : '+';
   const timezoneOffset = Math.abs(date.getTimezoneOffset());
   const offsetMinutes = timezoneOffset % 60;
   const offsetHours = (timezoneOffset - offsetMinutes) / 60;
-  return `${sign}${String(offsetHours).padStart(2, '0')}:${String(offsetMinutes).padStart(2, '0')}`;
+  const separator = separatorFlag ? ':' : '';
+  return `${sign}${String(offsetHours).padStart(2, '0')}${separator}${String(offsetMinutes).padStart(2, '0')}`;
 }
 
 function diffMonth(since: Date, until: Date): number {
