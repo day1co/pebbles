@@ -405,22 +405,10 @@ describe('DateUtil', () => {
   describe('getDatetimeString', () => {
     const getDatetimeString = DateUtil.getDatetimeString;
     it('should format date to YYYY-MM-DD HH:mm:ss format string', () => {
-      expect(getDatetimeString(new Date('2020-01-01 01:01:01:111'))).toBe('2020-01-01 01:01:01');
-      expect(getDatetimeString(new Date('2020-11-11 23:23:23:999'))).toBe('2020-11-11 23:23:23');
-    });
-    it('should format date in local runtime as default', () => {
-      const localRuntimeTimezone = new Date().getTimezoneOffset() / 60;
-      if (localRuntimeTimezone !== 0) {
-        expect(getDatetimeString(new Date('2020-01-01 01:01:01:111Z'))).not.toBe('2020-01-01 01:01:01');
-        expect(getDatetimeString(new Date('2020-11-11 23:23:23:999Z'))).not.toBe('2020-11-12 23:23:23');
-      } else {
-        expect(getDatetimeString(new Date('2020-01-01 01:01:01:111Z'))).toBe('2020-01-01 01:01:01');
-        expect(getDatetimeString(new Date('2020-11-11 23:23:23:999Z'))).toBe('2020-11-11 23:23:23');
-      }
+      expect(getDatetimeString(new Date(testDatetimeStr6))).toBe(testDatetimeStr5 + getOffsetString());
     });
     it('should format date to YYYY-MM-DD HH:mm:ss as UTC timezone if true value is provided as isUTC parameter', () => {
-      expect(getDatetimeString(new Date('2020-01-01 01:01:01:111Z'), true)).toBe('2020-01-01 01:01:01');
-      expect(getDatetimeString(new Date('2020-11-11 23:23:23:999Z'), true)).toBe('2020-11-11 23:23:23');
+      expect(getDatetimeString(new Date(testDatetimeStr7), true)).toBe(testDatetimeStr4);
     });
   });
 
