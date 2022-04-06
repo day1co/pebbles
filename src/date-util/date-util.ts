@@ -1,6 +1,7 @@
 import {
-  DEFAULT_DATE_FORMAT,
-  DEFAULT_DATETIME_FORMAT,
+  DATE_FORMAT,
+  DATETIME_FORMAT,
+  LOCAL_DATETIME_FORMAT,
   ONE_DAY_IN_MILLI,
   ONE_DAY_IN_SECOND,
   ONE_HOUR_IN_MILLI,
@@ -246,7 +247,7 @@ export namespace DateUtil {
   export function format(d: Date, opts?: Readonly<DatetimeFormatOpts>): string {
     // format의 기본 기준은 로컬 런타임으로 한다.
     const isUtc = opts?.isUtc ?? false;
-    const formatStr = opts?.format ?? DEFAULT_DATETIME_FORMAT;
+    const formatStr = opts?.format ?? DATETIME_FORMAT;
     const dateInfo = isUtc
       ? {
           year: d.getUTCFullYear(),
@@ -313,11 +314,13 @@ export namespace DateUtil {
   }
 
   export function getDateString(date: Date, isUtc = false): string {
-    return format(date, { format: DEFAULT_DATE_FORMAT, isUtc });
+    return format(date, { format: DATE_FORMAT, isUtc });
   }
 
   export function getDatetimeString(date: Date, isUtc = false): string {
-    return format(date, { format: DEFAULT_DATETIME_FORMAT, isUtc });
+    return isUtc
+      ? format(date, { format: DATETIME_FORMAT, isUtc })
+      : format(date, { format: LOCAL_DATETIME_FORMAT, isUtc });
   }
 
   export function getTimestampString(date: Date, isUtc = false): string {
