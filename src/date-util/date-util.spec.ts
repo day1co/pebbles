@@ -1,6 +1,6 @@
 import { DateUtil } from './date-util';
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
-import { DATETIME_FORMAT_WITH_MILLIS, DEFAULT_DATE_FORMAT, DEFAULT_DATETIME_FORMAT } from './date-util.const';
+import { DATE_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_WITH_MILLIS } from './date-util.const';
 
 const now = new Date();
 const testDateStr = '2022-02-23';
@@ -365,13 +365,11 @@ describe('DateUtil', () => {
     const formatInIso8601 = DateUtil.formatInIso8601;
     it('should return date to ISO format string', () => {
       const testDate = new Date(testDatetimeStr6);
-      expect(formatInIso8601(testDate, { format: DEFAULT_DATE_FORMAT })).toEqual('2022-02-23');
+      expect(formatInIso8601(testDate, { format: DATE_FORMAT })).toEqual('2022-02-23');
       expect(formatInIso8601(testDate, { format: DATETIME_FORMAT_WITH_MILLIS })).toEqual(
         testDatetimeStr8 + getOffsetString()
       );
-      expect(formatInIso8601(testDate, { format: DEFAULT_DATETIME_FORMAT })).toEqual(
-        testDatetimeStr5 + getOffsetString()
-      );
+      expect(formatInIso8601(testDate, { format: DATETIME_FORMAT })).toEqual(testDatetimeStr5 + getOffsetString());
     });
   });
 
@@ -405,7 +403,7 @@ describe('DateUtil', () => {
   describe('getDatetimeString', () => {
     const getDatetimeString = DateUtil.getDatetimeString;
     it('should format date to YYYY-MM-DD HH:mm:ss format string', () => {
-      expect(getDatetimeString(new Date(testDatetimeStr6))).toBe(testDatetimeStr5 + getOffsetString());
+      expect(getDatetimeString(new Date(testDatetimeStr6))).toBe('2022-02-23 01:23:45');
     });
     it('should format date to YYYY-MM-DD HH:mm:ss as UTC timezone if true value is provided as isUTC parameter', () => {
       expect(getDatetimeString(new Date(testDatetimeStr7), true)).toBe(testDatetimeStr4);
