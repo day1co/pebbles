@@ -229,24 +229,28 @@ export namespace DateUtil {
     return Math.floor(result);
   }
 
-  export function min(first: DateType, ...rest: DateType[]): Date {
-    let min = parse(first);
+  export function min(first: DateType, second: DateType, ...rest: DateType[]): Date {
+    const parsedFirst = parse(first);
+    const parsedSecond = parse(second);
+    let min = parsedFirst <= parsedSecond ? parsedFirst : parsedSecond;
 
     for (let item of rest) {
       item = parse(item);
       min = item < min ? item : min;
     }
+
     return min;
   }
 
   /** @deprecated */
-  export function minDate(first: DateType, ...rest: DateType[]): Date {
-    return min(first, ...rest);
+  export function minDate(first: DateType, second: DateType, ...rest: DateType[]): Date {
+    return min(first, second, ...rest);
   }
 
   export function format(d: Date, opts?: Readonly<DatetimeFormatOpts>): string {
     // format의 기본 기준은 로컬 런타임으로 한다.
-    const { format: formatStr = DATETIME_FORMAT, isUtc = true } = opts ?? {};
+    const isUtc = opts?.isUtc ?? true;
+    const formatStr = opts?.format ?? (isUtc ? DATETIME_FORMAT : LOCAL_DATETIME_FORMAT);
     const dateInfo = isUtc
       ? {
           year: d.getUTCFullYear(),
@@ -317,9 +321,7 @@ export namespace DateUtil {
   }
 
   export function getDatetimeString(date: Date, isUtc = true): string {
-    return isUtc
-      ? format(date, { format: DATETIME_FORMAT, isUtc })
-      : format(date, { format: LOCAL_DATETIME_FORMAT, isUtc });
+    return format(date, { isUtc });
   }
 
   export function getTimestampString(date: Date, isUtc = true): string {

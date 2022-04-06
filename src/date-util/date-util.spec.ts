@@ -1,8 +1,13 @@
 import { DateUtil } from './date-util';
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
-import { DATE_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_WITH_MILLIS } from './date-util.const';
+import {
+  DATE_FORMAT,
+  DATETIME_FORMAT,
+  DATETIME_FORMAT_WITH_MILLIS,
+  LOCAL_DATETIME_FORMAT,
+  TIMESTAMP_FORMAT,
+} from './date-util.const';
 
-const now = new Date();
 const testDateStr = '2022-02-23';
 const testDatetimeStr1 = '2022-02-23 01:23';
 const testDatetimeStr2 = '2022-02-23T01:23Z';
@@ -12,14 +17,17 @@ const testDatetimeStr5 = '2022-02-23T01:23:45';
 const testDatetimeStr6 = '2022-02-23 01:23:45.678';
 const testDatetimeStr7 = '2022-02-23T01:23:45.678Z';
 const testDatetimeStr8 = '2022-02-23T01:23:45.678';
+const testTimestampStr = '20220223012345678';
+const testDate = new Date(`${testDateStr} 00:00`);
 
-function getOffsetString(): string {
+function getOffsetString(separatorFlag: boolean): string {
   const offset = new Date().getTimezoneOffset();
   const sign = offset > 0 ? '-' : '+';
   const timezoneOffset = Math.abs(offset);
   const offsetMinutes = timezoneOffset % 60;
   const offsetHours = (timezoneOffset - offsetMinutes) / 60;
-  return `${sign}${String(offsetHours).padStart(2, '0')}:${String(offsetMinutes).padStart(2, '0')}`;
+  const separator = separatorFlag ? ':' : '';
+  return `${sign}${String(offsetHours).padStart(2, '0')}${separator}${String(offsetMinutes).padStart(2, '0')}`;
 }
 
 describe('DateUtil', () => {
@@ -28,7 +36,7 @@ describe('DateUtil', () => {
     it('should return true with valid date', () => {
       expect(isValidDate(new Date())).toBe(true);
       expect(isValidDate(new Date(1))).toBe(true);
-      expect(isValidDate(new Date('2000-01-01'))).toBe(true);
+      expect(isValidDate(new Date(testDateStr))).toBe(true);
     });
     it('should return false with invalid date', () => {
       expect(isValidDate(new Date(''))).toBe(false);
@@ -45,76 +53,81 @@ describe('DateUtil', () => {
       expect(() => parse('3월 9일')).toThrow();
     });
     test('valid date input returns instance of Date', () => {
-      expect(parse(now).getTime()).toEqual(now.getTime());
-      expect(parse(testDateStr).getTime()).toEqual(new Date('2022-02-23 00:00').getTime());
-      expect(parse(testDatetimeStr1).getTime()).toEqual(new Date(testDatetimeStr1).getTime());
-      expect(parse(testDatetimeStr2).getTime()).toEqual(new Date(testDatetimeStr2).getTime());
-      expect(parse(testDatetimeStr3).getTime()).toEqual(new Date(testDatetimeStr3).getTime());
-      expect(parse(testDatetimeStr4).getTime()).toEqual(new Date(testDatetimeStr4).getTime());
-      expect(parse(testDatetimeStr6).getTime()).toEqual(new Date(testDatetimeStr6).getTime());
-      expect(parse(testDatetimeStr7).getTime()).toEqual(new Date(testDatetimeStr7).getTime());
+      const now = new Date();
+      expect(parse(now)).toEqual(now);
+      expect(parse(testDateStr)).toEqual(testDate);
+      expect(parse(testDatetimeStr1)).toEqual(new Date(testDatetimeStr1));
+      expect(parse(testDatetimeStr2)).toEqual(new Date(testDatetimeStr2));
+      expect(parse(testDatetimeStr3)).toEqual(new Date(testDatetimeStr3));
+      expect(parse(testDatetimeStr4)).toEqual(new Date(testDatetimeStr4));
+      expect(parse(testDatetimeStr6)).toEqual(new Date(testDatetimeStr6));
+      expect(parse(testDatetimeStr7)).toEqual(new Date(testDatetimeStr7));
     });
     test('original input value is maintained', () => {
-      const testDate = new Date();
-      const parsedDate = parse(testDate);
+      const now = new Date();
+      const parsedDate = parse(now);
       parsedDate.setHours(parsedDate.getHours() + 1);
-      expect(parsedDate.getTime()).not.toBe(testDate.getTime());
+      expect(parsedDate).not.toBe(now);
     });
   });
 
   describe('parseByFormat', () => {
+    const parseByFormat = DateUtil.parseByFormat;
     it('should throw error when invalid arguments given', () => {
-      expect(() => DateUtil.parseByFormat('20210131', 'YYYYM')).toThrow();
-      expect(() => DateUtil.parseByFormat('20210131', 'YYYYMMDDHHmmssSSSS')).not.toThrow();
+      const testData = testTimestampStr.substring(0, 8);
+      expect(() => parseByFormat(testData, 'YYYYM')).toThrow();
+      expect(() => parseByFormat(testData, 'YYYYMMDDHHmmssSSS')).not.toThrow();
     });
 
     it('should return valid date', () => {
-      expect(DateUtil.parseByFormat('20220223012345', 'YYYYMMDDHHmmss')).toEqual(new Date(testDatetimeStr3));
-      expect(DateUtil.parseByFormat('02202223012345', 'MMYYYYDDHHmmss')).toEqual(new Date(testDatetimeStr3));
-      expect(DateUtil.parseByFormat('20220223012345678', 'YYYYMMDDHHmmssSSS')).toEqual(new Date(testDatetimeStr6));
-      expect(DateUtil.parseByFormat('23/02/2022 01:23:45', 'DD/MM/YYYY HH:mm:ss')).toEqual(new Date(testDatetimeStr3));
+      const testData = testTimestampStr.substring(0, 14);
+      expect(parseByFormat(testData, 'YYYYMMDDHHmmss')).toEqual(new Date(testDatetimeStr3));
+      expect(parseByFormat('02202223012345', 'MMYYYYDDHHmmss')).toEqual(new Date(testDatetimeStr3));
+      expect(parseByFormat('23/02/2022 01:23:45', 'DD/MM/YYYY HH:mm:ss')).toEqual(new Date(testDatetimeStr3));
     });
   });
 
   describe('parseTimestamp', () => {
+    const parseTimestamp = DateUtil.parseTimestamp;
     it('should throw error when invalid arguments given', () => {
-      expect(() => DateUtil.parseTimestamp('20210131')).not.toThrow();
-      expect(() => DateUtil.parseTimestamp('2021013111223344112233')).toThrow();
+      expect(() => parseTimestamp(testTimestampStr.substring(0, 8))).not.toThrow();
+      expect(() => parseTimestamp('2021013111223344112233')).toThrow();
     });
 
     it('should return valid date', () => {
-      expect(DateUtil.parseTimestamp('20220223')).toEqual(DateUtil.parse(testDateStr));
-      expect(DateUtil.parseTimestamp('20220223012345')).toEqual(new Date(testDatetimeStr3));
-      expect(DateUtil.parseTimestamp('20220223012345678')).toEqual(new Date(testDatetimeStr6));
+      expect(parseTimestamp(testTimestampStr.substring(0, 8))).toEqual(testDate);
+      expect(parseTimestamp(testTimestampStr.substring(0, 14))).toEqual(new Date(testDatetimeStr3));
+      expect(parseTimestamp(testTimestampStr)).toEqual(new Date(testDatetimeStr6));
     });
   });
 
   describe('parseUnixTime', () => {
+    const parseUnixTime = DateUtil.parseUnixTime;
     it('should return Date instance of given unix time', () => {
       // see https://www.epochconverter.com/
-      expect(DateUtil.parseUnixTime(1645579425)).toEqual(new Date(testDatetimeStr4));
-      expect(DateUtil.parseUnixTime(0)).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
-      expect(DateUtil.parseUnixTime(-1000000000)).toEqual(new Date('1938-04-25T07:13:20+09:00'));
+      expect(parseUnixTime(1645579425)).toEqual(new Date(testDatetimeStr4));
+      expect(parseUnixTime(0)).toEqual(new Date(new Date('1970-01-01T00:00:00Z')));
+      expect(parseUnixTime(-1000000000)).toEqual(new Date('1938-04-24T22:13:20Z'));
     });
 
     it('should throw with invalid parameter', () => {
-      expect(() => DateUtil.parseUnixTime(Number.NEGATIVE_INFINITY)).toThrow();
-      expect(() => DateUtil.parseUnixTime(Number.POSITIVE_INFINITY)).toThrow();
-      expect(() => DateUtil.parseUnixTime(Number.MAX_SAFE_INTEGER)).toThrow();
-      expect(() => DateUtil.parseUnixTime(Number.MIN_SAFE_INTEGER)).toThrow();
-      expect(() => DateUtil.parseUnixTime(8640000000001)).toThrow();
-      expect(() => DateUtil.parseUnixTime(-8640000000001)).toThrow();
+      expect(() => parseUnixTime(Number.NEGATIVE_INFINITY)).toThrow();
+      expect(() => parseUnixTime(Number.POSITIVE_INFINITY)).toThrow();
+      expect(() => parseUnixTime(Number.MAX_SAFE_INTEGER)).toThrow();
+      expect(() => parseUnixTime(Number.MIN_SAFE_INTEGER)).toThrow();
+      expect(() => parseUnixTime(8640000000001)).toThrow();
+      expect(() => parseUnixTime(-8640000000001)).toThrow();
     });
   });
 
   describe('calcDatetime', () => {
     const calcDatetime = DateUtil.calcDatetime;
-    test('should return error', () => {
+    test('should throw error for invalid date', () => {
       expect(() => calcDatetime('string', { year: 3 })).toThrow();
       expect(() => calcDatetime('20209999', { year: 3 })).toThrow();
       expect(() => calcDatetime('', { year: 3 })).toThrow();
     });
-    test('add, sub year, month, date, ...', () => {
+    test('add/subtract year/month/day/hour/minute/second', () => {
       expect(calcDatetime(testDatetimeStr6, { year: 1 })).toEqual(new Date('2023-02-23 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { month: 1 })).toEqual(new Date('2022-03-23 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { day: 1 })).toEqual(new Date('2022-02-24 01:23:45.678'));
@@ -130,7 +143,7 @@ describe('DateUtil', () => {
       expect(calcDatetime(testDatetimeStr6, { second: -1 })).toEqual(new Date('2022-02-23 01:23:44.678'));
     });
 
-    test('60이상의 숫자도 계산이 가능해야 함', () => {
+    test('should return date for the over-unit-max-value', () => {
       expect(calcDatetime(testDatetimeStr6, { hour: 100 })).toEqual(new Date('2022-02-27 05:23:45.678')); // 100시간 => 4일 4시간
       expect(calcDatetime(testDatetimeStr6, { minute: 100 })).toEqual(new Date('2022-02-23 03:03:45.678')); // 100분 => 1시간 40분
       expect(calcDatetime(testDatetimeStr6, { second: 100 })).toEqual(new Date('2022-02-23 01:25:25.678')); // 100초 => 1분 40초
@@ -321,118 +334,94 @@ describe('DateUtil', () => {
 
   describe('min', () => {
     const min = DateUtil.min;
-    it('should throw error when invalid Date given', () => {
-      expect(() => min('zzzzz')).toThrow();
-      expect(() => min('2021-13-01 00:00:00')).toThrow();
-      expect(() => min(new Date('zzzzz'))).toThrow();
+    it('should throw error when invalid date is given', () => {
+      expect(() => min('zzzzz', new Date())).toThrow();
+      expect(() => min('2021-13-01 00:00:00', new Date())).toThrow();
+      expect(() => min(new Date('zzzzz'), new Date())).toThrow();
     });
 
     it('should return former date', () => {
-      expect(min('2021-08-01 00:00:00', testDatetimeStr6)).toEqual(new Date('2021-08-01 00:00:00'));
-      expect(min(testDatetimeStr6, '2021-08-01 00:00:00')).toEqual(new Date('2021-08-01 00:00:00'));
-      expect(min(new Date('2021-08-01 00:00:00'), new Date(testDatetimeStr6))).toEqual(new Date('2021-08-01 00:00:00'));
-      expect(min(new Date(testDatetimeStr6), new Date('2021-08-01 00:00:00'))).toEqual(new Date('2021-08-01 00:00:00'));
-      expect(min(testDatetimeStr6, testDatetimeStr3, '2021-08-01 00:00:00')).toEqual(new Date('2021-08-01 00:00:00'));
+      expect(min(testDateStr, testDatetimeStr6)).toEqual(testDate);
+      expect(min(testDatetimeStr6, testDateStr)).toEqual(testDate);
+      expect(min(testDate, new Date(testDatetimeStr6))).toEqual(testDate);
+      expect(min(new Date(testDatetimeStr6), testDate)).toEqual(testDate);
+      expect(min(testDatetimeStr6, testDatetimeStr3, testDate)).toEqual(testDate);
     });
   });
 
   describe('format', () => {
     const format = DateUtil.format;
     it('should return formatted date string in specific format', () => {
-      const testDate = new Date(testDatetimeStr6);
-      expect(format(testDate, { format: 'YYYY-MM-DD HH:mm:ss', isUtc: false })).toEqual(testDatetimeStr3);
-      expect(format(testDate, { format: 'YYYY-MM-DD HH:mm:ss.SSS', isUtc: false })).toEqual(testDatetimeStr6);
-      expect(format(testDate, { format: 'YYYY년 MM월 DD일', isUtc: false })).toEqual('2022년 02월 23일');
-      expect(format(testDate, { format: 'YYYY년 M월 D일 H시 m분 s초', isUtc: false })).toEqual(
-        '2022년 2월 23일 1시 23분 45초'
-      );
-      expect(format(testDate, { format: 'M/D', isUtc: false })).toEqual('2/23');
-      expect(format(testDate, { format: 'MM월 DD일', isUtc: false })).toEqual('02월 23일');
-      expect(format(testDate, { format: 'YY/MM/DD', isUtc: false })).toEqual('22/02/23');
-      expect(format(testDate, { format: 'YYYYMMDDHHmmssSSS', isUtc: false })).toEqual('20220223012345678');
+      const testDatetime = new Date(testDatetimeStr7);
+      expect(format(testDatetime, { format: DATE_FORMAT })).toEqual(testDateStr);
+      expect(format(testDatetime, { format: DATETIME_FORMAT_WITH_MILLIS })).toEqual(testDatetimeStr7);
+      expect(format(testDatetime, { format: TIMESTAMP_FORMAT })).toEqual(testTimestampStr);
+      expect(format(testDatetime, { format: 'YYYY-MM-DD HH:mm:ss.SSS' })).toEqual(testDatetimeStr6);
+      expect(format(testDatetime, { format: 'YYYY년 MM월 DD일' })).toEqual('2022년 02월 23일');
+      expect(format(testDatetime, { format: 'YYYY년 M월 D일 H시 m분 s초' })).toEqual('2022년 2월 23일 1시 23분 45초');
+      expect(format(testDatetime, { format: 'M/D' })).toEqual('2/23');
+      expect(format(testDatetime, { format: 'MM월 DD일' })).toEqual('02월 23일');
+      expect(format(testDatetime, { format: 'YY/MM/DD' })).toEqual('22/02/23');
     });
 
     it('should return formatted date string in default format', () => {
-      expect(DateUtil.format(new Date(testDatetimeStr3), { isUtc: false })).toBe(testDatetimeStr5 + getOffsetString());
+      expect(format(new Date(testDatetimeStr7))).toBe(testDatetimeStr4);
+      expect(format(new Date('2022-02-22T22:23:45-03:00'))).toBe(testDatetimeStr4);
+      expect(format(new Date('2022-02-23T07:08:45+05:45'))).toBe(testDatetimeStr4);
     });
 
-    it('should return formatted UTC string', () => {
-      expect(DateUtil.format(new Date(testDatetimeStr7), { isUtc: true })).toBe(testDatetimeStr4);
-      expect(DateUtil.format(new Date('2022-02-22 22:23:45-03:00'), { isUtc: true })).toBe(testDatetimeStr4);
-      expect(DateUtil.format(new Date('2022-02-23 10:23:45+09:00'), { isUtc: true })).toBe(testDatetimeStr4);
+    it('should return formatted date string of local time when isUtc is false', () => {
+      const testDatetime = new Date(testDatetimeStr6);
+      expect(format(testDatetime, { isUtc: false })).toBe(testDatetimeStr3);
+      expect(format(testDatetime, { format: 'YYYY-MM-DDTHH:mm:ssZZ', isUtc: false })).toEqual(
+        testDatetimeStr5 + getOffsetString(false)
+      );
     });
   });
 
   describe('formatInIso8601', () => {
     const formatInIso8601 = DateUtil.formatInIso8601;
-    it('should return date to ISO format string', () => {
-      const testDate = new Date(testDatetimeStr6);
-      expect(formatInIso8601(testDate, { format: DATE_FORMAT, isUtc: false })).toEqual('2022-02-23');
-      expect(formatInIso8601(testDate, { format: DATETIME_FORMAT_WITH_MILLIS, isUtc: false })).toEqual(
-        testDatetimeStr8 + getOffsetString()
-      );
-      expect(formatInIso8601(testDate, { format: DATETIME_FORMAT, isUtc: false })).toEqual(
-        testDatetimeStr5 + getOffsetString()
+    it('should return formatted date string in ISO format string', () => {
+      const testDatetime = new Date(testDatetimeStr7);
+      expect(formatInIso8601(testDatetime, { format: DATE_FORMAT })).toEqual(testDateStr);
+      expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT })).toEqual(testDatetimeStr4);
+      expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT_WITH_MILLIS })).toEqual(testDatetimeStr7);
+    });
+    it('should return formatted date string of local time', () => {
+      const testDatetime = new Date(testDatetimeStr6);
+      expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT, isUtc: false })).toEqual(
+        testDatetimeStr5 + getOffsetString(true)
       );
     });
   });
 
   describe('getDateString', () => {
     const getDateString = DateUtil.getDateString;
-    it('should format date to YYYY-MM-DD format string', () => {
-      expect(getDateString(new Date(testDatetimeStr6), false)).toBe(testDateStr);
+    it('should return formatted date string', () => {
+      expect(getDateString(new Date(testDatetimeStr7))).toBe(testDateStr);
     });
-    it('should format date to YYYY-MM-DD as UTC timezone', () => {
-      const localRuntimeTimezone = new Date().getTimezoneOffset() / 60;
-      const test1 = getDateString(new Date('2020-01-01 01:01:01:111'), true);
-      const test2 = getDateString(new Date('2020-01-01 01:01:01:111Z'), true);
-      const test3 = getDateString(new Date('2020-11-11 23:23:23:999'), true);
-      const test4 = getDateString(new Date('2020-11-11 23:23:23:999Z'), true);
-
-      if (localRuntimeTimezone < 0) {
-        expect(test1).toBe('2019-12-31');
-        expect(test2).toBe('2020-01-01');
-        expect(test3).toBe('2020-11-11');
-        expect(test4).toBe('2020-11-11');
-      }
-      if (localRuntimeTimezone > 0) {
-        expect(test1).toBe('2020-01-01');
-        expect(test2).toBe('2020-01-01');
-        expect(test3).toBe('2020-11-12');
-        expect(test4).toBe('2020-11-11');
-      }
+    it('should return formatted date string of local time', () => {
+      expect(getDateString(new Date(testDatetimeStr6), false)).toBe(testDateStr);
     });
   });
 
   describe('getDatetimeString', () => {
     const getDatetimeString = DateUtil.getDatetimeString;
-    it('should format date to YYYY-MM-DD HH:mm:ss format string', () => {
-      expect(getDatetimeString(new Date(testDatetimeStr6), false)).toBe('2022-02-23 01:23:45');
-    });
-    it('should format date to YYYY-MM-DD HH:mm:ss as UTC timezone if true value is provided as isUTC parameter', () => {
+    it('should return format datetime string', () => {
       expect(getDatetimeString(new Date(testDatetimeStr7))).toBe(testDatetimeStr4);
+    });
+    it('should return formatted datetime string of local time', () => {
+      expect(getDatetimeString(new Date(testDatetimeStr6), false)).toBe(testDatetimeStr3);
     });
   });
 
   describe('getTimestampString', () => {
     const getTimestampString = DateUtil.getTimestampString;
-    it('should format date to YYYYMMDDHHmmssSSS format string', () => {
-      expect(getTimestampString(new Date('2020-01-01 01:01:01:111'), false)).toBe('20200101010101111');
-      expect(getTimestampString(new Date('2020-11-11 23:23:23:999'), false)).toBe('20201111232323999');
+    it('should return formatted timestamp string', () => {
+      expect(getTimestampString(new Date(testDatetimeStr7))).toBe(testTimestampStr);
     });
-    it('should format date in local runtime as default', () => {
-      const localRuntimeTimezone = new Date().getTimezoneOffset() / 60;
-      if (localRuntimeTimezone !== 0) {
-        expect(getTimestampString(new Date('2020-01-01 01:01:01:111Z'), false)).not.toBe('20200101010101111');
-        expect(getTimestampString(new Date('2020-11-11 23:23:23:999Z'), false)).not.toBe('20201112232323999');
-      } else {
-        expect(getTimestampString(new Date('2020-01-01 01:01:01:111Z'))).toBe('20200101010101111');
-        expect(getTimestampString(new Date('2020-11-11 23:23:23:999Z'))).toBe('20201111232323999');
-      }
-    });
-    it('should format date to YYYYMMDDHHmmssSSS as UTC timezone if true value is provided as isUTC parameter', () => {
-      expect(getTimestampString(new Date('2020-01-01 01:01:01:111Z'), true)).toBe('20200101010101111');
-      expect(getTimestampString(new Date('2020-11-11 23:23:23:999Z'), true)).toBe('20201111232323999');
+    it('should return formatted timestamp string of local time', () => {
+      expect(getTimestampString(new Date(testDatetimeStr6), false)).toBe(testTimestampStr);
     });
   });
 
