@@ -20,8 +20,12 @@ export type {
   DatetimeFormatOpts,
   DatetimeProperties,
   DateType,
+  FormatOpts,
+  Iso8601FormatType,
   IsoDatetimeFormatOpts,
   LocalDateTimeFormatOpts,
+  LocaleType,
+  TimeZoneType,
 } from './date-util';
 export {
   BadRequestException,
