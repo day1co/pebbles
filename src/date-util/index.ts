@@ -13,11 +13,6 @@ export {
   ONE_SECOND_IN_MILLI,
   TIMESTAMP_FORMAT,
 } from './date-util.const';
-export type { DatetimeProperties, LocalDateTimeFormatOpts } from './date-util.interface';
-export type {
-  CalcDatetimeOpts,
-  DatePropertyType,
-  DatetimeFormatOpts,
-  DateType,
-  IsoDatetimeFormatOpts,
-} from './date-util.type';
+export type { DatetimeProperties, FormatOpts, LocalDateTimeFormatOpts } from './date-util.interface';
+export type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
+export type { DatePropertyType, DateType, Iso8601FormatType, LocaleType, TimeZoneType } from './date-util-base.type';
