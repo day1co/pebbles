@@ -15,6 +15,8 @@ import type { LocalDateTimeFormatOpts } from './date-util.interface';
 import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
 import { DatePropertyType, DateType, TimeZoneType } from './date-util-base.type';
 
+const timeZoneMap: Record<TimeZoneType, number> = { 'Asia/Seoul': 540, 'Asia/Tokyo': 540, PST: -480, UTC: 0 };
+
 export namespace DateUtil {
   export function isValidDate(d: Date): boolean {
     return !isNaN(d.valueOf());
@@ -246,12 +248,12 @@ export namespace DateUtil {
     const { isUtc = true, locale = 'ko' } = opts ?? {};
     const formatStr = opts?.format ?? (isUtc ? DATETIME_FORMAT : LOCAL_DATETIME_FORMAT);
     const timeZone = isUtc ? 'UTC' : opts?.timeZone ?? 'UTC';
-    const year = Number(new Intl.DateTimeFormat('en-US', { year: 'numeric', timeZone }).format(d));
-    const month = new Intl.DateTimeFormat('en-US', { month: 'numeric', timeZone }).format(d);
-    const date = new Intl.DateTimeFormat('en-US', { day: 'numeric', timeZone }).format(d);
-    const hour = Number(new Intl.DateTimeFormat('en-US', { hour: 'numeric', hourCycle: 'h23', timeZone }).format(d));
-    const minute = new Intl.DateTimeFormat('en-US', { minute: 'numeric', timeZone }).format(d);
-    const second = new Intl.DateTimeFormat('en-US', { second: 'numeric', timeZone }).format(d);
+    const year = Number(new Intl.DateTimeFormat('en', { year: 'numeric', timeZone }).format(d));
+    const month = new Intl.DateTimeFormat('en', { month: 'numeric', timeZone }).format(d);
+    const date = new Intl.DateTimeFormat('en', { day: 'numeric', timeZone }).format(d);
+    const hour = Number(new Intl.DateTimeFormat('en', { hour: 'numeric', hourCycle: 'h23', timeZone }).format(d));
+    const minute = new Intl.DateTimeFormat('en', { minute: 'numeric', timeZone }).format(d);
+    const second = new Intl.DateTimeFormat('en', { second: 'numeric', timeZone }).format(d);
     const millisecond = String(d.getMilliseconds());
 
     return formatStr.replace(/(Y{2,4}|M?M|D?D|H?H|m?m|s?s|S?S?S|Z?Z|ddd?d)/g, (match) => {
@@ -429,25 +431,12 @@ function format12HourInLocale(str: string, locale: string): string {
 
 function getTimezoneOffsetString(timeZone: TimeZoneType, separatorFlag: boolean): string {
   const separator = separatorFlag ? ':' : '';
-  let sign: '+' | '-' = '+';
-  let offsetHours: string, offsetMinutes: string;
-  switch (timeZone) {
-    case 'Asia/Seoul':
-    case 'Asia/Tokyo':
-      offsetHours = '09';
-      offsetMinutes = '00';
-      break;
-    case 'PST':
-      sign = '-';
-      offsetHours = '08';
-      offsetMinutes = '00';
-      break;
-    default:
-      // UTC
-      offsetHours = '00';
-      offsetMinutes = '00';
-  }
-  return `${sign}${offsetHours}${separator}${offsetMinutes}`;
+  const sign = timeZoneMap[timeZone] >= 0 ? '+' : '-';
+  const offsetMinutes = timeZoneMap[timeZone] % 60;
+  const offsetHours = (timeZoneMap[timeZone] - offsetMinutes) / 60;
+  const offsetHoursString = String(Math.abs(offsetHours)).padStart(2, '0');
+  const offsetMinutesString = String(Math.abs(offsetMinutes)).padStart(2, '0');
+  return `${sign}${offsetHoursString}${separator}${offsetMinutesString}`;
 }
 
 function diffMonth(since: Date, until: Date): number {
