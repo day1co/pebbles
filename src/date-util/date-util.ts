@@ -302,7 +302,7 @@ export namespace DateUtil {
     });
   }
 
-  export function formatInIso8601(date: Date, opts: Readonly<IsoDatetimeFormatOpts>): string {
+  export function formatInIso8601(date: Date, opts?: Readonly<IsoDatetimeFormatOpts>): string {
     const formatOpts: IsoDatetimeFormatOpts = opts ?? {};
     formatOpts.format = opts?.format ?? DATETIME_FORMAT;
     return format(date, formatOpts);
