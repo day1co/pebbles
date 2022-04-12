@@ -16,10 +16,10 @@ export interface FormatOpts<Type extends string> {
   timeZone: TimeZoneType;
 }
 
-// Todo: timezone과 locale에 리터럴 타입 적용
+/** @deprecated */
 export interface LocalDateTimeFormatOpts {
   withYear?: boolean;
-  timeZone: string;
-  locale: string;
+  timeZone: TimeZoneType;
+  locale: LocaleType;
   formatStyle: 'long' | '2-digit';
 }

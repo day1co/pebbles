@@ -303,9 +303,9 @@ export namespace DateUtil {
   }
 
   export function formatInIso8601(date: Date, opts: Readonly<IsoDatetimeFormatOpts>): string {
-    const testOpts: IsoDatetimeFormatOpts = opts;
-    testOpts.format = opts.format ?? DATETIME_FORMAT;
-    return format(date, testOpts);
+    const formatOpts: IsoDatetimeFormatOpts = opts ?? {};
+    formatOpts.format = opts?.format ?? DATETIME_FORMAT;
+    return format(date, formatOpts);
   }
 
   export function getDateString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
@@ -360,6 +360,7 @@ export namespace DateUtil {
     return getTimeStringFromSeconds(totalSeconds);
   }
 
+  /** @deprecated */
   export function formatLocalTime(d: DateType, opts: Readonly<LocalDateTimeFormatOpts>): string {
     d = subtractOneDayIfLocalTimeIsMidnight(parse(d), opts.timeZone);
 
