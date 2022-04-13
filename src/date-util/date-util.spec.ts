@@ -1,5 +1,4 @@
 import { DateUtil } from './date-util';
-import type { LocalDateTimeFormatOpts } from './date-util.interface';
 import { DATE_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_WITH_MILLIS, TIMESTAMP_FORMAT } from './date-util.const';
 
 const testDateStr = '2022-02-23';
