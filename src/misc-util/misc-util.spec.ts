@@ -3,11 +3,10 @@ import { TimeSection } from './misc-util.interface';
 
 describe('Miscellaneous Util', () => {
   describe('sleep', () => {
-    it('allow 10ms error', async () => {
+    it('sleep over 500ms', async () => {
       const startTime = Date.now();
       await MiscUtil.sleep(500);
       const finishTime = Date.now();
-      expect(finishTime - startTime).toBeLessThan(500 + 15);
       expect(finishTime - startTime).toBeGreaterThanOrEqual(500);
     });
   });
