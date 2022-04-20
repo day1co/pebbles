@@ -48,5 +48,5 @@ export type { PageDetail, PageInfo, Pagination } from './misc-util';
 export { NumberUtil } from './number-util';
 export { ObjectUtil } from './object-util';
 export type { ObjectType, ObjectKeyType } from './object-util';
-export { StringUtil } from './string-util';
+export { StringUtil, UTF8_BOM_STR } from './string-util';
 export type { Tag, TemplateOpts } from './string-util';
