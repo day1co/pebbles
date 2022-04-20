@@ -92,6 +92,11 @@ export namespace StringUtil {
     const trimmedText = substringByByteInEUCKR(textToBeTrimmed, maxByteLength - minByteLength);
     return fullText.replace(textToBeTrimmed, trimmedText + '...');
   }
+
+  /** @deprecated */
+  export const escapeCsv = (s: string) => {
+    return s ? `"${s}"` : '';
+  };
 }
 
 function getCharacterByteInEUCKR(character: string): number {
