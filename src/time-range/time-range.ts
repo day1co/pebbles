@@ -20,7 +20,7 @@ export class TimeRange {
           const prevSection: TimeSection = p[p.length - 1];
           if (prevSection.end >= v.start) {
             prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
-            prevSection.duration += v.duration;
+            prevSection.interval += v.interval;
           } else {
             p.push(v);
           }
@@ -32,9 +32,9 @@ export class TimeRange {
   value() {
     return this.section;
   }
-  totalDuration() {
+  totalInterval() {
     return this.section.reduce((p, v) => {
-      p = p + v.duration;
+      p = p + v.interval;
       return p;
     }, 0);
   }
