@@ -19,8 +19,3 @@ export interface Pagination {
   pages: PageDetail[];
 }
 
-export interface TimeSection {
-  start: number;
-  end: number;
-  duration: number;
-}
