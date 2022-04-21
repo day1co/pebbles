@@ -18,4 +18,3 @@ export interface Pagination {
   lastPage: number;
   pages: PageDetail[];
 }
-
