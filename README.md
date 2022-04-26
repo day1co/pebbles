@@ -20,4 +20,4 @@ Backend / Frontend 공통 Utility package
 [NumberUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021064827/NumberUtil
 [ObjectUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2021195869/ObjectUtil
 [StringUtil]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2020966461/StringUtil
-[TimeRange]: https://fastcampus.atlassian.net/browse/FCLXP-275
+[TimeRange]: https://fastcampus.atlassian.net/wiki/spaces/engineering/pages/2120417390/TimeRange
