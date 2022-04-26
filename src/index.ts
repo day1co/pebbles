@@ -50,3 +50,5 @@ export { ObjectUtil } from './object-util';
 export type { ObjectType, ObjectKeyType } from './object-util';
 export { StringUtil, UTF8_BOM_STR } from './string-util';
 export type { Tag, TemplateOpts } from './string-util';
+export { TimeRange } from './time-range';
+export type { TimeSection } from './time-range';
