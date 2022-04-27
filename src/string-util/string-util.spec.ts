@@ -116,88 +116,120 @@ describe('StringUtil', () => {
 
   describe('normalizePhoneNumber', () => {
     it('should normalize phone number starting with 010 or 070', () => {
-      expect(StringUtil.normalizePhoneNumber('01012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('010-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('010 1234 5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('07012345678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('070-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('070.1234.5678')).toBe('07012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('01012345678')).toBe('01012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('010-1234-5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('010 1234 5678')).toBe('01012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('07012345678')).toBe('07012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('070-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('070.1234.5678')).toBe('07012345678');
     });
 
     it('should normalize phone number starting with +82 or +082', () => {
       // 010
-      expect(StringUtil.normalizePhoneNumber('+0821012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+08201012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+082-10-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+082-010-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+082--10 1234 5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+082 010 1234 5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+8201012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+821012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+82-010-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+82-10-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('+82 10 1234 5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+0821012345678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+08201012345678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082-10-1234-5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082-010-1234-5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082--10 1234 5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082 010 1234 5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+8201012345678')).toBe('01012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('+821012345678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+82-010-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('+82-10-1234-5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+82 10 1234 5678')).toBe('01012345678');
 
       // 070
-      expect(StringUtil.normalizePhoneNumber('+0827012345678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+08207012345678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+082 070 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+082-070-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+082 70 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+082-70-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+82 070 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+82-070-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+827012345678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+8207012345678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+82 70 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('+82-70-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+0827012345678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+08207012345678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082 070 1234 5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082-070-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082 70 1234 5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+082-70-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+82 070 1234 5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+82-070-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('+827012345678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+8207012345678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('+82 70 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('+82-70-1234-5678')).toBe('07012345678');
     });
 
     it('should normalize phone number starting with 82 or 082', () => {
       // 010
-      expect(StringUtil.normalizePhoneNumber('08201012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('0821012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('082 10 1234 5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('082 010 1234 5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('082-10-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('082-010-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('821012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('8201012345678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('82-10-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('82-010-1234-5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('82 10 1234 5678')).toBe('01012345678');
-      expect(StringUtil.normalizePhoneNumber('82 010 1234 5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('08201012345678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('0821012345678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082 10 1234 5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082 010 1234 5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082-10-1234-5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082-010-1234-5678')).toBe('01012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('821012345678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('8201012345678')).toBe('01012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('82-10-1234-5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('82-010-1234-5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('82 10 1234 5678')).toBe('01012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('82 010 1234 5678')).toBe('01012345678');
 
       // 070
-      expect(StringUtil.normalizePhoneNumber('082 70 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('082-70-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('082 070 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('082-070-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('082 70 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('082-70-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('82 070 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('82-070-1234-5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('827012345678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('8207012345678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('82 70 1234 5678')).toBe('07012345678');
-      expect(StringUtil.normalizePhoneNumber('82-70-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082 70 1234 5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082-70-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082 070 1234 5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082-070-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082 70 1234 5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('082-70-1234-5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('82 070 1234 5678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('82-070-1234-5678')).toBe('07012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('827012345678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('8207012345678')).toBe('07012345678');
+      // expect(StringUtil.normalizeKoreaPhoneNumber('82 70 1234 5678')).toBe('07012345678');
+      expect(StringUtil.normalizeKoreaPhoneNumber('82-70-1234-5678')).toBe('07012345678');
     });
 
-    it('should normalize phone number even if it does not belong to domestic number type', () => {
-      expect(StringUtil.normalizePhoneNumber('+1-123-456-8900')).toBe('11234568900');
-      expect(StringUtil.normalizePhoneNumber('88123456789')).toBe('88123456789');
-      expect(StringUtil.normalizePhoneNumber('83-1234-5678')).toBe('8312345678');
-      expect(StringUtil.normalizePhoneNumber('+49 1234 56789')).toBe('49123456789');
-    });
+    // it('should normalize phone number even if it does not belong to domestic number type', () => {
+    //   expect(StringUtil.normalizeKoreaPhoneNumber('+1-123-456-8900')).toBe('11234568900');
+    //   expect(StringUtil.normalizeKoreaPhoneNumber('88123456789')).toBe('88123456789');
+    //   expect(StringUtil.normalizeKoreaPhoneNumber('83-1234-5678')).toBe('8312345678');
+    //   expect(StringUtil.normalizeKoreaPhoneNumber('+49 1234 56789')).toBe('49123456789');
+    // });
   });
 
   describe('validatePhoneNumber', () => {
-    it('should validate phone number', () => {
-      expect(StringUtil.isValidPhoneNumber('01012345678')).toBe(true);
-      expect(StringUtil.isValidPhoneNumber('07012345678')).toBe(true);
-      expect(StringUtil.isValidPhoneNumber('1012345678')).toBe(false);
-      expect(StringUtil.isValidPhoneNumber('04412345678')).toBe(false);
-      expect(StringUtil.isValidPhoneNumber('010123456789')).toBe(false);
+    const isValidKoreaPhoneNumber = StringUtil.isValidKoreaPhoneNumber;
+    it('should return true for a Korea phone number', () => {
+      expect(isValidKoreaPhoneNumber('01012345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('821012345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('010-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('+82-10-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('82-10-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('0212345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('82212345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('02-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('+82-2-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('82-2-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('021234567')).toBe(true);
+      expect(isValidKoreaPhoneNumber('8221234567')).toBe(true);
+      expect(isValidKoreaPhoneNumber('02-123-4567')).toBe(true);
+      expect(isValidKoreaPhoneNumber('+82-2-123-4567')).toBe(true);
+      expect(isValidKoreaPhoneNumber('82-2-123-4567')).toBe(true);
+      expect(isValidKoreaPhoneNumber('04412345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('824412345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('044-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('+82-44-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('82-44-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('07012345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('827012345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('070-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('+82-70-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('82-70-1234-5678')).toBe(true);
+    });
+    it('should return false for a wrong string', () => {
+      expect(isValidKoreaPhoneNumber('01012345678a')).toBe(false);
+      expect(isValidKoreaPhoneNumber('1012345678')).toBe(false);
+      expect(isValidKoreaPhoneNumber('010123456789')).toBe(false);
+      expect(isValidKoreaPhoneNumber('02!1234-5678')).toBe(false);
+      expect(isValidKoreaPhoneNumber('031-12-3456')).toBe(false);
+      expect(isValidKoreaPhoneNumber('051-1234-567')).toBe(false);
+      expect(isValidKoreaPhoneNumber('+82-090-1234-5678')).toBe(false);
+      expect(isValidKoreaPhoneNumber('+82-010-1234-5678')).toBe(false);
+      expect(isValidKoreaPhoneNumber('+81-10-1234-5678')).toBe(false);
     });
   });
 
