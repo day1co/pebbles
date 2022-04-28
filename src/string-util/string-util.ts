@@ -14,6 +14,7 @@ const KOREA_PHONE_NUMBER_REGEXP = new RegExp(
 export namespace StringUtil {
   export function maskPrivacy(text: string, type: PrivacyType): string {
     function getMaskedString({ text, length, maskingStart }: MaskingOpts): string {
+      length = Math.max(0, length);
       const masking = '*'.repeat(length);
       const textSplit = [...text];
       textSplit.splice(maskingStart, length, masking);

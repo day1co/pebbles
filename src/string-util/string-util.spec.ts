@@ -4,6 +4,7 @@ import { TemplateOpts } from './string-util.interface';
 describe('StringUtil', () => {
   describe('maskPrivacy', () => {
     it('should mask names except the first and last characters', () => {
+      expect(StringUtil.maskPrivacy('김', 'name')).toBe('김');
       expect(StringUtil.maskPrivacy('김이', 'name')).toBe('김*');
       expect(StringUtil.maskPrivacy('김이박', 'name')).toBe('김*박');
       expect(StringUtil.maskPrivacy('김이박최', 'name')).toBe('김**최');
@@ -27,13 +28,16 @@ describe('StringUtil', () => {
       const testEmail1 = 'test@test.com';
       const testEmail2 = '12test@test.com';
       const testEmail3 = '__testtesttesttest@test.com';
+      const testEmail4 = 'te@test.com';
       const expectedTestEmail1 = 'te**@test.com';
       const expectedTestEmail2 = '12****@test.com';
       const expectedTestEmail3 = '__****************@test.com';
+      const expectedTestEmail4 = 'te@test.com';
 
       expect(StringUtil.maskPrivacy(testEmail1, 'email')).toBe(expectedTestEmail1);
       expect(StringUtil.maskPrivacy(testEmail2, 'email')).toBe(expectedTestEmail2);
       expect(StringUtil.maskPrivacy(testEmail3, 'email')).toBe(expectedTestEmail3);
+      expect(StringUtil.maskPrivacy(testEmail4, 'email')).toBe(expectedTestEmail4);
     });
 
     it('should mask phone numbers in the middle', () => {
