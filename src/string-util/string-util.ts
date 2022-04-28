@@ -39,11 +39,13 @@ export namespace StringUtil {
   }
 
   export function normalizeKoreaPhoneNumber(str: string): string {
-    if (!isValidKoreaPhoneNumber(str)) {
+    const trimmedStr = str.trim();
+
+    if (!isValidKoreaPhoneNumber(trimmedStr)) {
       throw new Error('Not a valid Korea phone number');
     }
 
-    return str.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
+    return trimmedStr.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
   }
 
   /** @deprecated */
