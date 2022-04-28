@@ -2,6 +2,51 @@ import { StringUtil } from './string-util';
 import { TemplateOpts } from './string-util.interface';
 
 describe('StringUtil', () => {
+  describe('maskPrivacy', () => {
+    it('should mask names except the first and last characters', () => {
+      expect(StringUtil.maskPrivacy('김이', 'name')).toBe('김*');
+      expect(StringUtil.maskPrivacy('김이박', 'name')).toBe('김*박');
+      expect(StringUtil.maskPrivacy('김이박최', 'name')).toBe('김**최');
+      expect(StringUtil.maskPrivacy('김이박최정', 'name')).toBe('김***정');
+    });
+
+    it('should mask bank accounts from the fourth character to the last fourth character', () => {
+      const testBankAccount1 = '1234567890';
+      const testBankAccount2 = '1234567890123';
+      const testBankAccount3 = '1234567890123456';
+      const expectedMaskedBankAccount1 = '123****890';
+      const expectedMaskedBankAccount2 = '123*******123';
+      const expectedMaskedBankAccount3 = '123**********456';
+
+      expect(StringUtil.maskPrivacy(testBankAccount1, 'bankAccount')).toBe(expectedMaskedBankAccount1);
+      expect(StringUtil.maskPrivacy(testBankAccount2, 'bankAccount')).toBe(expectedMaskedBankAccount2);
+      expect(StringUtil.maskPrivacy(testBankAccount3, 'bankAccount')).toBe(expectedMaskedBankAccount3);
+    });
+
+    it('should mask emails from the third character to the character before @', () => {
+      const testEmail1 = 'test@test.com';
+      const testEmail2 = '12test@test.com';
+      const testEmail3 = '__testtesttesttest@test.com';
+      const expectedTestEmail1 = 'te**@test.com';
+      const expectedTestEmail2 = '12****@test.com';
+      const expectedTestEmail3 = '__****************@test.com';
+
+      expect(StringUtil.maskPrivacy(testEmail1, 'email')).toBe(expectedTestEmail1);
+      expect(StringUtil.maskPrivacy(testEmail2, 'email')).toBe(expectedTestEmail2);
+      expect(StringUtil.maskPrivacy(testEmail3, 'email')).toBe(expectedTestEmail3);
+    });
+
+    it('should mask phone numbers in the middle', () => {
+      const testPhone1 = '01011118888';
+      const testPhone2 = '0101118888';
+      const expectedTestPhone1 = '010****8888';
+      const expectedTestPhone2 = '010***8888';
+
+      expect(StringUtil.maskPrivacy(testPhone1, 'phone')).toBe(expectedTestPhone1);
+      expect(StringUtil.maskPrivacy(testPhone2, 'phone')).toBe(expectedTestPhone2);
+    });
+  });
+
   describe('midMask', () => {
     it('should mask phone number', () => {
       const phone1 = '010-0000-0000';

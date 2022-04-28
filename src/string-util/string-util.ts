@@ -1,5 +1,6 @@
 import Mustache from 'mustache';
-import type { Tag, TemplateOpts } from './string-util.interface';
+import type { MaskingOpts, Tag, TemplateOpts } from './string-util.interface';
+import type { PrivacyType } from './string-util.type';
 
 const KOREA_COUNTRY_NUMBER_REGEXP = /^(\+?82-?|0)/;
 const KOREA_MOBILE_PREFIXES_REGEXP = /10|11|12|15|16|17|18|19/;
@@ -11,6 +12,41 @@ const KOREA_PHONE_NUMBER_REGEXP = new RegExp(
 );
 
 export namespace StringUtil {
+  export function maskPrivacy(text: string, type: PrivacyType): string {
+    function getMaskedString({ text, length, maskingStart }: MaskingOpts): string {
+      const masking = '*'.repeat(length);
+      const textSplit = [...text];
+      textSplit.splice(maskingStart, length, masking);
+      return textSplit.join('');
+    }
+
+    let start: number;
+    let end: number;
+
+    switch (type) {
+      case 'bankAccount':
+        start = 3;
+        end = text.length - 3;
+        return getMaskedString({ text, length: end - start, maskingStart: start });
+
+      case 'email':
+        start = 2;
+        end = text.indexOf('@');
+        return getMaskedString({ text, length: end - start, maskingStart: start });
+
+      case 'name':
+        start = 1;
+        end = text.length - 1;
+        return getMaskedString({ text, length: end - start || 1, maskingStart: start });
+
+      case 'phone':
+        start = 3;
+        end = text.length - 4;
+        return getMaskedString({ text, length: end - start, maskingStart: start });
+    }
+  }
+
+  /** @deprecated in favor of maskPrivacy */
   export function midMask(str: string, startIndex: number, length: number, maskChar = '*'): string {
     const strList = [...str];
     const maskingPart = maskChar.repeat(length);
