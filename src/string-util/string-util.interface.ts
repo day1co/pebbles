@@ -10,3 +10,9 @@ export interface TemplateOpts {
   partial?: Record<string, string>;
   customTag?: [string, string];
 }
+
+export interface MaskingOpts {
+  text: string;
+  length: number;
+  maskingStart: number;
+}
