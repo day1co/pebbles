@@ -1,36 +1,14 @@
 import Mustache from 'mustache';
 import type { Tag, TemplateOpts } from './string-util.interface';
 
-const KOREAN_PHONE_NUMBER_REGEXP = /^0[1,7]\d{9}$/;
-const KOREA_COUNTRY_NUMBER_REGEXP = /\+?82-?/;
-const KOREA_EXCHANGE_NUMBERS = [
-  '10',
-  '11',
-  '12',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '2',
-  '31',
-  '32',
-  '33',
-  '41',
-  '42',
-  '43',
-  '44',
-  '51',
-  '52',
-  '53',
-  '54',
-  '55',
-  '61',
-  '62',
-  '63',
-  '64',
-  '70',
-].join('|');
+const KOREA_COUNTRY_NUMBER_REGEXP = /^(\+?82-?|0)/;
+const KOREA_MOBILE_PREFIXES_REGEXP = /10|11|12|15|16|17|18|19/;
+const KOREA_AREA_CODES_REGEXP = /2|31|32|33|41|42|43|44|51|52|53|54|55|61|62|63|64/;
+const KOREA_SERVICE_PREFIXES_REGEXP = /50\d?|70/;
+const KOREA_BASIC_PHONE_NUMBER_REGEXP = /\d{3,4}-?\d{4}$/;
+const KOREA_PHONE_NUMBER_REGEXP = new RegExp(
+  `${KOREA_COUNTRY_NUMBER_REGEXP.source}(${KOREA_MOBILE_PREFIXES_REGEXP.source}|${KOREA_AREA_CODES_REGEXP.source}|${KOREA_SERVICE_PREFIXES_REGEXP.source})-?${KOREA_BASIC_PHONE_NUMBER_REGEXP.source}`
+);
 
 export namespace StringUtil {
   export function midMask(str: string, startIndex: number, length: number, maskChar = '*'): string {
@@ -57,10 +35,7 @@ export namespace StringUtil {
   }
 
   export function isValidKoreaPhoneNumber(str: string): boolean {
-    const regexp = new RegExp(
-      `^(${KOREA_COUNTRY_NUMBER_REGEXP.source}|0)(${KOREA_EXCHANGE_NUMBERS})-?\\d{3,4}-?\\d{4}$`
-    );
-    return regexp.test(str);
+    return KOREA_PHONE_NUMBER_REGEXP.test(str);
   }
 
   export function normalizeKoreaPhoneNumber(str: string): string {
@@ -73,7 +48,7 @@ export namespace StringUtil {
 
   /** @deprecated */
   export function normalizePhoneNumber(str: string): string {
-    if (KOREAN_PHONE_NUMBER_REGEXP.test(str)) {
+    if (isValidPhoneNumber(str)) {
       return str;
     }
 
@@ -88,7 +63,7 @@ export namespace StringUtil {
 
   /** @deprecated */
   export function isValidPhoneNumber(str: string): boolean {
-    return KOREAN_PHONE_NUMBER_REGEXP.test(str);
+    return /^0[1,7]\d{9}$/.test(str);
   }
 
   export function isValidEmail(str: string): boolean {

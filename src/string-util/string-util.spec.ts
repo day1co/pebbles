@@ -114,7 +114,7 @@ describe('StringUtil', () => {
     });
   });
 
-  describe('normalizePhoneNumber', () => {
+  describe('normalizeKoreaPhoneNumber', () => {
     it('should normalize phone number starting with 010 or 070', () => {
       expect(StringUtil.normalizeKoreaPhoneNumber('01012345678')).toBe('01012345678');
       expect(StringUtil.normalizeKoreaPhoneNumber('010-1234-5678')).toBe('01012345678');
@@ -191,7 +191,7 @@ describe('StringUtil', () => {
     // });
   });
 
-  describe('validatePhoneNumber', () => {
+  describe('isValidKoreaPhoneNumber', () => {
     const isValidKoreaPhoneNumber = StringUtil.isValidKoreaPhoneNumber;
     it('should return true for a Korea phone number', () => {
       expect(isValidKoreaPhoneNumber('01012345678')).toBe(true);
@@ -219,13 +219,19 @@ describe('StringUtil', () => {
       expect(isValidKoreaPhoneNumber('070-1234-5678')).toBe(true);
       expect(isValidKoreaPhoneNumber('+82-70-1234-5678')).toBe(true);
       expect(isValidKoreaPhoneNumber('82-70-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('050512345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('8250512345678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('0505-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('+82-505-1234-5678')).toBe(true);
+      expect(isValidKoreaPhoneNumber('82-505-1234-5678')).toBe(true);
     });
     it('should return false for a wrong string', () => {
       expect(isValidKoreaPhoneNumber('01012345678a')).toBe(false);
       expect(isValidKoreaPhoneNumber('1012345678')).toBe(false);
       expect(isValidKoreaPhoneNumber('010123456789')).toBe(false);
-      expect(isValidKoreaPhoneNumber('02!1234-5678')).toBe(false);
-      expect(isValidKoreaPhoneNumber('031-12-3456')).toBe(false);
+      expect(isValidKoreaPhoneNumber('02.1234.5678')).toBe(false);
+      expect(isValidKoreaPhoneNumber('031 1234 5678')).toBe(false);
+      expect(isValidKoreaPhoneNumber('041-12-3456')).toBe(false);
       expect(isValidKoreaPhoneNumber('051-1234-567')).toBe(false);
       expect(isValidKoreaPhoneNumber('+82-090-1234-5678')).toBe(false);
       expect(isValidKoreaPhoneNumber('+82-010-1234-5678')).toBe(false);
