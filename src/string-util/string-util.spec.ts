@@ -130,7 +130,6 @@ describe('StringUtil', () => {
       expect(normalizeKoreaPhoneNumber('07012345678')).toBe(voipNumber);
       expect(normalizeKoreaPhoneNumber('070-1234-5678')).toBe(voipNumber);
     });
-
     it('should normalize phone number starting with (+)82 or (+)082', () => {
       expect(normalizeKoreaPhoneNumber('+821012345678')).toBe(mobileNumber);
       expect(normalizeKoreaPhoneNumber('+82-10-1234-5678')).toBe(mobileNumber);
@@ -149,8 +148,7 @@ describe('StringUtil', () => {
       expect(normalizeKoreaPhoneNumber('827012345678')).toBe(voipNumber);
       expect(normalizeKoreaPhoneNumber('82-70-1234-5678')).toBe(voipNumber);
     });
-
-    it('should throw for the not-valid-in-Korea phone number', () => {
+    it('should throw for the not-valid-in-Korea phone number and no fallback', () => {
       expect(() => normalizeKoreaPhoneNumber('01012345678a')).toThrow();
       expect(() => normalizeKoreaPhoneNumber('1012345678')).toThrow();
       expect(() => normalizeKoreaPhoneNumber('010123456789')).toThrow();
@@ -161,6 +159,9 @@ describe('StringUtil', () => {
       expect(() => normalizeKoreaPhoneNumber('+82-090-1234-5678')).toThrow();
       expect(() => normalizeKoreaPhoneNumber('+82-010-1234-5678')).toThrow();
       expect(() => normalizeKoreaPhoneNumber('+1-10-1234-5678')).toThrow();
+    });
+    it('should return fallback for the not-valid-in-Korea phone number', () => {
+      expect(normalizeKoreaPhoneNumber('01012345678a', 'fallback')).toBe('fallback');
     });
   });
 
