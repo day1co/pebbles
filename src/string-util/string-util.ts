@@ -42,7 +42,7 @@ export namespace StringUtil {
     const trimmedStr = str.trim();
 
     if (!isValidKoreaPhoneNumber(trimmedStr)) {
-      throw new Error('Not a valid Korea phone number');
+      return trimmedStr;
     }
 
     return trimmedStr.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
