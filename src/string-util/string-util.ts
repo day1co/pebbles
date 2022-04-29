@@ -44,9 +44,9 @@ export namespace StringUtil {
     if (!isValidKoreaPhoneNumber(trimmedStr)) {
       if (!fallback) {
         throw new Error('Not a valid Korea phone number');
-      } else {
-        return typeof fallback === 'function' ? fallback() : typeof fallback === 'string' ? fallback.trim() : fallback;
       }
+
+      return typeof fallback === 'function' ? fallback() : fallback;
     }
 
     return trimmedStr.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
