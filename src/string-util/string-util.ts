@@ -38,11 +38,15 @@ export namespace StringUtil {
     return KOREA_PHONE_NUMBER_REGEXP.test(str);
   }
 
-  export function normalizeKoreaPhoneNumber(str: string): string {
+  export function normalizeKoreaPhoneNumber(str: string, fallback?: unknown): string {
     const trimmedStr = str.trim();
 
     if (!isValidKoreaPhoneNumber(trimmedStr)) {
-      return trimmedStr;
+      if (!fallback) {
+        throw new Error('Not a valid Korea phone number');
+      } else {
+        return typeof fallback === 'function' ? fallback() : typeof fallback === 'string' ? fallback.trim() : fallback;
+      }
     }
 
     return trimmedStr.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
