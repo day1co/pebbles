@@ -10,17 +10,16 @@ const KOREA_BASIC_PHONE_NUMBER_REGEXP = /\d{3,4}-?\d{4}$/;
 const KOREA_PHONE_NUMBER_REGEXP = new RegExp(
   `${KOREA_COUNTRY_NUMBER_REGEXP.source}(${KOREA_MOBILE_PREFIXES_REGEXP.source}|${KOREA_AREA_CODES_REGEXP.source}|${KOREA_SERVICE_PREFIXES_REGEXP.source})-?${KOREA_BASIC_PHONE_NUMBER_REGEXP.source}`
 );
+const KOREA_ROAD_NAME_ADDRESS_REGEXP = /길|로/;
+const KOREA_LOT_NUMBER_ADDRESS_REGEXP = /읍|면|동|가/;
+const KOREA_ADDRESS_SORT_REGEXP = new RegExp(
+  `${KOREA_ROAD_NAME_ADDRESS_REGEXP.source}|${KOREA_LOT_NUMBER_ADDRESS_REGEXP.source}`
+);
+const EMOJI_REGEXP =
+  /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
 
 export namespace StringUtil {
   export function maskPrivacy(text: string, type: PrivacyType): string {
-    function getMaskedString({ text, length, maskingStart }: MaskingOpts): string {
-      length = Math.max(0, length);
-      const masking = '*'.repeat(length);
-      const textSplit = [...text];
-      textSplit.splice(maskingStart, length, masking);
-      return textSplit.join('');
-    }
-
     let start: number;
     let end: number;
 
@@ -36,14 +35,74 @@ export namespace StringUtil {
         return getMaskedString({ text, length: end - start, maskingStart: start });
 
       case 'name':
-        start = 1;
-        end = text.length - 1;
+        start = EMOJI_REGEXP.test(text.slice(0, 2)) ? 2 : 1;
+        end = EMOJI_REGEXP.test(text.slice(text.length - 2)) ? text.length - 2 : text.length - 1;
+
         return getMaskedString({ text, length: end - start || 1, maskingStart: start });
 
       case 'phone':
-        start = 3;
-        end = text.length - 4;
+        if (/\D/.test(text)) {
+          const { start: _start, end: _end } = getMaskingIndexOfUnnormalizedPhone(text);
+          start = _start;
+          end = _end;
+        } else {
+          start = 3;
+          end = text.length - 4;
+        }
         return getMaskedString({ text, length: end - start, maskingStart: start });
+
+      case 'address':
+        start = getMaskingStartIndexOfAddress(text);
+        end = text.length;
+        return getMaskedString({ text, length: end - start, maskingStart: start });
+    }
+
+    function getMaskedString({ text, length, maskingStart }: MaskingOpts): string {
+      const validLength = Math.max(0, length);
+      const masking = '*'.repeat(validLength);
+      const textSplit = [...text];
+      textSplit.splice(maskingStart, validLength, masking);
+      return textSplit.join('');
+    }
+
+    function getMaskingIndexOfUnnormalizedPhone(phone: string): { start: number; end: number } {
+      const phoneNumberParts = phone.split(/\D/);
+
+      let middleIndex = Math.floor(phoneNumberParts.length / 2);
+
+      if (/\D/.test(phone[0]) && phoneNumberParts.length % 2) {
+        middleIndex++;
+      }
+
+      const start = phoneNumberParts.slice(0, middleIndex).join(' ').length;
+      const end = phoneNumberParts.slice(0, middleIndex + 1).join(' ').length + 1;
+      return { start, end };
+    }
+
+    function getMaskingStartIndexOfAddress(address: string): number {
+      let returnIndex = address.length;
+      const districtsOfAddress = address.split(' ');
+
+      for (let idx = 0; idx < districtsOfAddress.length; idx++) {
+        const district = districtsOfAddress[idx];
+        const districtSort = district.slice(-1);
+        const nextDistrictSort = districtsOfAddress[idx + 1]?.slice(-1);
+
+        const breakCondition = KOREA_ROAD_NAME_ADDRESS_REGEXP.test(districtSort)
+          ? KOREA_ROAD_NAME_ADDRESS_REGEXP.test(nextDistrictSort) || !KOREA_ADDRESS_SORT_REGEXP.test(nextDistrictSort)
+          : !KOREA_ADDRESS_SORT_REGEXP.test(nextDistrictSort);
+        // OO시 OO구 OO로 OO길 123 ==> OO시 OO구 OO로 XXX XXX
+        // OO시 OO동 OO로 123     ==> OO시 OO동 OO로 XXX
+        // OO시 OO로 123         ==> OO시 OO로 XXX
+
+        const condition = districtSort && KOREA_ADDRESS_SORT_REGEXP.test(districtSort) && breakCondition;
+
+        if (condition) {
+          returnIndex = districtsOfAddress.slice(0, idx + 1).join(' ').length;
+          break;
+        }
+      }
+      return returnIndex;
     }
   }
 

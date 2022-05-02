@@ -3,25 +3,48 @@ import { TemplateOpts } from './string-util.interface';
 
 describe('StringUtil', () => {
   describe('maskPrivacy', () => {
+    it('should return original parameter when nothing is to be masked', () => {
+      expect(StringUtil.maskPrivacy('', 'address')).toBe('');
+      expect(StringUtil.maskPrivacy('', 'bankAccount')).toBe('');
+      expect(StringUtil.maskPrivacy('', 'email')).toBe('');
+      expect(StringUtil.maskPrivacy('', 'name')).toBe('');
+      expect(StringUtil.maskPrivacy('', 'phone')).toBe('');
+    });
+
     it('should mask names except the first and last characters', () => {
-      expect(StringUtil.maskPrivacy('김', 'name')).toBe('김');
-      expect(StringUtil.maskPrivacy('김이', 'name')).toBe('김*');
-      expect(StringUtil.maskPrivacy('김이박', 'name')).toBe('김*박');
-      expect(StringUtil.maskPrivacy('김이박최', 'name')).toBe('김**최');
-      expect(StringUtil.maskPrivacy('김이박최정', 'name')).toBe('김***정');
+      const testName1 = '김';
+      const testName2 = '😆';
+      const testName3 = 'John Doe';
+      const testName4 = '김이';
+      const testName5 = '김이박';
+      const testName6 = '김이박최';
+      const testName7 = '김이박최정';
+      const testName8 = 'John Doe 김이박';
+
+      expect(StringUtil.maskPrivacy(testName1, 'name')).toBe(testName1);
+      expect(StringUtil.maskPrivacy(testName2, 'name')).toBe(testName2);
+      expect(StringUtil.maskPrivacy(testName3, 'name')).toBe('J******e');
+      expect(StringUtil.maskPrivacy(testName4, 'name')).toBe('김*');
+      expect(StringUtil.maskPrivacy(testName5, 'name')).toBe('김*박');
+      expect(StringUtil.maskPrivacy(testName6, 'name')).toBe('김**최');
+      expect(StringUtil.maskPrivacy(testName7, 'name')).toBe('김***정');
+      expect(StringUtil.maskPrivacy(testName8, 'name')).toBe('J**********박');
     });
 
     it('should mask bank accounts from the fourth character to the last fourth character', () => {
-      const testBankAccount1 = '1234567890';
-      const testBankAccount2 = '1234567890123';
-      const testBankAccount3 = '1234567890123456';
-      const expectedMaskedBankAccount1 = '123****890';
-      const expectedMaskedBankAccount2 = '123*******123';
-      const expectedMaskedBankAccount3 = '123**********456';
+      const testBankAccount1 = '123456';
+      const testBankAccount2 = '1234567890';
+      const testBankAccount3 = '1234567890123';
+      const testBankAccount4 = '1234567890123456';
+      const expectedMaskedBankAccount1 = '123456';
+      const expectedMaskedBankAccount2 = '123****890';
+      const expectedMaskedBankAccount3 = '123*******123';
+      const expectedMaskedBankAccount4 = '123**********456';
 
       expect(StringUtil.maskPrivacy(testBankAccount1, 'bankAccount')).toBe(expectedMaskedBankAccount1);
       expect(StringUtil.maskPrivacy(testBankAccount2, 'bankAccount')).toBe(expectedMaskedBankAccount2);
       expect(StringUtil.maskPrivacy(testBankAccount3, 'bankAccount')).toBe(expectedMaskedBankAccount3);
+      expect(StringUtil.maskPrivacy(testBankAccount4, 'bankAccount')).toBe(expectedMaskedBankAccount4);
     });
 
     it('should mask emails from the third character to the character before @', () => {
@@ -43,11 +66,55 @@ describe('StringUtil', () => {
     it('should mask phone numbers in the middle', () => {
       const testPhone1 = '01011118888';
       const testPhone2 = '0101118888';
+      const testPhone3 = '010-1111-8888';
+      const testPhone4 = '+1 111 8888';
+      const testPhone5 = '+1 111-1111-11111';
       const expectedTestPhone1 = '010****8888';
       const expectedTestPhone2 = '010***8888';
+      const expectedTestPhone3 = '010******8888';
+      const expectedTestPhone4 = '+1*****8888';
+      const expectedTestPhone5 = '+1 111******11111';
 
       expect(StringUtil.maskPrivacy(testPhone1, 'phone')).toBe(expectedTestPhone1);
       expect(StringUtil.maskPrivacy(testPhone2, 'phone')).toBe(expectedTestPhone2);
+      expect(StringUtil.maskPrivacy(testPhone3, 'phone')).toBe(expectedTestPhone3);
+      expect(StringUtil.maskPrivacy(testPhone4, 'phone')).toBe(expectedTestPhone4);
+      expect(StringUtil.maskPrivacy(testPhone5, 'phone')).toBe(expectedTestPhone5);
+    });
+
+    it('should mask Korean address', () => {
+      const testAddress1 = '강원 원주시 학성동 12아파트';
+      const testAddress2 = '서울특별시 강남구 역삼동 12번지 34빌딩';
+      const testAddress3 = '서울 영등포구 양평동5가 12-3 456호';
+      const testAddress4 = '충북 보은군 회남면 신곡리 산12-3';
+      const testAddress5 = '세종 어진동 123 45호';
+      const testAddress6 = '세종특별자치시 한누리대로 1234';
+      const testAddress7 = '서울 강남구 강남대로 123길 45 67빌딩';
+      const testAddress8 = '경남 양산시 물금읍 가촌서로 12345';
+      const testAddress9 = '전북 남원시 사매면 서도길 1234';
+      const testAddress10 = '부산 해운대구 달맞이길117번가길 123-45';
+
+      const expectedTestAddress1 = testAddress1.replace(' 12아파트', '*'.repeat(' 12아파트'.length));
+      const expectedTestAddress2 = testAddress2.replace(' 12번지 34빌딩', '*'.repeat(' 12번지 34빌딩'.length));
+      const expectedTestAddress3 = testAddress3.replace(' 12-3 456호', '*'.repeat(' 12-3 456호'.length));
+      const expectedTestAddress4 = testAddress4.replace(' 신곡리 산12-3', '*'.repeat(' 신곡리 산12-3'.length));
+      const expectedTestAddress5 = testAddress5.replace(' 123 45호', '*'.repeat(' 123 45호'.length));
+      const expectedTestAddress6 = testAddress6.replace(' 1234', '*'.repeat(' 1234'.length));
+      const expectedTestAddress7 = testAddress7.replace(' 123길 45 67빌딩', '*'.repeat(' 123길 45 67빌딩'.length));
+      const expectedTestAddress8 = testAddress8.replace(' 12345', '*'.repeat(' 12345'.length));
+      const expectedTestAddress9 = testAddress9.replace(' 1234', '*'.repeat(' 1234'.length));
+      const expectedTestAddress10 = testAddress10.replace(' 123-45', '*'.repeat(' 123-45'.length));
+
+      expect(StringUtil.maskPrivacy(testAddress1, 'address')).toBe(expectedTestAddress1);
+      expect(StringUtil.maskPrivacy(testAddress2, 'address')).toBe(expectedTestAddress2);
+      expect(StringUtil.maskPrivacy(testAddress3, 'address')).toBe(expectedTestAddress3);
+      expect(StringUtil.maskPrivacy(testAddress4, 'address')).toBe(expectedTestAddress4);
+      expect(StringUtil.maskPrivacy(testAddress5, 'address')).toBe(expectedTestAddress5);
+      expect(StringUtil.maskPrivacy(testAddress6, 'address')).toBe(expectedTestAddress6);
+      expect(StringUtil.maskPrivacy(testAddress7, 'address')).toBe(expectedTestAddress7);
+      expect(StringUtil.maskPrivacy(testAddress8, 'address')).toBe(expectedTestAddress8);
+      expect(StringUtil.maskPrivacy(testAddress9, 'address')).toBe(expectedTestAddress9);
+      expect(StringUtil.maskPrivacy(testAddress10, 'address')).toBe(expectedTestAddress10);
     });
   });
 
