@@ -58,18 +58,23 @@ export namespace DateUtil {
           retDate.setFullYear(value);
           break;
         case '/M?M/':
+          if (value > 12) throw new Error('Invalid month value');
           retDate.setMonth(value - 1);
           break;
         case '/D?D/':
+          if (value > 31) throw new Error('Invalid month value');
           retDate.setDate(value);
           break;
         case '/H?H/':
+          if (value >= 24) throw new Error('Invalid hour value');
           retDate.setHours(value);
           break;
         case '/m?m/':
+          if (value >= 60) throw new Error('Invalid minute value');
           retDate.setMinutes(value);
           break;
         case '/s?s/':
+          if (value >= 60) throw new Error('Invalid second value');
           retDate.setSeconds(value);
           break;
         case '/S?S?S/':
