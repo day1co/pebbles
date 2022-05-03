@@ -56,12 +56,14 @@ describe('DateUtil', () => {
 
   describe('parseByFormat', () => {
     const parseByFormat = DateUtil.parseByFormat;
-    it('should throw error when invalid arguments given', () => {
+    it('should throw error for invalid format', () => {
       const testData = testTimestampStr.substring(0, 8);
       expect(() => parseByFormat(testData, 'YYYYM')).toThrow();
-      expect(() => parseByFormat(testData, 'YYYYMMDDHHmmssSSS')).not.toThrow();
     });
-
+    it('should throw error for invalid string', () => {
+      expect(() => parseByFormat('20221301', 'YYYYMMDD')).toThrow();
+      expect(() => parseByFormat('20220223241234567', 'YYYYMMDDHHmmssSSS')).toThrow();
+    });
     it('should return valid date', () => {
       const testData = testTimestampStr.substring(0, 14);
       expect(parseByFormat(testData, 'YYYYMMDDHHmmss')).toEqual(new Date(testDatetimeStr3));

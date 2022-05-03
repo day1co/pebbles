@@ -62,7 +62,7 @@ export namespace DateUtil {
           retDate.setMonth(value - 1);
           break;
         case '/D?D/':
-          if (value > 31) throw new Error('Invalid month value');
+          if (value > 31) throw new Error('Invalid date value');
           retDate.setDate(value);
           break;
         case '/H?H/':
