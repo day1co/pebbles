@@ -16,3 +16,8 @@ export interface MaskingOpts {
   length: number;
   maskingStart: number;
 }
+
+export interface MaskingRange {
+  start: number;
+  end: number;
+}
