@@ -1,5 +1,5 @@
 import Mustache from 'mustache';
-import type { MaskingOpts, Tag, TemplateOpts } from './string-util.interface';
+import type { MaskingOpts, Tag, TemplateOpts, MaskingRange } from './string-util.interface';
 import type { PrivacyType } from './string-util.type';
 
 const KOREA_COUNTRY_NUMBER_REGEXP = /^(\+?82-?|0)/;
@@ -20,42 +20,24 @@ const EMOJI_REGEXP =
 
 export namespace StringUtil {
   export function maskPrivacy(text: string, type: PrivacyType): string {
-    let start: number;
-    let end: number;
+    const targetMask: Record<PrivacyType, MaskingRange> = {
+      name: {
+        start: EMOJI_REGEXP.test(text.slice(0, 2)) ? 2 : 1,
+        end: EMOJI_REGEXP.test(text.slice(text.length - 2)) ? text.length - 2 : text.length - 1,
+      },
+      phone: {
+        start: /\D/.test(text) ? getMaskingIndexOfUnnormalizedPhone(text).start : 3,
+        end: /\D/.test(text) ? getMaskingIndexOfUnnormalizedPhone(text).end : text.length - 4,
+      },
+      email: { start: 2, end: text.indexOf('@') },
+      bankAccount: { start: 3, end: text.length - 3 },
+      address: { start: getMaskingStartIndexOfAddress(text), end: text.length },
+    };
 
-    switch (type) {
-      case 'bankAccount':
-        start = 3;
-        end = text.length - 3;
-        return getMaskedString({ text, length: end - start, maskingStart: start });
-
-      case 'email':
-        start = 2;
-        end = text.indexOf('@');
-        return getMaskedString({ text, length: end - start, maskingStart: start });
-
-      case 'name':
-        start = EMOJI_REGEXP.test(text.slice(0, 2)) ? 2 : 1;
-        end = EMOJI_REGEXP.test(text.slice(text.length - 2)) ? text.length - 2 : text.length - 1;
-
-        return getMaskedString({ text, length: end - start || 1, maskingStart: start });
-
-      case 'phone':
-        if (/\D/.test(text)) {
-          const { start: _start, end: _end } = getMaskingIndexOfUnnormalizedPhone(text);
-          start = _start;
-          end = _end;
-        } else {
-          start = 3;
-          end = text.length - 4;
-        }
-        return getMaskedString({ text, length: end - start, maskingStart: start });
-
-      case 'address':
-        start = getMaskingStartIndexOfAddress(text);
-        end = text.length;
-        return getMaskedString({ text, length: end - start, maskingStart: start });
-    }
+    const start = targetMask[type].start;
+    const end = targetMask[type].end;
+    const length = type === 'name' ? end - start || 1 : end - start;
+    return getMaskedString({ text, length, maskingStart: start });
 
     function getMaskedString({ text, length, maskingStart }: MaskingOpts): string {
       const validLength = Math.max(0, length);
