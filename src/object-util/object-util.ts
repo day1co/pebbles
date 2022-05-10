@@ -89,20 +89,20 @@ export namespace ObjectUtil {
     const argKeysArray: ObjectKeyType[][] = [];
     const mergedObj = deepClone<ObjectType>(obj);
 
-    if (!(mergedObj instanceof Function)) {
-      args.forEach((arg) => {
+    args.forEach((arg) => {
+      if (!(arg instanceof Function)) {
         argKeysArray.push(getAllPropertyKeys(arg));
-      });
-
-      for (let ix = 0; ix < args.length; ix++) {
-        argKeysArray[ix].forEach((key) => {
-          if (mergedObj[key] instanceof Object && args[ix][key] instanceof Object) {
-            mergedObj[key] = merge(mergedObj[key], args[ix][key]);
-          } else {
-            mergedObj[key] = args[ix][key];
-          }
-        });
       }
+    });
+
+    for (let ix = 0; ix < args.length; ix++) {
+      argKeysArray[ix].forEach((key) => {
+        if (isObjectTypeExceptFunction(mergedObj[key]) && isObjectTypeExceptFunction(args[ix][key])) {
+          mergedObj[key] = merge(mergedObj[key], args[ix][key]);
+        } else {
+          mergedObj[key] = args[ix][key];
+        }
+      });
     }
 
     return mergedObj;
@@ -200,4 +200,8 @@ export namespace ObjectUtil {
 
     return ret;
   }
+}
+
+function isObjectTypeExceptFunction(arg: unknown) {
+  return arg instanceof Object && !(arg instanceof Function);
 }
