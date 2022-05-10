@@ -175,7 +175,7 @@ describe('ObjectUtil', () => {
       result[symbol] = 6;
       expect(merge(obj1, obj2, obj3)).toEqual(result);
     });
-    it('merge objects which contains function', () => {
+    it('merge objects which contain function', () => {
       const obj1 = { foo: 1 };
       const obj2 = { foo: (val: string) => `test ${val}` };
       const mergedObj = merge(obj1, obj2);
