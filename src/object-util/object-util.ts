@@ -61,6 +61,8 @@ export namespace ObjectUtil {
       const clonedBuf = new constructor(obj.byteLength);
       new Uint8Array(clonedBuf as unknown as ArrayBuffer).set(new Uint8Array(obj));
       return clonedBuf;
+    } else if (obj instanceof Function) {
+      return obj;
     }
 
     const clonedObj = new constructor();
@@ -87,18 +89,20 @@ export namespace ObjectUtil {
     const argKeysArray: ObjectKeyType[][] = [];
     const mergedObj = deepClone<ObjectType>(obj);
 
-    args.forEach((arg) => {
-      argKeysArray.push(getAllPropertyKeys(arg));
-    });
-
-    for (let ix = 0; ix < args.length; ix++) {
-      argKeysArray[ix].forEach((key) => {
-        if (mergedObj[key] instanceof Object && args[ix][key] instanceof Object) {
-          mergedObj[key] = merge(mergedObj[key], args[ix][key]);
-        } else {
-          mergedObj[key] = args[ix][key];
-        }
+    if (!(mergedObj instanceof Function)) {
+      args.forEach((arg) => {
+        argKeysArray.push(getAllPropertyKeys(arg));
       });
+
+      for (let ix = 0; ix < args.length; ix++) {
+        argKeysArray[ix].forEach((key) => {
+          if (mergedObj[key] instanceof Object && args[ix][key] instanceof Object) {
+            mergedObj[key] = merge(mergedObj[key], args[ix][key]);
+          } else {
+            mergedObj[key] = args[ix][key];
+          }
+        });
+      }
     }
 
     return mergedObj;
