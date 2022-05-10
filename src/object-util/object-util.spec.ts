@@ -68,6 +68,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('deepClone', () => {
+    const deepClone = ObjectUtil.deepClone;
     it('should return deep cloned object', () => {
       interface TestInterface {
         foo: Bar;
@@ -77,7 +78,7 @@ describe('ObjectUtil', () => {
         bar: number;
       }
       const interfaceObj: TestInterface = { foo: { bar: 1 }, baz: 2 };
-      const clonedInterfaceObj = ObjectUtil.deepClone<TestInterface>(interfaceObj);
+      const clonedInterfaceObj = deepClone<TestInterface>(interfaceObj);
       expect(clonedInterfaceObj).not.toBe(interfaceObj);
       expect(clonedInterfaceObj).toEqual(interfaceObj);
       expect(clonedInterfaceObj.foo).not.toBe(interfaceObj.foo);
@@ -99,27 +100,27 @@ describe('ObjectUtil', () => {
         }
       }
       const classObj: TestClass = new TestClass(1);
-      const clonedClassObj = ObjectUtil.deepClone<TestClass>(classObj);
+      const clonedClassObj = deepClone<TestClass>(classObj);
       expect(clonedClassObj instanceof TestClass).toBe(true);
       expect(clonedClassObj).not.toBe(classObj);
       expect(clonedClassObj).toEqual(classObj);
 
       const array = ['foo', { bar: 1 }];
-      const clonedArray = ObjectUtil.deepClone<(string | Bar)[]>(array);
+      const clonedArray = deepClone<(string | Bar)[]>(array);
       expect(clonedArray).not.toBe(array);
       expect(clonedArray).toEqual(array);
       expect(clonedArray[1]).not.toBe(array[1]);
       expect(clonedArray[1]).toEqual(array[1]);
 
       const date = new Date();
-      const clonedDate = ObjectUtil.deepClone<Date>(date);
+      const clonedDate = deepClone<Date>(date);
       expect(clonedDate).not.toBe(date);
       expect(clonedDate).toEqual(date);
 
       const map = new Map<string, number | Bar>();
       map.set('foo', 1);
       map.set('bar', { bar: 2 });
-      const clonedMap = ObjectUtil.deepClone<Map<string, number | Bar>>(map);
+      const clonedMap = deepClone<Map<string, number | Bar>>(map);
       expect(clonedMap).not.toBe(map);
       expect(clonedMap).toEqual(map);
       expect(clonedMap.get('bar')).not.toBe(map.get('bar'));
@@ -129,7 +130,7 @@ describe('ObjectUtil', () => {
       const bar = { bar: 1 };
       set.add('foo');
       set.add(bar);
-      const clonedSet = ObjectUtil.deepClone<Set<string | Bar>>(set);
+      const clonedSet = deepClone<Set<string | Bar>>(set);
       expect(clonedSet).not.toBe(set);
       expect(clonedSet).toEqual(set);
       expect(clonedSet.has(bar)).toBe(false);
@@ -138,7 +139,7 @@ describe('ObjectUtil', () => {
       const symbolKeyObj: SymbolKeyObj = {};
       const symbol = Symbol('foo');
       symbolKeyObj[symbol] = 'bar';
-      const clonedSymbolKey = ObjectUtil.deepClone<SymbolKeyObj>(symbolKeyObj);
+      const clonedSymbolKey = deepClone<SymbolKeyObj>(symbolKeyObj);
       expect(clonedSymbolKey).not.toBe(symbolKeyObj);
       expect(clonedSymbolKey).toEqual(symbolKeyObj);
 
@@ -146,14 +147,18 @@ describe('ObjectUtil', () => {
       const float64Array = new Float64Array(buf);
       float64Array[0] = 0.5;
       float64Array[1] = 1.5;
-      const clonedBuf = ObjectUtil.deepClone(buf);
+      const clonedBuf = deepClone(buf);
       const clonedFloat64Array = new Float64Array(clonedBuf);
       expect(clonedFloat64Array).not.toBe(float64Array);
       expect(clonedFloat64Array).toEqual(float64Array);
+
+      const obj = { foo: (val: string) => `test ${val}` };
+      expect(deepClone(obj).foo('bar')).toBe('test bar');
     });
   });
 
   describe('merge', () => {
+    const merge = ObjectUtil.merge;
     it('merge jsons and arrays', () => {
       const obj1 = { foo: [{ bar: 2 }, { qux: 4 }] };
       const obj2 = { foo: [{ baz: 3 }, { quux: 5 }] };
@@ -168,7 +173,14 @@ describe('ObjectUtil', () => {
         ],
       };
       result[symbol] = 6;
-      expect(ObjectUtil.merge(obj1, obj2, obj3)).toEqual(result);
+      expect(merge(obj1, obj2, obj3)).toEqual(result);
+    });
+    it('merge objects which contains function', () => {
+      const obj1 = { foo: 1 };
+      const obj2 = { foo: (val: string) => `test ${val}` };
+      const mergedObj = merge(obj1, obj2);
+      expect(mergedObj.foo('bar')).toBe('test bar');
+      expect(merge(obj2, obj1)).toEqual(obj1);
     });
   });
 
