@@ -152,8 +152,11 @@ describe('ObjectUtil', () => {
       expect(clonedFloat64Array).not.toBe(float64Array);
       expect(clonedFloat64Array).toEqual(float64Array);
 
-      const obj = { foo: (val: string) => `test ${val}` };
-      expect(deepClone(obj).foo('bar')).toBe('test bar');
+      const func = (value: string) => `test ${value}`;
+      const obj = { foo: func };
+      const result = 'test bar';
+      expect(deepClone(func)('bar')).toBe(result);
+      expect(deepClone(obj).foo('bar')).toBe(result);
     });
   });
 
