@@ -189,24 +189,20 @@ describe('ObjectUtil', () => {
 
   describe('omit', () => {
     const omit = ObjectUtil.omit;
-    interface TestObj {
-      foo: 1;
-      bar: 2;
-      baz?: unknown;
-    }
 
     it('should return object with given keys deleted', () => {
-      const testObj1: TestObj = { foo: 1, bar: 2, baz: 3 };
-      const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
-      const testObj3: TestObj = { foo: 1, bar: 2, baz: [1, 2, 3] };
+      const testObj1 = { foo: 1, bar: 2, baz: 3 };
+      const testObj2 = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
+      const testObj3 = { foo: 1, bar: 2, baz: [1, 2, 3] };
       expect(omit(testObj1, ['foo', 'bar'])).toEqual({ baz: 3 });
       expect(omit(testObj2, ['baz'])).toEqual({ foo: 1, bar: 2 });
       expect(omit(testObj3, ['baz'])).toEqual({ foo: 1, bar: 2 });
+      expect(omit(testObj1, ['qux', 'bar'])).toEqual({ foo: 1, baz: 3 });
     });
 
     it('should delete object keys flattened', () => {
-      const testObj1: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
-      const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: [1, 2], bar: { foo: 1, bar: 2 } } };
+      const testObj1 = { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } };
+      const testObj2 = { foo: 1, bar: 2, baz: { foo: [1, 2], bar: { foo: 1, bar: 2 } } };
       expect(omit(testObj1, ['baz.foo'])).toEqual({ foo: 1, bar: 2, baz: { bar: 2 } });
       expect(omit(testObj2, ['foo', 'baz.bar.bar'])).toEqual({
         bar: 2,
@@ -215,8 +211,8 @@ describe('ObjectUtil', () => {
     });
 
     it('should not deform original object', () => {
-      const testObj1: TestObj = { foo: 1, bar: 2 };
-      const testObj2: TestObj = { foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } };
+      const testObj1 = { foo: 1, bar: 2 };
+      const testObj2 = { foo: 1, bar: 2, baz: { foo: 1, bar: 2, baz: { foo: 1, bar: 2 } } };
       const testResult1 = omit(testObj1, ['bar']);
       const testResult2 = omit(testObj2, ['bar', 'baz.foo', 'baz.baz.bar']);
       expect(testObj1).toEqual({ foo: 1, bar: 2 });
