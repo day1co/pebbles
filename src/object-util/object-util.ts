@@ -110,7 +110,7 @@ export namespace ObjectUtil {
 
   export function omit(obj: Readonly<ObjectType>, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
     function omitObject(obj: ObjectType, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
-      for (const omitKey of omitKeys) {
+      omitKeys.forEach((omitKey) => {
         const nestedKeys: ObjectKeyType[] = [omitKey];
 
         if (typeof omitKey === 'string') {
@@ -122,16 +122,14 @@ export namespace ObjectUtil {
           }
         }
 
-        if (isNullish(obj[nestedKeys[0]])) {
-          continue;
+        if (!isNullish(obj[nestedKeys[0]])) {
+          if (nestedKeys.length > 1) {
+            obj[nestedKeys[0]] = omitObject(obj[nestedKeys[0]], [nestedKeys[1]]);
+          } else {
+            delete obj[nestedKeys[0]];
+          }
         }
-
-        if (nestedKeys.length > 1) {
-          obj[nestedKeys[0]] = omitObject(obj[nestedKeys[0]], [nestedKeys[1]]);
-        } else {
-          delete obj[nestedKeys[0]];
-        }
-      }
+      });
 
       if (Array.isArray(obj)) {
         for (let ix = obj.length - 1; ix >= 0; ix--) {
