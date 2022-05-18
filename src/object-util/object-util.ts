@@ -65,7 +65,7 @@ export namespace ObjectUtil {
       return obj;
     }
 
-    const clonedObj = new constructor();
+    const clonedObj = constructor ? new constructor() : (new Object() as Type);
     getAllPropertyKeys(obj).forEach((key) => {
       let value;
       if (obj[key] instanceof Object) {
