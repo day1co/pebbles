@@ -260,12 +260,17 @@ describe('ObjectUtil', () => {
       const testObj1 = {};
       const testObj2 = new Map();
       const testObj3 = new Set();
-      expect(ObjectUtil.omit(testObj1, ['foo'])).toEqual({});
-      expect(ObjectUtil.omit(testObj1, ['foo'])).not.toBe(testObj1);
-      expect(ObjectUtil.omit(testObj2, ['foo'])).toEqual(new Map());
-      expect(ObjectUtil.omit(testObj2, ['foo'])).not.toBe(testObj2);
-      expect(ObjectUtil.omit(testObj3, ['foo'])).toEqual(new Set());
-      expect(ObjectUtil.omit(testObj3, ['foo'])).not.toBe(testObj3);
+      expect(omit(testObj1, ['foo'])).toEqual({});
+      expect(omit(testObj1, ['foo'])).not.toBe(testObj1);
+      expect(omit(testObj2, ['foo'])).toEqual(new Map());
+      expect(omit(testObj2, ['foo'])).not.toBe(testObj2);
+      expect(omit(testObj3, ['foo'])).toEqual(new Set());
+      expect(omit(testObj3, ['foo'])).not.toBe(testObj3);
+    });
+
+    it('should return obj with deleted keys with undefined value', () => {
+      const testObj = { foo: undefined };
+      expect(omit(testObj, ['foo'])).toEqual({});
     });
   });
 
