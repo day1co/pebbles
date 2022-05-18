@@ -123,7 +123,7 @@ export namespace ObjectUtil {
         }
 
         if (isNullish(obj[nestedKeys[0]])) {
-          return obj;
+          continue;
         }
 
         if (nestedKeys.length > 1) {
