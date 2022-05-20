@@ -11,13 +11,13 @@ describe('MapUtil', () => {
     });
 
     it('should return existing value', () => {
-      const booleanMap = new Map([['FALSE', false]]);
-      const nullableMap = new Map([['NULL', null]]);
-      const integerMap = new Map([['ZERO', 0]]);
+      const booleanMap: Map<string, boolean> = new Map([['FALSE', false]]);
+      const nullableMap: Map<string, string | null> = new Map([['NULL', null]]);
+      const numberMap: Map<string, number> = new Map([['ZERO', 0]]);
 
-      expect(MapUtil.get(booleanMap, 'FALSE', 'invalid')).toBe(booleanMap.get('FALSE'));
-      expect(MapUtil.get(nullableMap, 'NULL', 'invalid')).toBe(nullableMap.get('NULL'));
-      expect(MapUtil.get(integerMap, 'ZERO', 'invalid')).toBe(integerMap.get('ZERO'));
+      expect(MapUtil.get(booleanMap, 'FALSE', true)).toBe(booleanMap.get('FALSE'));
+      expect(MapUtil.get(nullableMap, 'NULL')).toBe(nullableMap.get('NULL'));
+      expect(MapUtil.get(numberMap, 'ZERO', 1)).toBe(numberMap.get('ZERO'));
     });
   });
 });

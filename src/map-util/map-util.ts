@@ -6,7 +6,7 @@ export namespace MapUtil {
    * @param key
    * @param defaultValue
    */
-  export function get(map: Map<any, any>, key: any, defaultValue: any = undefined) {
+  export function get<K, V>(map: Map<K, V>, key: K, defaultValue?: V) {
     const value = map.get(key);
     return value === undefined ? defaultValue : value;
   }
