@@ -156,7 +156,7 @@ export namespace StringUtil {
     return EMAIL_REGEXP.test(str);
   }
 
-  export function splitTags(str = '', separator = ','): Tag[] {
+  export function splitTags(str: string, separator = ','): Tag[] {
     return split(str, separator).map((text) => {
       return { text };
     });
