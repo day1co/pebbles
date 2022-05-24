@@ -391,6 +391,9 @@ describe('StringUtil', () => {
     it('should return empty array when empty string is given', () => {
       expect(StringUtil.splitTags('')).toEqual([]);
     });
+    it('should return empty array when undefined is given', () => {
+      expect(StringUtil.splitTags(undefined)).toEqual([]);
+    });
   });
 
   describe('split', () => {
