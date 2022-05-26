@@ -1,7 +1,9 @@
-import type { DataSizeType } from './unit-util.type';
-
-export interface ConvertByteOpts {
+export interface ConvertOpts<UNIT> {
   size: number;
-  inputUnit: DataSizeType;
-  outputUnit?: DataSizeType;
+  inputUnit: UNIT;
+  outputUnit?: UNIT;
+}
+
+export interface UnitConverter<UNIT> {
+  convert({ size, inputUnit, outputUnit }: ConvertOpts<UNIT>): string;
 }

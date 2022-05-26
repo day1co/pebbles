@@ -1,3 +1,3 @@
-export { UnitUtil } from './unit-util';
-export type { ConvertByteOpts } from './unit-util.interface';
-export type { DataSizeType, DataSizeNotationMapType } from './unit-util.type';
+export { byteUnitConverter } from './unit-converters';
+export type { ByteUnitType } from './unit-converters';
+export type { UnitConverter } from './unit-util.interface';
