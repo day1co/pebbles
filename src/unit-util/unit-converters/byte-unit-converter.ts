@@ -1,18 +1,18 @@
-import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
+import type { ConvertOpts } from '../unit-util.interface';
 import type { ByteUnitType } from './byte-unit-converter.type';
 
 const BYTE_UNIT_SQRT_DIFF = 3;
 const BYTE_UNIT_MULTIPLE_DIFF = 1000;
 
-export class ByteUnitConverter implements UnitConverter<ByteUnitType> {
-  private readonly byteUnitOrderList: Array<ByteUnitType> = ['bytes', 'kilobytes', 'megabytes'];
-  private readonly byteUnitNotationMap: Record<ByteUnitType, string> = {
+export class ByteUnitConverter {
+  private static readonly byteUnitOrderList: Array<ByteUnitType> = ['bytes', 'kilobytes', 'megabytes'];
+  private static readonly byteUnitNotationMap: Record<ByteUnitType, string> = {
     bytes: 'bytes',
     kilobytes: 'KB',
     megabytes: 'MB',
   };
 
-  public convert({ size, inputUnit, outputUnit }: Readonly<ConvertOpts<ByteUnitType>>): string {
+  public static convert({ size, inputUnit, outputUnit }: Readonly<ConvertOpts<ByteUnitType>>): string {
     if (size < 0) {
       throw new Error('Data size cannot be less than zero');
     }
@@ -30,12 +30,12 @@ export class ByteUnitConverter implements UnitConverter<ByteUnitType> {
     return this.toString(converted, outputUnit);
   }
 
-  private toString(size: number, outputUnit: ByteUnitType): string {
+  private static toString(size: number, outputUnit: ByteUnitType): string {
     const retSize = size < 1 ? size : Math.round(size);
     return `${retSize} ${this.byteUnitNotationMap[outputUnit]}`;
   }
 
-  private getConvertableUnit(size: number, inputUnitIdx: number): ByteUnitType {
+  private static getConvertableUnit(size: number, inputUnitIdx: number): ByteUnitType {
     const toBiggerUnit = size < 1 ? false : true;
 
     let idxGap = 0;

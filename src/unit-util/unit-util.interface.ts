@@ -3,7 +3,3 @@ export interface ConvertOpts<UNIT> {
   inputUnit: UNIT;
   outputUnit?: UNIT;
 }
-
-export interface UnitConverter<UNIT> {
-  convert({ size, inputUnit, outputUnit }: ConvertOpts<UNIT>): string;
-}
