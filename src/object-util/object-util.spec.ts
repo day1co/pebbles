@@ -54,6 +54,10 @@ describe('ObjectUtil', () => {
       expect(ObjectUtil.isEmpty(new Set([]))).toBe(true);
       expect(ObjectUtil.isEmpty(new Map())).toBe(true);
       expect(ObjectUtil.isEmpty(new Date('2021-10-10'))).toBe(true);
+      const obj = Object.create(null);
+      expect(ObjectUtil.isEmpty(obj)).toBe(true);
+      obj['id'] = 1;
+      expect(ObjectUtil.isEmpty(obj)).toBe(false);
     });
     it('should return false', () => {
       expect(ObjectUtil.isEmpty(['foo'])).toBe(false);

@@ -22,11 +22,13 @@ export namespace ObjectUtil {
   }
 
   export function isEmpty(value: unknown): boolean {
+    if (value === null) {
+      return true;
+    }
     if (value instanceof Set || value instanceof Map) {
       return !value.size;
     }
-
-    if (typeof value === 'string' || value instanceof Object) {
+    if (typeof value === 'string' || typeof value === 'object') {
       return !Object.keys(value).length;
     }
 
