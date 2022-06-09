@@ -29,7 +29,7 @@ export type {
 } from './date-util';
 export {
   BadRequestException,
-  ChangedCredentialException,
+  CredentialChangedException,
   ClientException,
   CustomException,
   DataException,
