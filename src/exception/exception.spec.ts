@@ -1,6 +1,6 @@
 import {
   BadRequestException,
-  ChangedCredentialException,
+  CredentialChangedException,
   ClientException,
   ForbiddenException,
   NotFoundException,
@@ -118,8 +118,8 @@ describe('UnauthorizedException', () => {
 });
 describe('CredentialChangedException', () => {
   test('should have default property', () => {
-    const e = new ChangedCredentialException();
-    expect(e).toBeInstanceOf(ChangedCredentialException);
+    const e = new CredentialChangedException();
+    expect(e).toBeInstanceOf(CredentialChangedException);
     expect(e).toBeInstanceOf(ClientException);
     expect(e).toBeInstanceOf(CustomException);
     expect(e).toBeInstanceOf(Error);
@@ -128,8 +128,8 @@ describe('CredentialChangedException', () => {
     expect(e.cause).toBeUndefined();
   });
   test('should have specified property', () => {
-    const e = new ChangedCredentialException('hello', error);
-    expect(e).toBeInstanceOf(ChangedCredentialException);
+    const e = new CredentialChangedException('hello', error);
+    expect(e).toBeInstanceOf(CredentialChangedException);
     expect(e).toBeInstanceOf(ClientException);
     expect(e).toBeInstanceOf(CustomException);
     expect(e).toBeInstanceOf(Error);

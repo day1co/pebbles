@@ -1,6 +1,6 @@
 export {
   BadRequestException,
-  ChangedCredentialException,
+  CredentialChangedException,
   ClientException,
   ForbiddenException,
   NotFoundException,
