@@ -18,6 +18,6 @@ export namespace NumberUtil {
   }
 
   export function isNumeric(numStr: string): boolean {
-    return !isNaN(Number(numStr)) && isFinite(Number(numStr));
+    return !!numStr && !isNaN(Number(numStr)) && isFinite(Number(numStr));
   }
 }
