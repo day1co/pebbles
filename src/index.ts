@@ -38,6 +38,7 @@ export {
   NotFoundException,
   ServerException,
   UnauthorizedException,
+  UnknownException,
 } from './exception';
 export { HttpClient, HttpState } from './http-client';
 export type { HttpReqConfig, HttpRes, HttpResponse } from './http-client';
