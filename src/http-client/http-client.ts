@@ -31,6 +31,11 @@ export class HttpClient {
     return axios.put<Type, HttpResponse<Type>>(fullUrl, data, config);
   }
 
+  sendPatchRequest<Type>(url: string, data: unknown, config?: Readonly<HttpReqConfig>): Promise<HttpResponse<Type>> {
+    const fullUrl = this.getFullUrl(url);
+    return axios.patch<Type, HttpResponse<Type>>(fullUrl, data, config);
+  }
+
   sendDeleteRequest<Type>(url: string, config?: Readonly<HttpReqConfig>): Promise<HttpResponse<Type>> {
     const fullUrl = this.getFullUrl(url);
     return axios.delete<Type, HttpResponse<Type>>(fullUrl, config);

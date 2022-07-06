@@ -33,6 +33,12 @@ describe('HttpClient', () => {
       expect(result).toBe('put');
     });
 
+    it('Http PATCH test', async () => {
+      axios.patch = jest.fn().mockResolvedValue('patch');
+      const result = await httpClient.sendPatchRequest('/', {});
+      expect(result).toBe('patch');
+    });
+
     it('Http DELETE test', async () => {
       axios.delete = jest.fn().mockResolvedValue('delete');
       const result = await httpClient.sendDeleteRequest('/', {});
