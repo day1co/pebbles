@@ -6,4 +6,5 @@ export interface Logger {
   info(msgTemplate: string, ...args: unknown[]): void;
   warn(msgTemplate: string, ...args: unknown[]): void;
   error(msgTemplate: string, ...args: unknown[]): void;
+  log(msgTemplate: string, ...args: unknown[]): void;
 }
