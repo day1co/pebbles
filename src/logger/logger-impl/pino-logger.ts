@@ -28,4 +28,20 @@ export class PinoLogger implements Logger {
   error(msgTemplate: string, ...args: unknown[]): void {
     this.logger.error(msgTemplate, ...args);
   }
+
+  log(msgTemplate: string, ...args: unknown[]): void {
+    switch (this.logger.level) {
+      case 'error':
+        this.logger.error(msgTemplate, args);
+        break;
+      case 'warn':
+        this.logger.warn(msgTemplate, args);
+        break;
+      case 'info':
+        this.logger.info(msgTemplate, args);
+        break;
+      default:
+        this.logger.debug(msgTemplate, args);
+    }
+  }
 }
