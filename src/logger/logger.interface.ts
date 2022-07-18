@@ -2,6 +2,7 @@ import type { LogLevel } from './logger.type';
 
 export interface Logger {
   set logLevel(level: LogLevel);
+  trace(msgTemplate: string, ...args: unknown[]): void;
   debug(msgTemplate: string, ...args: unknown[]): void;
   info(msgTemplate: string, ...args: unknown[]): void;
   warn(msgTemplate: string, ...args: unknown[]): void;
