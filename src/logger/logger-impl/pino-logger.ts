@@ -13,6 +13,10 @@ export class PinoLogger implements Logger {
     this.logger.level = level;
   }
 
+  trace(msgTemplate: string, ...args: unknown[]): void {
+    this.logger.trace(msgTemplate, ...args);
+  }
+
   debug(msgTemplate: string, ...args: unknown[]): void {
     this.logger.debug(msgTemplate, ...args);
   }
