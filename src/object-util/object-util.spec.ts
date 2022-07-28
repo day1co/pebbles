@@ -342,13 +342,4 @@ describe('ObjectUtil', () => {
       expect(pick(['foo', 2, { bar: 3 }], [0, 1, 2, 3])).toEqual({ 0: 'foo', 1: 2, 2: { bar: 3 } });
     });
   });
-
-  describe('makeLiteralTypeList', () => {
-    const { makeLiteralTypeList } = ObjectUtil;
-    it('should return array', () => {
-      expect(makeLiteralTypeList('foo', 'bar', 'baz', 'qux', 'quux')).toEqual(['foo', 'bar', 'baz', 'qux', 'quux']);
-      expect(makeLiteralTypeList(1, 3, 2, 4, 5)).toEqual([1, 3, 2, 4, 5]);
-      expect(makeLiteralTypeList('foo', 1, 'bar', 2, undefined)).toEqual(['foo', 1, 'bar', 2, undefined]);
-    });
-  });
 });

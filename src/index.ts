@@ -54,5 +54,7 @@ export { StringUtil, UTF8_BOM_STR } from './string-util';
 export type { Tag, TemplateOpts } from './string-util';
 export { TimeRange } from './time-range';
 export type { TimeSection } from './time-range';
+export { TypeUtil } from './type-util';
+export type { NarrowableType } from './type-util';
 export { byteUnitConverter } from './unit-util';
 export type { ByteUnitType, UnitConverter } from './unit-util';
