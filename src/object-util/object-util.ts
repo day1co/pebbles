@@ -1,4 +1,4 @@
-import { Narrowable, ObjectKeyType, ObjectType } from './object-util.type';
+import { ObjectKeyType, ObjectType } from './object-util.type';
 
 export namespace ObjectUtil {
   export function serialize(obj: Readonly<ObjectType>): string | null {
@@ -204,10 +204,6 @@ export namespace ObjectUtil {
     });
 
     return ret;
-  }
-
-  export function makeLiteralTypeList<T extends Narrowable[]>(...args: T): Readonly<T> {
-    return args;
   }
 }
 
