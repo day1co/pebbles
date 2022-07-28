@@ -1,6 +1,6 @@
 {
   "name": "@day1co/pebbles",
-  "version": "3.1.27",
+  "version": "3.1.28",
   "author": "Day1Company",
   "license": "MIT",
   "main": "./lib/index.js",
