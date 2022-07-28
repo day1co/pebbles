@@ -3,7 +3,7 @@ import { ObjectType } from './object-util.type';
 
 describe('ObjectUtil', () => {
   describe('serialize', () => {
-    const serialize = ObjectUtil.serialize;
+    const { serialize } = ObjectUtil;
     it('should return string', () => {
       const obj = { test: 123 };
       const result = serialize(obj);
@@ -17,7 +17,7 @@ describe('ObjectUtil', () => {
     });
   });
   describe('deserialize', () => {
-    const deserialize = ObjectUtil.deserialize;
+    const { deserialize } = ObjectUtil;
     it('should return object', () => {
       const str = '{ "test": 123 }';
       const result = deserialize(str);
@@ -30,7 +30,7 @@ describe('ObjectUtil', () => {
     });
   });
   describe('isNullish', () => {
-    const isNullish = ObjectUtil.isNullish;
+    const { isNullish } = ObjectUtil;
     it('should return true', () => {
       expect(isNullish(null)).toBe(true);
       expect(isNullish(undefined)).toBe(true);
@@ -45,7 +45,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('isEmpty', () => {
-    const isEmpty = ObjectUtil.isEmpty;
+    const { isEmpty } = ObjectUtil;
     const obj = Object.create(null);
     it('should return true', () => {
       expect(isEmpty(null)).toBe(true);
@@ -77,7 +77,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('deepClone', () => {
-    const deepClone = ObjectUtil.deepClone;
+    const { deepClone } = ObjectUtil;
     it('should return deep cloned object', () => {
       interface TestInterface {
         foo: Bar;
@@ -170,7 +170,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('merge', () => {
-    const merge = ObjectUtil.merge;
+    const { merge } = ObjectUtil;
     it('merge jsons and arrays', () => {
       const obj1 = { foo: [{ bar: 2 }, { qux: 4 }] };
       const obj2 = { foo: [{ baz: 3 }, { quux: 5 }] };
@@ -197,7 +197,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('omit', () => {
-    const omit = ObjectUtil.omit;
+    const { omit } = ObjectUtil;
 
     it('should return object with given keys deleted', () => {
       const testObj1 = { foo: 1, bar: 2, baz: 3 };
@@ -284,7 +284,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('getAllPropertyKeys', () => {
-    const getAllPropertyKeys = ObjectUtil.getAllPropertyKeys;
+    const { getAllPropertyKeys } = ObjectUtil;
     it('should return true', () => {
       const symbol = Symbol('bar');
       const obj: { [key: string | symbol]: unknown } = { foo: 1 };
@@ -295,7 +295,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('isEqual', () => {
-    const isEqual = ObjectUtil.isEqual;
+    const { isEqual } = ObjectUtil;
     it('should return true', () => {
       expect(isEqual({ foo: 1 }, { foo: 1 })).toBe(true);
       expect(isEqual({ foo: { bar: 'baz' } }, { foo: { bar: 'baz' } })).toBe(true);
@@ -330,7 +330,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('pick', () => {
-    const pick = ObjectUtil.pick;
+    const { pick } = ObjectUtil;
     it('should return picked object', () => {
       expect(pick({ foo: 1, bar: '2', baz: 3 }, ['foo', 'bar'])).toEqual({ foo: 1, bar: '2' });
       expect(pick({ foo: 1 }, ['bar'])).toEqual({});
@@ -344,7 +344,7 @@ describe('ObjectUtil', () => {
   });
 
   describe('makeLiteralTypeList', () => {
-    const makeLiteralTypeList = ObjectUtil.makeLiteralTypeList;
+    const { makeLiteralTypeList } = ObjectUtil;
     it('should return array', () => {
       expect(makeLiteralTypeList('foo', 'bar', 'baz', 'qux', 'quux')).toEqual(['foo', 'bar', 'baz', 'qux', 'quux']);
       expect(makeLiteralTypeList(1, 3, 2, 4, 5)).toEqual([1, 3, 2, 4, 5]);
