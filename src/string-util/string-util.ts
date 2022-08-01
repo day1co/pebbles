@@ -15,50 +15,84 @@ const KOREA_LOT_NUMBER_ADDRESS_REGEXP = /읍|면|동|가/;
 const KOREA_ADDRESS_SORT_REGEXP = new RegExp(
   `${KOREA_ROAD_NAME_ADDRESS_REGEXP.source}|${KOREA_LOT_NUMBER_ADDRESS_REGEXP.source}`
 );
-const EMOJI_REGEXP =
-  /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+
+//이모지 정규식 표현
+const EMOJI_REGEXP = /([\uD800-\uDBFF][\uDC00-\uDFFF])/;
+//ZERO WIDTH JOINER = 다중이모지에서 이모지 끼리 붙일 때 쓰이는 코드
+const EMOJI_ZERO_WIDTH_JOINER = '\u200D';
 
 export namespace StringUtil {
   export function maskPrivacy(text: string, type: PrivacyType): string {
-    const targetMask: Record<PrivacyType, MaskingRange> = {
-      name: {
-        start: EMOJI_REGEXP.test(text.slice(0, 2)) ? 2 : 1,
-        end: EMOJI_REGEXP.test(text.slice(text.length - 2)) ? text.length - 2 : text.length - 1,
-      },
-      phone: {
-        start: /\D/.test(text) ? getMaskingIndexOfUnnormalizedPhone(text).start : 3,
-        end: /\D/.test(text) ? getMaskingIndexOfUnnormalizedPhone(text).end : text.length - 4,
-      },
+    const maskingRule: Record<PrivacyType, MaskingRange> = {
+      name: { start: 1, end: text.length - 1 },
+      phone: { start: 3, end: text.length - 4 },
       email: { start: 2, end: text.indexOf('@') },
       bankAccount: { start: 3, end: text.length - 3 },
       address: { start: getMaskingStartIndexOfAddress(text), end: text.length },
     };
 
-    const start = targetMask[type].start;
-    const end = targetMask[type].end;
+    const start = maskingRule[type].start;
+    const end = maskingRule[type].end;
     const length = type === 'name' ? end - start || 1 : end - start;
     return getMaskedString({ text, length, maskingStart: start });
 
     function getMaskedString({ text, length, maskingStart }: MaskingOpts): string {
+      //emoji가 있는 name에 대해서 따로 처리 = 현재 이모지는 name에만 존재함.
+      if (EMOJI_REGEXP.test(text)) {
+        return getMaskedWithEmoji(text);
+      }
+
       const validLength = Math.max(0, length);
       const masking = '*'.repeat(validLength);
       const textSplit = [...text];
       textSplit.splice(maskingStart, validLength, masking);
+
       return textSplit.join('');
     }
 
-    function getMaskingIndexOfUnnormalizedPhone(phone: string): { start: number; end: number } {
-      const phoneNumberParts = phone.split(/\D/);
+    function getMaskedWithEmoji(text: string): string {
+      const charOfText = enumerateCharOfText(text);
 
-      let middleIndex = Math.floor(phoneNumberParts.length / 2);
+      let maskedName = '';
 
-      if (/\D/.test(phone[0]) && phoneNumberParts.length % 2) {
-        middleIndex++;
+      charOfText.forEach((char, index) => {
+        if (index !== 0 && (charOfText.length === 2 || index !== charOfText.length - 1)) {
+          maskedName += '*';
+        } else {
+          maskedName += char;
+        }
+      });
+
+      return maskedName;
+    }
+
+    function enumerateCharOfText(text: string): string[] {
+      //emoji 정규식으로 emoji와 emoji가 아닌 글자로 split
+      const splitNamesByEmoji = text.split(EMOJI_REGEXP);
+      const charList: string[] = [];
+      let emoji = '';
+
+      splitNamesByEmoji.forEach((splitName) => {
+        if (EMOJI_ZERO_WIDTH_JOINER !== splitName && !EMOJI_REGEXP.test(splitName)) {
+          //👩‍👩‍👧같은 다중 이모지는 ["👩‍👩‍👧"]로 인식하기 위해 배열에 한번에 push
+          if (emoji) {
+            charList.push(emoji);
+            emoji = '';
+          }
+          //emoji가 아닌 글자는 글자수대로 배열에 push
+          charList.push(...splitName);
+        } else {
+          //👩‍👩‍👧같은 다중 이모지는 ["👩","","👩","","👧"]로 인식해서 하나로 합치기 위함.
+          emoji += splitName;
+        }
+      });
+
+      if (emoji) {
+        charList.push(emoji);
       }
 
-      const start = phoneNumberParts.slice(0, middleIndex).join(' ').length;
-      const end = phoneNumberParts.slice(0, middleIndex + 1).join(' ').length + 1;
-      return { start, end };
+      //char[]로 각 index마다 한 글자씩 담은 배열
+      return charList;
     }
 
     function getMaskingStartIndexOfAddress(address: string): number {
