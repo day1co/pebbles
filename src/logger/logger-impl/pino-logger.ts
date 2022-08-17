@@ -13,24 +13,24 @@ export class PinoLogger implements Logger {
     this.logger.level = level;
   }
 
-  trace(msgTemplate?: string, ...args: unknown[]): void {
-    this.logger.trace(msgTemplate ?? '', ...args);
+  trace(msgTemplate = '', ...args: unknown[]): void {
+    this.logger.trace(msgTemplate, ...args);
   }
 
-  debug(msgTemplate?: string, ...args: unknown[]): void {
-    this.logger.debug(msgTemplate ?? '', ...args);
+  debug(msgTemplate = '', ...args: unknown[]): void {
+    this.logger.debug(msgTemplate, ...args);
   }
 
-  info(msgTemplate?: string, ...args: unknown[]): void {
-    this.logger.info(msgTemplate ?? '', ...args);
+  info(msgTemplate = '', ...args: unknown[]): void {
+    this.logger.info(msgTemplate, ...args);
   }
 
-  warn(msgTemplate?: string, ...args: unknown[]): void {
-    this.logger.warn(msgTemplate ?? '', ...args);
+  warn(msgTemplate = '', ...args: unknown[]): void {
+    this.logger.warn(msgTemplate, ...args);
   }
 
-  error(msgTemplate?: string, ...args: unknown[]): void {
-    this.logger.error(msgTemplate ?? '', ...args);
+  error(msgTemplate = '', ...args: unknown[]): void {
+    this.logger.error(msgTemplate, ...args);
   }
 
   log = this.debug;
