@@ -5,6 +5,7 @@ import {
   ForbiddenException,
   NotFoundException,
   UnauthorizedException,
+  TokenExpiredException,
 } from './client-exception';
 import { CustomException } from './custom-exception';
 import { DataException, InternalServerException, ServerException } from './server-exception';
@@ -220,6 +221,24 @@ describe('DataException', () => {
     expect(e).toBeInstanceOf(CustomException);
     expect(e).toBeInstanceOf(Error);
     expect(e.code).toBe(500);
+    expect(e.message).toBe('hello');
+    expect(e.cause).toBe(error);
+  });
+});
+describe('TokenExpiredException', () => {
+  test('should have default property', () => {
+    const e = new TokenExpiredException();
+    expect(e).toBeInstanceOf(TokenExpiredException);
+    expect(e).toBeInstanceOf(ClientException);
+    expect(e.code).toBe(401);
+    expect(e.message).toBe('TOKEN_EXPIRED');
+    expect(e.cause).toBeUndefined();
+  });
+  test('should have specified property', () => {
+    const e = new TokenExpiredException('hello', error);
+    expect(e).toBeInstanceOf(TokenExpiredException);
+    expect(e).toBeInstanceOf(ClientException);
+    expect(e.code).toBe(401);
     expect(e.message).toBe('hello');
     expect(e.cause).toBe(error);
   });
