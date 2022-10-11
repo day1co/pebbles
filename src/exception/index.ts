@@ -4,6 +4,7 @@ export {
   ClientException,
   ForbiddenException,
   NotFoundException,
+  TokenExpiredException,
   UnauthorizedException,
 } from './client-exception';
 export { CustomException } from './custom-exception';
