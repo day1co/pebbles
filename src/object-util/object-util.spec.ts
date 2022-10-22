@@ -196,6 +196,124 @@ describe('ObjectUtil', () => {
     });
   });
 
+  describe('naive merge', () => {
+    const { naiveMerge } = ObjectUtil;
+
+    it('merge plain object with empty target', () => {
+      const obj1 = {};
+      const obj2 = { foo: { id: 1 } };
+      const expected: ObjectType = { foo: { id: 1 } };
+
+      const mergedObj = naiveMerge(obj1, obj2);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge plain array object with empty target', () => {
+      const obj1 = {};
+      const obj2 = { foo: [{ id: 1 }] };
+      const expected: ObjectType = { foo: [{ id: 1 }] };
+
+      const mergedObj = naiveMerge(obj1, obj2);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge array object naively', () => {
+      const obj1 = { foo: [{ id: 1 }] };
+      const obj2 = { foo: [{ id: 2 }] };
+      const expected: ObjectType = { foo: [{ id: 1 }, { id: 2 }] };
+
+      const mergedObj = naiveMerge(obj1, obj2);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge nested array object naively', () => {
+      const obj1 = { foo: { bar: [{ id: 3 }] } };
+      const obj2 = { foo: { bar: [{ id: 4 }] } };
+      const expected = { foo: { bar: [{ id: 3 }, { id: 4 }] } };
+
+      const mergedObj = naiveMerge(obj1, obj2);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge multi nested array object naively', () => {
+      const obj1 = { foo: { bar: { qux: [{ id: 5 }] } } };
+      const obj2 = { foo: { bar: { qux: [{ id: 6 }] } } };
+      const expected = { foo: { bar: { qux: [{ id: 5 }, { id: 6 }] } } };
+
+      const mergedObj = naiveMerge(obj1, obj2);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge multi nested array object for non array property', () => {
+      const obj1 = { foo: { bar: { qux: { id: 5 } } } };
+      const obj2 = { foo: { bar: { qux: [{ id: 6 }] } } };
+      const expected = { foo: { bar: { qux: [{ id: 5 }, { id: 6 }] } } };
+
+      const mergedObj = naiveMerge(obj1, obj2);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge multi nested array object without drop anything', () => {
+      const obj1 = { foo: { bar: { qux: { id: 5 } } } };
+      const obj2 = { foo: { bar: { qux: { id: 6 } } } };
+      const expected = { foo: { bar: { qux: { id: [5, 6] } } } };
+
+      const mergedObj = naiveMerge(obj1, obj2);
+
+      expect(mergedObj).toEqual(expected);
+    });
+  });
+
+  describe('leaner merge', () => {
+    const { linearMerge } = ObjectUtil;
+
+    it('merge object linear with empty object', () => {
+      const arr1 = ['foo', 'bar', 'baz'];
+      const leaf = {};
+      const expected = { foo: { bar: { baz: {} } } };
+
+      const mergedObj = linearMerge(arr1, leaf);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge object linear with plain object ', () => {
+      const arr1 = ['foo', 'bar', 'baz'];
+      const leaf = { id: 1 };
+      const expected = { foo: { bar: { baz: leaf } } };
+
+      const mergedObj = linearMerge(arr1, { id: 1 });
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge object linear with array leaf', () => {
+      const arr1 = ['foo', 'bar', 'baz'];
+      const leaf = [1];
+      const expected = { foo: { bar: { baz: [1] } } };
+
+      const mergedObj = linearMerge(arr1, leaf);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge object linear with nested array object leaf', () => {
+      const arr1 = ['foo', 'bar', 'baz'];
+      const leaf = { id: [1] };
+      const expected = { foo: { bar: { baz: { id: [1] } } } };
+
+      const mergedObj = linearMerge(arr1, leaf);
+
+      expect(mergedObj).toEqual(expected);
+    });
+    it('merge object linear with nested primitive leaf', () => {
+      const arr1 = ['foo', 'bar', 'baz'];
+      const leaf = 'hello world';
+      const expected = { foo: { bar: { baz: 'hello world' } } };
+
+      const mergedObj = linearMerge(arr1, leaf);
+
+      expect(mergedObj).toEqual(expected);
+    });
+  });
+
   describe('omit', () => {
     const { omit } = ObjectUtil;
 

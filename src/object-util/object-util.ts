@@ -110,6 +110,43 @@ export namespace ObjectUtil {
     return mergedObj;
   }
 
+  // todo: 검증을 마치고 기존 merge 는 strictMerge 로 변경
+  export function naiveMerge(target: Readonly<ObjectType>, source: Readonly<ObjectType>): ObjectType {
+    const mergedObj = isEmpty(target) ? {} : deepClone<ObjectType>(target);
+
+    for (const [key, value] of Object.entries(source)) {
+      if (mergedObj[key]) {
+        if (Array.isArray(mergedObj[key])) {
+          if (Array.isArray(value)) {
+            mergedObj[key].push(...value);
+          } else {
+            mergedObj[key].push(value);
+          }
+        } else if (isObjectTypeExceptFunction(mergedObj[key])) {
+          if (Array.isArray(value)) {
+            mergedObj[key] = [mergedObj[key]].concat(value);
+          } else {
+            mergedObj[key] = naiveMerge(mergedObj[key], value);
+          }
+        } else {
+          mergedObj[key] = [mergedObj[key]].concat(value);
+        }
+      } else {
+        if (!Array.isArray(value) && isObjectTypeExceptFunction(value)) {
+          mergedObj[key] = naiveMerge(mergedObj[key], value);
+        } else {
+          mergedObj[key] = value;
+        }
+      }
+    }
+
+    return mergedObj;
+  }
+
+  export function linearMerge(arr: Readonly<string[]>, leaf: any): ObjectType {
+    return arr.reduceRight((acc, item) => ({ [item]: acc }), leaf);
+  }
+
   export function omit(obj: Readonly<ObjectType>, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
     function omitObject(obj: ObjectType, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
       const objKeys = getAllPropertyKeys(obj);
