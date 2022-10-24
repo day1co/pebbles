@@ -196,6 +196,33 @@ describe('ObjectUtil', () => {
     });
   });
 
+  describe('strict merge', () => {
+    const { strictMerge } = ObjectUtil;
+    it('merge jsons and arrays', () => {
+      const obj1 = { foo: [{ bar: 2 }, { qux: 4 }] };
+      const obj2 = { foo: [{ baz: 3 }, { quux: 5 }] };
+      type SymbolKeyObj = { [key: symbol]: number };
+      const obj3: SymbolKeyObj = {};
+      const symbol = Symbol('quuz');
+      obj3[symbol] = 6;
+      const result: ObjectType = {
+        foo: [
+          { bar: 2, baz: 3 },
+          { qux: 4, quux: 5 },
+        ],
+      };
+      result[symbol] = 6;
+      expect(strictMerge(obj1, obj2, obj3)).toEqual(result);
+    });
+    it('merge objects which contain function', () => {
+      const obj1 = { foo: 1 };
+      const obj2 = { foo: (val: string) => `test ${val}` };
+      const mergedObj = strictMerge(obj1, obj2);
+      expect(mergedObj.foo('bar')).toBe('test bar');
+      expect(strictMerge(obj2, obj1)).toEqual(obj1);
+    });
+  });
+
   describe('naive merge', () => {
     const { naiveMerge } = ObjectUtil;
 

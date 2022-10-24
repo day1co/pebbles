@@ -87,7 +87,14 @@ export namespace ObjectUtil {
     return clonedObj;
   }
 
+  /** @deprecated
+   * merge: fallback for strict merge
+   **/
   export function merge(obj: Readonly<ObjectType>, ...args: Readonly<ObjectType[]>): ObjectType {
+    return strictMerge(obj, ...args);
+  }
+
+  export function strictMerge(obj: Readonly<ObjectType>, ...args: Readonly<ObjectType[]>): ObjectType {
     const argKeysArray: ObjectKeyType[][] = [];
     const mergedObj = deepClone<ObjectType>(obj);
 
@@ -100,7 +107,7 @@ export namespace ObjectUtil {
     for (let ix = 0; ix < args.length; ix++) {
       argKeysArray[ix].forEach((key) => {
         if (isObjectTypeExceptFunction(mergedObj[key]) && isObjectTypeExceptFunction(args[ix][key])) {
-          mergedObj[key] = merge(mergedObj[key], args[ix][key]);
+          mergedObj[key] = strictMerge(mergedObj[key], args[ix][key]);
         } else {
           mergedObj[key] = args[ix][key];
         }
@@ -110,7 +117,6 @@ export namespace ObjectUtil {
     return mergedObj;
   }
 
-  // todo: 검증을 마치고 기존 merge 는 strictMerge 로 변경
   export function naiveMerge(target: Readonly<ObjectType>, source: Readonly<ObjectType>): ObjectType {
     const mergedObj = isEmpty(target) ? {} : deepClone<ObjectType>(target);
 
