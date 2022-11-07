@@ -54,6 +54,8 @@ describe('NumberUtil', () => {
       expect(NumberUtil.isNumeric('sdfsdfsdfa')).toEqual(false);
       expect(NumberUtil.isNumeric('\\http')).toEqual(false);
       expect(NumberUtil.isNumeric('1.2.3')).toEqual(false);
+      expect(NumberUtil.isNumeric('')).toEqual(false);
+      expect(NumberUtil.isNumeric('  ')).toEqual(false);
     });
   });
 });

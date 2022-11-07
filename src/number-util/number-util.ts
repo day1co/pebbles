@@ -18,6 +18,9 @@ export namespace NumberUtil {
   }
 
   export function isNumeric(numStr: string): boolean {
+    if (!numStr || numStr.trim() === '') {
+      return false;
+    }
     return !isNaN(Number(numStr)) && isFinite(Number(numStr));
   }
 }
