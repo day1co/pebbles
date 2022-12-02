@@ -114,8 +114,8 @@ describe('ObjectUtil', () => {
       expect(clonedClassObj).not.toBe(classObj);
       expect(clonedClassObj).toEqual(classObj);
 
-      const array = ['foo', { bar: 1 }];
-      const clonedArray = deepClone<(string | Bar)[]>(array);
+      const array = ['foo', { bar: 1 }, null];
+      const clonedArray = deepClone<(string | Bar | null)[]>(array);
       expect(clonedArray).not.toBe(array);
       expect(clonedArray).toEqual(array);
       expect(clonedArray[1]).not.toBe(array[1]);

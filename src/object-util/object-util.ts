@@ -45,7 +45,7 @@ export namespace ObjectUtil {
       const iterator = obj.entries();
 
       for (const item of iterator) {
-        const value = typeof item[1] === 'object' ? deepClone(item[1]) : item[1];
+        const value = item[1] && typeof item[1] === 'object' ? deepClone(item[1]) : item[1];
 
         if (result instanceof Map) {
           result.set(item[0], value);
