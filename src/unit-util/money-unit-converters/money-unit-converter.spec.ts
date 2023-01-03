@@ -2,6 +2,9 @@ import { moneyUnitConverter } from '.';
 
 describe('moneyUnitConverter', () => {
   it('exchange Currency for Fractional unit', () => {
+    expect(moneyUnitConverter.convert({ size: 123.45, inputUnit: 'currency', outputUnit: 'fractionalUnit' })).toEqual(
+      '12345'
+    );
     expect(moneyUnitConverter.convert({ size: 0.03, inputUnit: 'currency', outputUnit: 'fractionalUnit' })).toEqual(
       '3'
     );
@@ -13,18 +16,10 @@ describe('moneyUnitConverter', () => {
     expect(moneyUnitConverter.convert({ size: 0.0, inputUnit: 'currency', outputUnit: 'fractionalUnit' })).toEqual('0');
   });
 
-  // it('exchange Dollar for Cent Exception', () => {
-  //   expect(() => exchangeDollarForCent('hello')).toThrow();
-  //   expect(() => exchangeDollarForCent('hello')).toThrowError(`amount:hello, must provide a number.`);
-  //   expect(() => exchangeDollarForCent(null)).toThrow();
-  //   expect(() => exchangeDollarForCent(null)).toThrowError(`amount:null, must provide a number.`);
-  //   expect(() => exchangeDollarForCent(undefined)).toThrow();
-  //   expect(() => exchangeDollarForCent(undefined)).toThrowError(`amount:undefined, must provide a number.`);
-  //   expect(() => exchangeDollarForCent('')).toThrow();
-  //   expect(() => exchangeDollarForCent('')).toThrowError(`amount:, must provide a number.`);
-  // });
-
   it('exchange Fractional unit For Currency', () => {
+    expect(moneyUnitConverter.convert({ size: 12345, inputUnit: 'fractionalUnit', outputUnit: 'currency' })).toEqual(
+      '123.45'
+    );
     expect(moneyUnitConverter.convert({ size: 3, inputUnit: 'fractionalUnit', outputUnit: 'currency' })).toEqual(
       '0.03'
     );
