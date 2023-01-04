@@ -1,3 +1,4 @@
+import { ObjectUtil } from '../../object-util';
 import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
 import type { ByteUnitType } from './byte-unit-converter.type';
 
@@ -13,12 +14,12 @@ class ByteUnitConverter implements UnitConverter<ByteUnitType> {
   };
 
   public convert({ size, value, inputUnit, outputUnit }: Readonly<ConvertOpts<ByteUnitType>>): string {
-    if (size && !value) {
+    if (size && ObjectUtil.isNullish(value)) {
       value = size;
     }
 
-    if (value === undefined || value < 0) {
-      throw new Error('Data value cannot be less than zero');
+    if (ObjectUtil.isNullish(value) || value < 0) {
+      throw new Error('Value must be equal or greater than zero');
     }
 
     const inputUnitIdx = this.byteUnitOrderList.indexOf(inputUnit);
