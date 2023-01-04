@@ -1,7 +1,4 @@
 export interface ConvertOpts<UNIT> {
-  /**
-   * @deprecated
-   */
   size?: number;
   value?: number;
   inputUnit: UNIT;

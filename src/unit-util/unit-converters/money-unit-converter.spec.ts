@@ -72,6 +72,6 @@ describe('moneyUnitConverter', () => {
   it('moneyUnitConverter makes exception', () => {
     expect(() =>
       moneyUnitConverter.convert({ value: -1, inputUnit: 'currency', outputUnit: 'fractionalUnit' })
-    ).toThrow('Value cannot be less than zero');
+    ).toThrow('Value must be equal or greater than zero');
   });
 });

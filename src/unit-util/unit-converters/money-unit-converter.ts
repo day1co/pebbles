@@ -1,3 +1,4 @@
+import { ObjectUtil } from '../../object-util';
 import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
 import type { MoneyUnitType } from './money-unit-converter.type';
 
@@ -9,8 +10,8 @@ class MoneyUnitConverter implements UnitConverter<MoneyUnitType> {
   private fractionRatio = 100;
 
   public convert({ value, inputUnit, outputUnit }: Readonly<ConvertOpts<MoneyUnitType>>): string {
-    if (value === undefined || value < 0) {
-      throw new Error('Value cannot be less than zero');
+    if (ObjectUtil.isNullish(value) || value < 0) {
+      throw new Error('Value must be equal or greater than zero');
     }
 
     if (inputUnit === outputUnit) {
