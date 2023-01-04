@@ -1,4 +1,4 @@
-import { ByteUnitConverter } from './byte-unit-converter';
-
+export { byteUnitConverter } from './byte-unit-converter';
 export type { ByteUnitType } from './byte-unit-converter.type';
-export const byteUnitConverter = new ByteUnitConverter();
+export { moneyUnitConverter } from './money-unit-converter';
+export type { MoneyUnitType } from './money-unit-converter.type';

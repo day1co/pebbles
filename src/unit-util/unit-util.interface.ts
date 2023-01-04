@@ -1,9 +1,13 @@
 export interface ConvertOpts<UNIT> {
-  size: number;
+  /**
+   * @deprecated
+   */
+  size?: number;
+  value?: number;
   inputUnit: UNIT;
   outputUnit?: UNIT;
 }
 
 export interface UnitConverter<UNIT> {
-  convert({ size, inputUnit, outputUnit }: ConvertOpts<UNIT>): string;
+  convert({ value, inputUnit, outputUnit }: ConvertOpts<UNIT>): string;
 }

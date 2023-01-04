@@ -1,7 +1,6 @@
-import { ByteUnitConverter } from './byte-unit-converter';
+import { byteUnitConverter } from './byte-unit-converter';
 
 describe('byteUnitConverter', () => {
-  const byteUnitConverter = new ByteUnitConverter();
   const DataSizeUnitMap = {
     bytes: 'bytes',
     kilobytes: 'KB',
