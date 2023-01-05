@@ -37,6 +37,7 @@ export {
   InternalServerException,
   NotFoundException,
   ServerException,
+  TokenExpiredException,
   UnauthorizedException,
   UnknownException,
 } from './exception';
