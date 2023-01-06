@@ -1,4 +1,3 @@
-import { ObjectUtil } from '../../object-util';
 import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
 import type { MoneyUnitType } from './money-unit-converter.type';
 
@@ -10,9 +9,12 @@ class MoneyUnitConverter implements UnitConverter<MoneyUnitType> {
   private fractionRatio = 100;
 
   public convert({ value, inputUnit, outputUnit }: Readonly<ConvertOpts<MoneyUnitType>>): string {
-    if (ObjectUtil.isNullish(value) || value < 0) {
-      throw new Error('Value must be equal or greater than zero');
-    }
+    // money는 환불 data가 음수이므로 음수 체크는 제거
+    // if (value < 0) {
+    //   throw new Error('Value must be equal or greater than zero');
+    // }
+    const sign = value >= 0 ? '' : '-';
+    value = Math.abs(value);
 
     if (inputUnit === outputUnit) {
       return value.toString();
@@ -44,7 +46,7 @@ class MoneyUnitConverter implements UnitConverter<MoneyUnitType> {
       result = currency + '.' + fractionalUnit.toString().padStart(2, '0');
     }
 
-    return result;
+    return sign + result;
   }
 }
 

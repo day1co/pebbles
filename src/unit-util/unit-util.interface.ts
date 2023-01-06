@@ -1,6 +1,5 @@
 export interface ConvertOpts<UNIT> {
-  size?: number;
-  value?: number;
+  value: number;
   inputUnit: UNIT;
   outputUnit?: UNIT;
 }
