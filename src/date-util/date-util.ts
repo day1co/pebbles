@@ -460,3 +460,23 @@ function diffMonth(since: Date, until: Date): number {
 
   return diff;
 }
+
+export function hmsToSeconds(str: string) {
+  const hmsArray = str.split(':');
+
+  hmsArray.forEach((timeUnit) => {
+    if (isNaN(+timeUnit)) throw Error(`hmsToSeconds(): invalid timeUnit : ${timeUnit}`);
+  });
+
+  if (!hmsArray.length) return 0;
+
+  let seconds = 0;
+  let multiple = 1;
+
+  while (hmsArray.length > 0) {
+    seconds += multiple * parseInt(hmsArray.pop() as string, 10);
+    multiple *= 60;
+  }
+
+  return seconds;
+}
