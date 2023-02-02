@@ -150,6 +150,7 @@ export namespace StringUtil {
     return KOREA_PHONE_NUMBER_REGEXP.test(str);
   }
 
+  /** @deprecated */
   export function normalizeKoreaPhoneNumber(str: string, fallback?: unknown): string {
     const trimmedStr = str.trim();
 
@@ -164,19 +165,16 @@ export namespace StringUtil {
     return trimmedStr.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
   }
 
-  /** @deprecated */
-  export function normalizePhoneNumber(str: string): string {
-    if (isValidPhoneNumber(str)) {
-      return str;
-    }
+  export function normalizePhoneNumber(str: string, fallback?: unknown): string {
+    const trimmedStr = str.trim();
 
-    const NATIONAL_PHONE_NUMBER_REGEXP = /^0?820?[1,7]\d{9}$/;
-    const trimmedPhoneNumber = str.split(/\D/).join('');
-
-    if (NATIONAL_PHONE_NUMBER_REGEXP.test(trimmedPhoneNumber)) {
-      return '0' + trimmedPhoneNumber.slice(-10);
+    if (isValidKoreaPhoneNumber(trimmedStr)) {
+      return trimmedStr.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
     }
-    return trimmedPhoneNumber;
+    if (fallback) {
+      return typeof fallback === 'function' ? fallback() : fallback;
+    }
+    return trimmedStr ? trimmedStr.replaceAll('-', '') : '';
   }
 
   /** @deprecated */
