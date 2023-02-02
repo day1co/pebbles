@@ -461,8 +461,9 @@ function diffMonth(since: Date, until: Date): number {
   return diff;
 }
 
-export function hmsToSeconds(str: string) {
-  const hmsArray = str.split(':');
+export function hmsToSeconds(hms: string) {
+  const hmsArray = hms.split(':');
+  if (hmsArray.length > 3) throw Error(`hmsToSeconds(): invalid hms format : ${hms}`);
 
   hmsArray.forEach((timeUnit) => {
     if (isNaN(+timeUnit)) throw Error(`hmsToSeconds(): invalid timeUnit : ${timeUnit}`);
