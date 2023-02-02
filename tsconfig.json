@@ -13,7 +13,7 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "target": "es2017",
+    "target": "es2021",
     "skipLibCheck": true
   },
   "include": ["./src"],
