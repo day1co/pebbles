@@ -43,7 +43,7 @@ export namespace DateUtil {
       throw new Error(`Invalid Arguments: str and fmt are not matched. str: ${str}, fmt: ${fmt}`);
     }
 
-    const patterns = [/YYYY/, /M?M/, /D?D/, /H?H/, /m?m/, /s?s/, /S?S?S/];
+    const patterns = [/YY?Y?Y/, /M?M/, /D?D/, /H?H/, /m?m/, /s?s/, /S?S?S/];
     const retDate = new Date(0, 0, 1);
     for (const pattern of patterns) {
       // 각 패턴별로 한번만 파싱 하면 됨
@@ -54,8 +54,12 @@ export namespace DateUtil {
       const end = from + match[0].length;
       const value = from >= str.length || from === end ? 0 : parseInt(str.substring(from, end));
       switch (pattern.toString()) {
-        case '/YYYY/':
-          retDate.setFullYear(value);
+        case '/YY?Y?Y/':
+          let year = value;
+          if (year < 2000) {
+            year += 2000;
+          }
+          retDate.setFullYear(year);
           break;
         case '/M?M/':
           if (value > 12) throw new Error('Invalid month value');

@@ -69,6 +69,8 @@ describe('DateUtil', () => {
       expect(parseByFormat(testData, 'YYYYMMDDHHmmss')).toEqual(new Date(testDatetimeStr3));
       expect(parseByFormat('02202223012345', 'MMYYYYDDHHmmss')).toEqual(new Date(testDatetimeStr3));
       expect(parseByFormat('23/02/2022 01:23:45', 'DD/MM/YYYY HH:mm:ss')).toEqual(new Date(testDatetimeStr3));
+      expect(parseByFormat('23/02/22 01:23:45', 'DD/MM/YY HH:mm:ss')).toEqual(new Date(testDatetimeStr3));
+      expect(parseByFormat('022223012345', 'MMYYDDHHmmss')).toEqual(new Date(testDatetimeStr3));
     });
   });
 
