@@ -414,4 +414,26 @@ describe('DateUtil', () => {
       expect(formatSecondsInTimeFormat(100000)).toEqual('27:46:40'); // 100,000초 => 27시간 46분 40초
     });
   });
+
+  describe('hmsToSeconds', () => {
+    const hmsToSeconds = DateUtil.hmsToSeconds;
+    it('시간을 초로 바꾸어 리턴한다.', () => {
+      expect(hmsToSeconds('09:10:30')).toEqual(33030);
+      expect(hmsToSeconds('09:40:00')).toEqual(34800);
+      expect(hmsToSeconds('12:40:00')).toEqual(45600);
+      expect(hmsToSeconds('109:40:00')).toEqual(394800);
+      expect(hmsToSeconds('10:30')).toEqual(37800);
+      expect(hmsToSeconds('12:4')).toEqual(43440);
+      expect(hmsToSeconds('40:20')).toEqual(145200);
+      expect(hmsToSeconds('9')).toEqual(32400);
+    });
+
+    it('숫자가 아닌값이 들어가면 에러가 발생한다.', () => {
+      expect(() => hmsToSeconds('09:10:3ㅁ')).toThrow();
+    });
+
+    it('숫자 네가지 이상 넣으면 에러가 발생한다.', () => {
+      expect(() => hmsToSeconds('09:10:31:12')).toThrow();
+    });
+  });
 });
