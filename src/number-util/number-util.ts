@@ -22,8 +22,8 @@ export namespace NumberUtil {
     return !isNaN(num) && isFinite(num) && num === parseFloat(numStr);
   }
 
-  export function formatNumberAsCurrency(num: number | string, unit = ''): string {
-    if (Number.isFinite(num) && !isNaN(+num)) {
+  export function formatNumberAsCurrency(num: number, unit = ''): string {
+    if (Number.isFinite(num)) {
       return `${unit} ${Number(num).toLocaleString()}`.trim();
     }
     return String(num);
