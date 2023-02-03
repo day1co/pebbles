@@ -406,6 +406,23 @@ export namespace DateUtil {
       });
     return format12HourInLocale(formatResult, opts.locale);
   }
+
+  export function hmsToSeconds(hms: string): number {
+    const hmsArray = hms.split(':');
+    if (hmsArray.length > 3) throw Error(`hmsToSeconds(): invalid hms format : ${hms}`);
+
+    hmsArray.forEach((timeUnit) => {
+      if (isNaN(+timeUnit)) throw Error(`hmsToSeconds(): invalid timeUnit : ${timeUnit}`);
+    });
+
+    if (!hmsArray.length) return 0;
+
+    const hour = hmsArray[0] ? +hmsArray[0] * 3600 : 0;
+    const min = hmsArray[1] ? +hmsArray[1] * 60 : 0;
+    const second = hmsArray[2] ? +hmsArray[2] : 0;
+
+    return hour + min + second;
+  }
 }
 
 function subtractOneDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
@@ -459,25 +476,4 @@ function diffMonth(since: Date, until: Date): number {
   }
 
   return diff;
-}
-
-export function hmsToSeconds(hms: string) {
-  const hmsArray = hms.split(':');
-  if (hmsArray.length > 3) throw Error(`hmsToSeconds(): invalid hms format : ${hms}`);
-
-  hmsArray.forEach((timeUnit) => {
-    if (isNaN(+timeUnit)) throw Error(`hmsToSeconds(): invalid timeUnit : ${timeUnit}`);
-  });
-
-  if (!hmsArray.length) return 0;
-
-  let seconds = 0;
-  let multiple = 1;
-
-  while (hmsArray.length > 0) {
-    seconds += multiple * parseInt(hmsArray.pop() as string, 10);
-    multiple *= 60;
-  }
-
-  return seconds;
 }
