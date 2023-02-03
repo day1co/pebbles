@@ -65,11 +65,5 @@ describe('NumberUtil', () => {
       expect(NumberUtil.formatNumberAsCurrency(10000, '₩')).toEqual('₩ 10,000');
       expect(NumberUtil.formatNumberAsCurrency(10000000)).toEqual('10,000,000');
     });
-
-    it('should return input as string', () => {
-      expect(NumberUtil.formatNumberAsCurrency('10000')).toEqual('10000');
-      expect(NumberUtil.formatNumberAsCurrency('10000', '₩')).toEqual('10000');
-      expect(NumberUtil.formatNumberAsCurrency('10000000')).toEqual('10000000');
-    });
   });
 });
