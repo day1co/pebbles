@@ -415,25 +415,31 @@ describe('DateUtil', () => {
     });
   });
 
-  describe('hmsToSeconds', () => {
-    const hmsToSeconds = DateUtil.hmsToSeconds;
+  describe('durationTo', () => {
+    const durationTo = DateUtil.durationTo;
     it('시간을 초로 바꾸어 리턴한다.', () => {
-      expect(hmsToSeconds('09:10:30')).toEqual(33030);
-      expect(hmsToSeconds('09:40:00')).toEqual(34800);
-      expect(hmsToSeconds('12:40:00')).toEqual(45600);
-      expect(hmsToSeconds('109:40:00')).toEqual(394800);
-      expect(hmsToSeconds('10:30')).toEqual(37800);
-      expect(hmsToSeconds('12:4')).toEqual(43440);
-      expect(hmsToSeconds('40:20')).toEqual(145200);
-      expect(hmsToSeconds('9')).toEqual(32400);
+      expect(durationTo('09:10:30')).toEqual(33030);
+      expect(durationTo('09:40:00')).toEqual(34800);
+      expect(durationTo('12:40:00')).toEqual(45600);
+      expect(durationTo('109:40:00')).toEqual(394800);
+      expect(durationTo('10:30')).toEqual(37800);
+      expect(durationTo('12:4')).toEqual(43440);
+      expect(durationTo('40:20')).toEqual(145200);
+      expect(durationTo('9')).toEqual(32400);
     });
 
     it('숫자가 아닌값이 들어가면 에러가 발생한다.', () => {
-      expect(() => hmsToSeconds('09:10:3ㅁ')).toThrow();
+      expect(() => durationTo('09:10:3ㅁ')).toThrow();
     });
-
     it('숫자 네가지 이상 넣으면 에러가 발생한다.', () => {
-      expect(() => hmsToSeconds('09:10:31:12')).toThrow();
+      expect(() => durationTo('09:10:31:12')).toThrow();
+    });
+    it('시간양식이 아니면 에러가 발생한다.', () => {
+      expect(() => durationTo('-09:10:31')).toThrow();
+      expect(() => durationTo('09:-10:31')).toThrow();
+      expect(() => durationTo('09:10:-31')).toThrow();
+      expect(() => durationTo('09:10:60')).toThrow();
+      expect(() => durationTo('09:60:50')).toThrow();
     });
   });
 });
