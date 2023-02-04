@@ -14,8 +14,10 @@ import {
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
 import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts, DateUnitType } from './date-util.type';
 import { DatePropertyType, DateType, TimeZoneType } from './date-util-base.type';
+import { LoggerFactory } from '../logger';
 
 const timeZoneMap: Record<TimeZoneType, number> = { 'Asia/Seoul': 540, 'Asia/Tokyo': 540, PST: -480, UTC: 0 };
+const logger = LoggerFactory.getLogger('pebbles:date-util');
 
 export namespace DateUtil {
   export function isValidDate(d: Date): boolean {
@@ -412,13 +414,25 @@ export namespace DateUtil {
       throw new Error('Not supported yet');
     }
     const durationArray = duration.split(':');
-    if (durationArray.length > 3) throw Error(`durationTo(): invalid duration format : ${duration}`);
-
-    durationArray.forEach((timeUnit, i) => {
-      if (isNaN(+timeUnit) || +timeUnit < 0) throw Error(`durationTo(): invalid timeUnit : ${timeUnit}`);
-      if (i === 1 && +timeUnit > 59) throw Error(`durationTo(): minute is not valid${timeUnit}`);
-      if (i === 2 && +timeUnit > 59) throw Error(`durationTo(): minute is not valid${timeUnit}`);
-    });
+    if (durationArray.length > 3) {
+      logger.warn(`durationTo(): invalid duration format : ${duration}`);
+      return 0;
+    }
+    for (let i = 0; i < durationArray.length; i++) {
+      const timeUnit = durationArray[i];
+      if (isNaN(+timeUnit) || +timeUnit < 0) {
+        logger.warn(`durationTo(): invalid timeUnit : ${timeUnit}`);
+        return 0;
+      }
+      if (i === 1 && +timeUnit > 59) {
+        logger.warn(`durationTo(): minute is not valid${timeUnit}`);
+        return 0;
+      }
+      if (i === 2 && +timeUnit > 59) {
+        logger.warn(`durationTo(): minute is not valid${timeUnit}`);
+        return 0;
+      }
+    }
 
     if (!durationArray.length) return 0;
 
