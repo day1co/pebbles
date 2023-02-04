@@ -421,15 +421,15 @@ export namespace DateUtil {
     for (let i = 0; i < durationArray.length; i++) {
       const timeUnit = durationArray[i];
       if (isNaN(+timeUnit) || +timeUnit < 0) {
-        logger.warn(`durationTo(): invalid timeUnit : ${timeUnit}`);
+        logger.warn(`durationTo(): invalid timeUnit : ${duration}`);
         return 0;
       }
       if (i === 1 && +timeUnit > 59) {
-        logger.warn(`durationTo(): minute is not valid${timeUnit}`);
+        logger.warn(`durationTo(): minute is not valid : ${duration}`);
         return 0;
       }
       if (i === 2 && +timeUnit > 59) {
-        logger.warn(`durationTo(): minute is not valid${timeUnit}`);
+        logger.warn(`durationTo(): minute is not valid : ${duration}`);
         return 0;
       }
     }

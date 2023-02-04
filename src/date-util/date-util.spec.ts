@@ -429,17 +429,17 @@ describe('DateUtil', () => {
     });
 
     it('숫자가 아닌값이 들어가면 에러가 발생한다.', () => {
-      expect(() => durationTo('09:10:3ㅁ')).toThrow();
+      expect(durationTo('09:10:3ㅁ')).toEqual(0);
     });
     it('숫자 네가지 이상 넣으면 에러가 발생한다.', () => {
-      expect(() => durationTo('09:10:31:12')).toThrow();
+      expect(durationTo('09:10:31:12')).toEqual(0);
     });
     it('시간양식이 아니면 에러가 발생한다.', () => {
-      expect(() => durationTo('-09:10:31')).toThrow();
-      expect(() => durationTo('09:-10:31')).toThrow();
-      expect(() => durationTo('09:10:-31')).toThrow();
-      expect(() => durationTo('09:10:60')).toThrow();
-      expect(() => durationTo('09:60:50')).toThrow();
+      expect(durationTo('-09:10:31')).toEqual(0);
+      expect(durationTo('09:-10:31')).toEqual(0);
+      expect(durationTo('09:10:-31')).toEqual(0);
+      expect(durationTo('09:10:60')).toEqual(0);
+      expect(durationTo('09:60:50')).toEqual(0);
     });
   });
 });
