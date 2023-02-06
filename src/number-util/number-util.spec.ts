@@ -58,12 +58,4 @@ describe('NumberUtil', () => {
       expect(NumberUtil.isNumeric('  ')).toEqual(false);
     });
   });
-
-  describe('formatNumberAsCurrency', () => {
-    it('should return string starting unit if exist and having comma every three digit', () => {
-      expect(NumberUtil.formatNumberAsCurrency(10000)).toEqual('10,000');
-      expect(NumberUtil.formatNumberAsCurrency(10000, '₩')).toEqual('₩ 10,000');
-      expect(NumberUtil.formatNumberAsCurrency(10000000)).toEqual('10,000,000');
-    });
-  });
 });

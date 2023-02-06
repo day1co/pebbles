@@ -21,11 +21,4 @@ export namespace NumberUtil {
     const num = Number(numStr);
     return !isNaN(num) && isFinite(num) && num === parseFloat(numStr);
   }
-
-  export function formatNumberAsCurrency(num: number, unit = ''): string {
-    if (Number.isFinite(num)) {
-      return `${unit} ${Number(num).toLocaleString()}`.trim();
-    }
-    return String(num);
-  }
 }
