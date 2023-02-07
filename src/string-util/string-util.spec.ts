@@ -258,7 +258,7 @@ describe('StringUtil', () => {
   });
 
   describe('normalizeKoreaPhoneNumber', () => {
-    const normalizeKoreaPhoneNumber = StringUtil.normalizeKoreaPhoneNumber;
+    const normalizeKoreaPhoneNumber = StringUtil.normalizePhoneNumber;
     const mobileNumber = '01012345678';
     const localNumber = '0212345678';
     const personalNumber = '050512345678';
@@ -272,36 +272,40 @@ describe('StringUtil', () => {
       expect(normalizeKoreaPhoneNumber('0505-1234-5678')).toBe(personalNumber);
       expect(normalizeKoreaPhoneNumber('07012345678')).toBe(voipNumber);
       expect(normalizeKoreaPhoneNumber('070-1234-5678')).toBe(voipNumber);
+      expect(normalizeKoreaPhoneNumber('031 1234 5678')).toBe('03112345678');
     });
     it('should normalize phone number starting with (+)82 or (+)082', () => {
       expect(normalizeKoreaPhoneNumber('+821012345678')).toBe(mobileNumber);
       expect(normalizeKoreaPhoneNumber('+82-10-1234-5678')).toBe(mobileNumber);
+      expect(normalizeKoreaPhoneNumber('+082-10-1234-5678')).toBe(mobileNumber);
       expect(normalizeKoreaPhoneNumber('821012345678')).toBe(mobileNumber);
       expect(normalizeKoreaPhoneNumber('82-10-1234-5678')).toBe(mobileNumber);
       expect(normalizeKoreaPhoneNumber('+82212345678')).toBe(localNumber);
       expect(normalizeKoreaPhoneNumber('+82-2-1234-5678')).toBe(localNumber);
+      expect(normalizeKoreaPhoneNumber('+082-2-1234-5678')).toBe(localNumber);
       expect(normalizeKoreaPhoneNumber('82212345678')).toBe(localNumber);
       expect(normalizeKoreaPhoneNumber('82-2-1234-5678')).toBe(localNumber);
       expect(normalizeKoreaPhoneNumber('+82-50512345678')).toBe(personalNumber);
       expect(normalizeKoreaPhoneNumber('+82-505-1234-5678')).toBe(personalNumber);
+      expect(normalizeKoreaPhoneNumber('+082-505-1234-5678')).toBe(personalNumber);
       expect(normalizeKoreaPhoneNumber('82-50512345678')).toBe(personalNumber);
       expect(normalizeKoreaPhoneNumber('82-505-1234-5678')).toBe(personalNumber);
       expect(normalizeKoreaPhoneNumber('+827012345678')).toBe(voipNumber);
       expect(normalizeKoreaPhoneNumber('+82-70-1234-5678')).toBe(voipNumber);
+      expect(normalizeKoreaPhoneNumber('+082-70-1234-5678')).toBe(voipNumber);
       expect(normalizeKoreaPhoneNumber('827012345678')).toBe(voipNumber);
       expect(normalizeKoreaPhoneNumber('82-70-1234-5678')).toBe(voipNumber);
     });
     it('should throw for the not-valid-in-Korea phone number and no fallback', () => {
-      expect(() => normalizeKoreaPhoneNumber('01012345678a')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('1012345678')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('010123456789')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('02.1234.5678')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('031 1234 5678')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('041-12-3456')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('051-1234-567')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('+82-090-1234-5678')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('+82-010-1234-5678')).toThrow();
-      expect(() => normalizeKoreaPhoneNumber('+1-10-1234-5678')).toThrow();
+      expect(normalizeKoreaPhoneNumber('01012345678a')).toBe('01012345678a');
+      expect(normalizeKoreaPhoneNumber('1012345678')).toBe('1012345678');
+      expect(normalizeKoreaPhoneNumber('010123456789')).toBe('010123456789');
+      expect(normalizeKoreaPhoneNumber('02.1234.5678')).toBe('02.1234.5678');
+      expect(normalizeKoreaPhoneNumber('041-12-3456')).toBe('041123456');
+      expect(normalizeKoreaPhoneNumber('051-1234-567')).toBe('0511234567');
+      expect(normalizeKoreaPhoneNumber('+82-090-1234-5678')).toBe('+8209012345678');
+      expect(normalizeKoreaPhoneNumber('+82-010-1234-5678')).toBe('+8201012345678');
+      expect(normalizeKoreaPhoneNumber('+1-10-1234-5678')).toBe('+11012345678');
     });
     it('should return fallback for the not-valid-in-Korea phone number', () => {
       expect(normalizeKoreaPhoneNumber('01012345678a', 'fallback')).toBe('fallback');
