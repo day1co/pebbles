@@ -2,7 +2,7 @@ import Mustache from 'mustache';
 import type { MaskingOpts, Tag, TemplateOpts, MaskingRange } from './string-util.interface';
 import type { PrivacyType } from './string-util.type';
 
-const KOREA_COUNTRY_NUMBER_REGEXP = /^(\+?82-?|0)/;
+const KOREA_COUNTRY_NUMBER_REGEXP = /^(\+?0?82-?|0)/;
 const KOREA_MOBILE_PREFIXES_REGEXP = /10|11|12|15|16|17|18|19/;
 const KOREA_AREA_CODES_REGEXP = /2|31|32|33|41|42|43|44|51|52|53|54|55|61|62|63|64/;
 const KOREA_SERVICE_PREFIXES_REGEXP = /50\d?|70/;
@@ -166,14 +166,16 @@ export namespace StringUtil {
   }
 
   export function normalizePhoneNumber(str: string, fallback?: unknown): string {
-    const trimmedStr = str.trim();
+    const trimmedStr = str.trim().replaceAll(' ', '');
 
     if (isValidKoreaPhoneNumber(trimmedStr)) {
       return trimmedStr.replace(KOREA_COUNTRY_NUMBER_REGEXP, '0').replace(/-/g, '');
     }
+
     if (fallback) {
       return typeof fallback === 'function' ? fallback() : fallback;
     }
+
     return trimmedStr ? trimmedStr.replaceAll('-', '') : '';
   }
 
