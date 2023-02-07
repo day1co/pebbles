@@ -173,7 +173,7 @@ export namespace StringUtil {
     }
 
     if (fallback) {
-      return typeof fallback === 'function' ? fallback() : fallback;
+      return typeof fallback === 'function' ? fallback(str) : fallback;
     }
 
     return trimmedStr ? trimmedStr.replaceAll('-', '') : '';
