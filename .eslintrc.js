@@ -1,6 +1,6 @@
 module.exports = {
   env: { jest: true },
-  extends: ['plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended'],
+  extends: '@day1co/eslint-config/common-ts',
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: '2021', sourceType: 'module' },
   plugins: ['import', '@typescript-eslint'],
