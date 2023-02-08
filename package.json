@@ -30,6 +30,9 @@
     "pino": "^8.4.1"
   },
   "devDependencies": {
+    "@day1co/eslint-config": "^1.0.0",
+    "@day1co/prettier-config": "^1.0.0",
+    "@day1co/tsconfig": "^1.2.1",
     "@types/jest": "^27.0.1",
     "@types/mustache": "^4.1.2",
     "@types/pino": "^6.3.11",

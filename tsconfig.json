@@ -1,21 +1,9 @@
 {
   "compilerOptions": {
-    "allowUnreachableCode": false,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "strict": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "types": ["jest"],
-    "declaration": true,
-    "newLine": "lf",
     "outDir": "./lib",
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "target": "es2021",
     "skipLibCheck": true
   },
+  "extends": "@day1co/tsconfig/backend-mixed.json",
   "include": ["./src"],
   "exclude": ["./lib", "./node_modules"]
 }
