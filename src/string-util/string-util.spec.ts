@@ -274,25 +274,29 @@ describe('StringUtil', () => {
       expect(normalizePhoneNumber('070-1234-5678')).toBe(voipNumber);
       expect(normalizePhoneNumber('031 1234 5678')).toBe('03112345678');
     });
-    it('should normalize phone number starting with (+)82 or (+)082', () => {
+    it('should normalize phone number starting with (+)82 or (+)082 or + 82', () => {
       expect(normalizePhoneNumber('+821012345678')).toBe(mobileNumber);
       expect(normalizePhoneNumber('+82-10-1234-5678')).toBe(mobileNumber);
       expect(normalizePhoneNumber('+082-10-1234-5678')).toBe(mobileNumber);
+      expect(normalizePhoneNumber('+82 10-1234-5678')).toBe(mobileNumber);
       expect(normalizePhoneNumber('821012345678')).toBe(mobileNumber);
       expect(normalizePhoneNumber('82-10-1234-5678')).toBe(mobileNumber);
       expect(normalizePhoneNumber('+82212345678')).toBe(localNumber);
       expect(normalizePhoneNumber('+82-2-1234-5678')).toBe(localNumber);
       expect(normalizePhoneNumber('+082-2-1234-5678')).toBe(localNumber);
+      expect(normalizePhoneNumber('+82 2-1234-5678')).toBe(localNumber);
       expect(normalizePhoneNumber('82212345678')).toBe(localNumber);
       expect(normalizePhoneNumber('82-2-1234-5678')).toBe(localNumber);
       expect(normalizePhoneNumber('+82-50512345678')).toBe(personalNumber);
       expect(normalizePhoneNumber('+82-505-1234-5678')).toBe(personalNumber);
       expect(normalizePhoneNumber('+082-505-1234-5678')).toBe(personalNumber);
+      expect(normalizePhoneNumber('+82 505-1234-5678')).toBe(personalNumber);
       expect(normalizePhoneNumber('82-50512345678')).toBe(personalNumber);
       expect(normalizePhoneNumber('82-505-1234-5678')).toBe(personalNumber);
       expect(normalizePhoneNumber('+827012345678')).toBe(voipNumber);
       expect(normalizePhoneNumber('+82-70-1234-5678')).toBe(voipNumber);
       expect(normalizePhoneNumber('+082-70-1234-5678')).toBe(voipNumber);
+      expect(normalizePhoneNumber('+82 70-1234-5678')).toBe(voipNumber);
       expect(normalizePhoneNumber('827012345678')).toBe(voipNumber);
       expect(normalizePhoneNumber('82-70-1234-5678')).toBe(voipNumber);
     });
