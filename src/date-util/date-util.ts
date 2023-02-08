@@ -12,7 +12,7 @@ import {
   TIMESTAMP_FORMAT,
 } from './date-util.const';
 import type { LocalDateTimeFormatOpts } from './date-util.interface';
-import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts, DateUnitType } from './date-util.type';
+import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
 import { DatePropertyType, DateType, TimeZoneType } from './date-util-base.type';
 import { LoggerFactory } from '../logger';
 
@@ -409,8 +409,8 @@ export namespace DateUtil {
     return format12HourInLocale(formatResult, opts.locale);
   }
 
-  export function durationTo(duration: string, unitType: DateUnitType = 'seconds'): number {
-    if (unitType !== 'seconds') {
+  export function durationTo(duration: string, unitType: DatePropertyType = 'second'): number {
+    if (unitType !== 'second') {
       throw new Error('Not supported yet');
     }
     const durationArray = duration.split(':');
