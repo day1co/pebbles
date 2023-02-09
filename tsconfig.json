@@ -3,7 +3,7 @@
     "outDir": "./lib",
     "skipLibCheck": true
   },
-  "extends": "@day1co/tsconfig/backend-mixed.json",
+  "extends": "@day1co/tsconfig/backend.json",
   "include": ["./src"],
   "exclude": ["./lib", "./node_modules"]
 }

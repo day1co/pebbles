@@ -1,4 +1,4 @@
-import { PageInfo, Pagination } from './misc-util.interface';
+import { PageInfo, Pagination, PageDetail } from './misc-util.interface';
 
 export namespace MiscUtil {
   export async function sleep(delay: number): Promise<unknown> {
@@ -16,7 +16,7 @@ export namespace MiscUtil {
 
     if (limit <= 0) throw new Error('limit must be bigger than 0');
 
-    const pages = [];
+    const pages: PageDetail[] = [];
     const lastPage = count && limit ? Math.ceil(count / limit) : firstPage;
     const currentPage = limit > 0 ? Math.floor(offset / limit) + firstPage : firstPage;
     const rangeFirstPage = Math.max(currentPage - range, firstPage);

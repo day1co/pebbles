@@ -2,7 +2,7 @@ import { HttpState } from '../http-client';
 
 export class CustomException extends Error {
   readonly code: HttpState;
-  readonly cause: Error | undefined;
+  override readonly cause: Error | undefined;
 
   constructor(code = HttpState.CUSTOM_UNKNOWN_ERROR, message = 'UNKNOWN_ERROR', cause?: Error) {
     super();
