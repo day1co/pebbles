@@ -30,12 +30,12 @@ jobs:
           cache: npm
           cache-dependency-path: './package-lock.json'
       - name: Prepare dot npmrc for private registry
-        run: echo //npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }} >> .npmrc
+        run: echo //npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }} >> .npmrc
       - name: Bootstrap
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Build Test
         run: npm run build
         env:

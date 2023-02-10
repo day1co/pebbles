@@ -17,8 +17,8 @@ defaults:
     shell: bash
 
 env:
-  PUSH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  PACKAGE_TOKEN: ${{ secrets.NPM_TOKEN }}
+  PUSH_TOKEN: ${{ secrets.GH_TOKEN }}
+  PACKAGE_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   check-pusher:
@@ -57,7 +57,7 @@ jobs:
       - uses: 8BitJonny/gh-get-current-pr@1.1.0
         id: PR
         with:
-          github-token: ${{ secrets.NPM_TOKEN }}
+          github-token: ${{ secrets.GH_TOKEN }}
 
   build:
     needs: ci-label-test
