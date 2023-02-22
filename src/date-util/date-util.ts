@@ -117,13 +117,19 @@ export namespace DateUtil {
       parsedDate.setMonth(parsedDate.getMonth() + opts.month);
     }
 
-    return new Date(
+    if (opts.week) {
+      parsedDate.setDate(parsedDate.getDate() + 7 * opts.week);
+    }
+
+    const test = new Date(
       parsedDate.getTime() +
         (opts.day ?? 0) * ONE_DAY_IN_MILLI +
         (opts.hour ?? 0) * ONE_HOUR_IN_MILLI +
         (opts.minute ?? 0) * ONE_MINUTE_IN_MILLI +
         (opts.second ?? 0) * ONE_SECOND_IN_MILLI
     );
+    logger.info(`${test}`);
+    return test;
   }
 
   export function startOf(date: DateType, property: DatePropertyType): Date {
