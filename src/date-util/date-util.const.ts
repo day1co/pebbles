@@ -1,4 +1,6 @@
 export const DATE_FORMAT = 'YYYY-MM-DD';
+export const DATE_FORMAT_DOT_TYPE = 'YYYY. MM. DD';
+export const DATE_FORMAT_US = 'MM-DD-YYYY';
 export const DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 export const DATETIME_FORMAT_WITH_MILLIS = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
 export const LOCAL_DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -11,3 +13,7 @@ export const ONE_DAY_IN_SECOND = 24 * ONE_HOUR_IN_SECOND;
 export const ONE_MINUTE_IN_MILLI = ONE_MINUTE_IN_SECOND * ONE_SECOND_IN_MILLI;
 export const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_SECOND_IN_MILLI;
 export const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_SECOND_IN_MILLI;
+
+export const TIMEZONE_SEOUL = 'Asia/Seoul';
+export const TIMEZONE_PST = 'PST';
+export const TIMEZONE_TOKYO = 'Asia/Tokyo';
