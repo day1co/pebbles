@@ -114,9 +114,10 @@ describe('DateUtil', () => {
       expect(() => calcDatetime('20209999', { year: 3 })).toThrow();
       expect(() => calcDatetime('', { year: 3 })).toThrow();
     });
-    test('add/subtract year/month/day/hour/minute/second', () => {
+    test('add/subtract year/month/week/day/hour/minute/second', () => {
       expect(calcDatetime(testDatetimeStr6, { year: 1 })).toEqual(new Date('2023-02-23 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { month: 1 })).toEqual(new Date('2022-03-23 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr6, { week: 1 })).toEqual(new Date('2022-03-02 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { day: 1 })).toEqual(new Date('2022-02-24 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { hour: 1 })).toEqual(new Date('2022-02-23 02:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { minute: 1 })).toEqual(new Date('2022-02-23 01:24:45.678'));
@@ -124,6 +125,7 @@ describe('DateUtil', () => {
 
       expect(calcDatetime(testDatetimeStr6, { year: -1 })).toEqual(new Date('2021-02-23 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { month: -1 })).toEqual(new Date('2022-01-23 01:23:45.678'));
+      expect(calcDatetime(testDatetimeStr6, { week: -1 })).toEqual(new Date('2022-02-16 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { day: -1 })).toEqual(new Date('2022-02-22 01:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { hour: -1 })).toEqual(new Date('2022-02-23 00:23:45.678'));
       expect(calcDatetime(testDatetimeStr6, { minute: -1 })).toEqual(new Date('2022-02-23 01:22:45.678'));

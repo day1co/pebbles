@@ -3,6 +3,7 @@ import { LocaleType, TimeZoneType } from './date-util-base.type';
 export interface DatetimeProperties {
   year: number;
   month: number;
+  week: number;
   day: number;
   hour: number;
   minute: number;

@@ -119,6 +119,10 @@ export namespace DateUtil {
       parsedDate.setMonth(parsedDate.getMonth() + opts.month);
     }
 
+    if (opts.week) {
+      parsedDate.setDate(parsedDate.getDate() + 7 * opts.week);
+    }
+
     return new Date(
       parsedDate.getTime() +
         (opts.day ?? 0) * ONE_DAY_IN_MILLI +
