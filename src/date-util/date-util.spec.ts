@@ -45,6 +45,8 @@ describe('DateUtil', () => {
       expect(parse(testDatetimeStr5)).toEqual(new Date(testDatetimeStr5));
       expect(parse(testDatetimeStr6)).toEqual(new Date(testDatetimeStr6));
       expect(parse(testDatetimeStr8)).toEqual(new Date(testDatetimeStr8));
+      expect(parse()).toEqual(new Date());
+      expect(parse(undefined)).toEqual(new Date());
     });
     test('original input value is maintained', () => {
       const now = new Date();
