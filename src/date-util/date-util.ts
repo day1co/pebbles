@@ -24,7 +24,9 @@ export namespace DateUtil {
     return !isNaN(d.valueOf());
   }
 
-  export function parse(date: DateType): Date {
+  export function parse(date?: DateType): Date {
+    if (date === undefined) return new Date();
+
     if (typeof date === 'string' && date.split(/[ T]/).length === 1) {
       date = date.concat('T00:00:00.000');
     }
