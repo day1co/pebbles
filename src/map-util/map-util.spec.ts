@@ -20,4 +20,38 @@ describe('MapUtil', () => {
       expect(MapUtil.get(numberMap, 'ZERO', 1)).toBe(numberMap.get('ZERO'));
     });
   });
+
+  describe('groupByKey', () => {
+    test('should group an array of objects by a specified key', () => {
+      const array = [
+        { id: 1, name: 'John' },
+        { id: 2, name: 'Jane' },
+        { id: 3, name: 'John' },
+        { id: 4, name: 'Mary' },
+        { id: 5, name: null },
+      ];
+      const expectedMap = new Map([
+        [
+          'John',
+          [
+            { id: 1, name: 'John' },
+            { id: 3, name: 'John' },
+          ],
+        ],
+        ['Jane', [{ id: 2, name: 'Jane' }]],
+        ['Mary', [{ id: 4, name: 'Mary' }]],
+      ]);
+      const result = MapUtil.groupByKey(array, 'name');
+      expect(result).toEqual(expectedMap);
+    });
+
+    test('should return an empty map when given an empty array', () => {
+      // @ts-ignore
+      const array = [];
+      const expectedMap = new Map();
+      // @ts-ignore
+      const result = MapUtil.groupByKey(array, 'name');
+      expect(result).toEqual(expectedMap);
+    });
+  });
 });
