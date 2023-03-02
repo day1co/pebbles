@@ -10,13 +10,4 @@ export namespace MapUtil {
     const value = map.get(key);
     return value === undefined ? defaultValue : value;
   }
-
-  export function groupByKey<T, K extends keyof T>(array: T[], key: K): Map<T[K], T[]> {
-    return array.reduce((map, item) => {
-      const mapKey = item[key];
-      const collection = map.get(mapKey) ?? map.set(mapKey, []).get(mapKey);
-      collection.push(item);
-      return map;
-    }, new Map());
-  }
 }
