@@ -50,7 +50,7 @@ export { HttpClient, HttpState } from './http-client';
 export type { HttpReqConfig, HttpRes, HttpResponse } from './http-client';
 export { LoggerFactory } from './logger';
 export type { Logger, LogLevel } from './logger';
-export type { MapUtil } from './map-util';
+export { MapUtil } from './map-util';
 export { MiscUtil } from './misc-util';
 export type { PageDetail, PageInfo, Pagination } from './misc-util';
 export { NumberUtil } from './number-util';
