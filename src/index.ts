@@ -1,3 +1,4 @@
+export { ArrayUtil } from './array-util';
 export { BooleanUtil } from './boolean-util';
 export {
   DateUtil,
