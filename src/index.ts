@@ -44,6 +44,7 @@ export {
   NotFoundException,
   ServerException,
   TokenExpiredException,
+  UserDuplicatedException,
   UserUncertifiedEmailException,
   UnauthorizedException,
   UnknownException,

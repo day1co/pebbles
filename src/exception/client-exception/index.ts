@@ -5,4 +5,5 @@ export { ForbiddenException } from './forbidden-exception';
 export { NotFoundException } from './not-found-exception';
 export { TokenExpiredException } from './token-expired-exception';
 export { UnauthorizedException } from './unauthorized-exception';
+export { UserDuplicatedException } from './user-duplicated-exception';
 export { UserUncertifiedEmailException } from './user-uncertified-email-exception';
