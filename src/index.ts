@@ -44,6 +44,7 @@ export {
   NotFoundException,
   ServerException,
   TokenExpiredException,
+  UserUncertifiedEmailException,
   UnauthorizedException,
   UnknownException,
 } from './exception';
