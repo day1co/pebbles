@@ -46,6 +46,7 @@ export {
   TokenExpiredException,
   UserDuplicatedException,
   UserInfoNotFoundException,
+  UserPasswordChangedException,
   UserUncertifiedEmailException,
   UnauthorizedException,
   UnknownException,
