@@ -9,6 +9,7 @@ export {
   UserDuplicatedException,
   UserInfoNotFoundException,
   UserPasswordChangedException,
+  UserRegistrationException,
   UserUncertifiedEmailException,
 } from './client-exception';
 export { CustomException } from './custom-exception';

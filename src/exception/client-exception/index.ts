@@ -8,4 +8,5 @@ export { UnauthorizedException } from './unauthorized-exception';
 export { UserDuplicatedException } from './user-duplicated-exception';
 export { UserInfoNotFoundException } from './user-info-not-found-exception';
 export { UserPasswordChangedException } from './user-password-changed-exception';
+export { UserRegistrationException } from './user-registration-exception';
 export { UserUncertifiedEmailException } from './user-uncertified-email-exception';

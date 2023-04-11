@@ -47,6 +47,7 @@ export {
   UserDuplicatedException,
   UserInfoNotFoundException,
   UserPasswordChangedException,
+  UserRegistrationException,
   UserUncertifiedEmailException,
   UnauthorizedException,
   UnknownException,
