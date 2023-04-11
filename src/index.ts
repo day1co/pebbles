@@ -45,6 +45,7 @@ export {
   ServerException,
   TokenExpiredException,
   UserDuplicatedException,
+  UserInfoNotFoundException,
   UserUncertifiedEmailException,
   UnauthorizedException,
   UnknownException,

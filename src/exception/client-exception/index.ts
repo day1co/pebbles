@@ -6,4 +6,5 @@ export { NotFoundException } from './not-found-exception';
 export { TokenExpiredException } from './token-expired-exception';
 export { UnauthorizedException } from './unauthorized-exception';
 export { UserDuplicatedException } from './user-duplicated-exception';
+export { UserInfoNotFoundException } from './user-info-not-found-exception';
 export { UserUncertifiedEmailException } from './user-uncertified-email-exception';

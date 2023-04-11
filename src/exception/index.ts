@@ -7,6 +7,7 @@ export {
   TokenExpiredException,
   UnauthorizedException,
   UserDuplicatedException,
+  UserInfoNotFoundException,
   UserUncertifiedEmailException,
 } from './client-exception';
 export { CustomException } from './custom-exception';
