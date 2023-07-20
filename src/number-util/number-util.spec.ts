@@ -58,4 +58,28 @@ describe('NumberUtil', () => {
       expect(NumberUtil.isNumeric('  ')).toEqual(false);
     });
   });
+
+  describe('toPermyriad', () => {
+    it('should throw', () => {
+      expect(() => NumberUtil.toPermyriad(NaN)).toThrow();
+    });
+    it('should convert to permyriad', () => {
+      expect(NumberUtil.toPermyriad(100)).toEqual(1_000_000);
+      expect(NumberUtil.toPermyriad(0.01)).toEqual(100);
+      expect(NumberUtil.toPermyriad(0.00001)).toEqual(0.1);
+      expect(NumberUtil.toPermyriad(10.005)).toEqual(100050);
+      expect(NumberUtil.toPermyriad(0)).toEqual(0);
+    });
+  });
+
+  describe('fromPermyriad', () => {
+    it('should throw', () => {
+      expect(() => NumberUtil.fromPermyriad(NaN)).toThrow();
+    });
+    it('should convert from permyriad', () => {
+      expect(NumberUtil.fromPermyriad(100)).toEqual(0.01);
+      expect(NumberUtil.fromPermyriad(0.1)).toEqual(0);
+      expect(NumberUtil.fromPermyriad(0)).toEqual(0);
+    });
+  });
 });
