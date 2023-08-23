@@ -313,20 +313,38 @@ export namespace DateUtil {
     });
   }
 
+  /**
+   *
+   * @description It converts `date` in `opts.format` if it's given. Otherwise the default format would be `YYYY-MM-DDTHH:mm:ssZ`.
+   * - Other format options can be `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm:ss.SSSZ`.
+   */
   export function formatInIso8601(date: Date, opts?: Readonly<IsoDatetimeFormatOpts>): string {
     const formatOpts: IsoDatetimeFormatOpts = opts ?? {};
     formatOpts.format = opts?.format ?? DATETIME_FORMAT;
     return format(date, formatOpts);
   }
 
+  /**
+   *
+   * @description It converts `date` in `YYYY-MM-DD` format.
+   */
   export function getDateString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
     return format(date, { format: DATE_FORMAT, isUtc, timeZone });
   }
 
+  /**
+   *
+   * @description It converts `date` in `YYYY-MM-DDTHH:mm:ssZ` format if isUtc is true by default.
+   * Otherwise the format would be `YYYY-MM-DD HH:mm:ss`.
+   */
   export function getDatetimeString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
     return format(date, { isUtc, timeZone });
   }
 
+  /**
+   *
+   * @description It converts `date` in `YYYYMMDDHHmmssSSS` format.
+   */
   export function getTimestampString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
     return format(date, { format: TIMESTAMP_FORMAT, isUtc, timeZone });
   }
@@ -351,6 +369,10 @@ export namespace DateUtil {
     return getTimestampString(d, isUtc);
   }
 
+  /**
+   *
+   * @description It converts `totalSeconds` in `hh:mm:ss` format.
+   */
   export function getTimeStringFromSeconds(totalSeconds: number): string {
     if (totalSeconds < 0) {
       throw new Error('Invalid number');
