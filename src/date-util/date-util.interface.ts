@@ -24,3 +24,13 @@ export interface LocalDateTimeFormatOpts {
   locale: LocaleType;
   formatStyle: 'long' | '2-digit';
 }
+
+export interface TimeAnnotationSet {
+  SSS: string;
+  s: string;
+  m: string;
+  H: string;
+  D: string;
+  M: string;
+  Y: string;
+}

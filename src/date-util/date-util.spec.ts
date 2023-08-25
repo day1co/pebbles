@@ -444,4 +444,68 @@ describe('DateUtil', () => {
       expect(durationTo('09:60:50')).toEqual(0);
     });
   });
+
+  describe('fromNow', () => {
+    const fromNow = DateUtil.fromNow;
+
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2020-01-01')); // 00:00:00Z
+    });
+    afterAll(() => {
+      jest.clearAllTimers();
+    });
+
+    it('should return year diff from now', () => {
+      expect(fromNow(new Date('2021-01-01'))).toEqual('1년');
+      expect(fromNow(new Date('2019-01-01'))).toEqual('1년');
+      expect(fromNow(new Date('2022-01-01'))).toEqual('2년');
+      expect(fromNow(new Date('2018-01-01'))).toEqual('2년');
+
+      expect(fromNow(new Date('2021-12-31'))).toEqual('1년');
+      expect(fromNow(new Date('2019-12-31'))).not.toEqual('1년');
+      expect(fromNow(new Date('2022-12-31'))).toEqual('2년');
+      expect(fromNow(new Date('2018-12-31'))).not.toEqual('2년');
+    });
+    it('should return month diff from now', () => {
+      expect(fromNow(new Date('2020-12-01'))).toEqual('11달');
+      expect(fromNow(new Date('2020-12-31'))).toEqual('11달');
+      expect(fromNow(new Date('2020-02-01'))).toEqual('1달');
+      expect(fromNow(new Date('2020-02-28'))).toEqual('1달');
+      expect(fromNow(new Date('2019-12-01'))).toEqual('1달');
+      expect(fromNow(new Date('2019-12-02'))).not.toEqual('1달');
+      expect(fromNow(new Date('2019-11-02'))).toEqual('2달');
+      expect(fromNow(new Date('2019-11-30'))).toEqual('2달');
+      expect(fromNow(new Date('2019-02-01'))).toEqual('11달');
+      expect(fromNow(new Date('2019-02-02'))).toEqual('11달');
+    });
+    it('should return day diff from now', () => {
+      expect(fromNow(new Date('2020-01-02'))).toEqual('1일');
+      expect(fromNow(new Date('2020-01-31'))).toEqual('30일');
+      expect(fromNow(new Date('2019-12-31'))).toEqual('1일');
+      expect(fromNow(new Date('2019-12-02'))).toEqual('30일');
+    });
+    it('should return hour diff from now', () => {
+      expect(fromNow(new Date('2020-01-01 01:00:00Z'))).toEqual('1시간');
+      expect(fromNow(new Date('2020-01-01 23:00:00Z'))).toEqual('23시간');
+      expect(fromNow(new Date('2019-12-31 23:00:00Z'))).toEqual('1시간');
+      expect(fromNow(new Date('2019-12-31 01:00:00Z'))).toEqual('23시간');
+    });
+    it('should return minute diff from now', () => {
+      expect(fromNow(new Date('2020-01-01 00:59:00Z'))).toEqual('59분');
+      expect(fromNow(new Date('2020-01-01 00:01:00Z'))).toEqual('1분');
+      expect(fromNow(new Date('2019-12-31 23:01:00Z'))).toEqual('59분');
+      expect(fromNow(new Date('2019-12-31 23:59:00Z'))).toEqual('1분');
+    });
+    it('should return second diff from now', () => {
+      expect(fromNow(new Date('2020-01-01 00:00:59Z'))).toEqual('59초');
+      expect(fromNow(new Date('2020-01-01 00:00:01Z'))).toEqual('1초');
+      expect(fromNow(new Date('2019-12-31 23:59:01Z'))).toEqual('59초');
+      expect(fromNow(new Date('2019-12-31 23:59:59Z'))).toEqual('1초');
+    });
+    it('should return just now', () => {
+      expect(fromNow(new Date())).toEqual('금방');
+      expect(fromNow(new Date('2020-01-01 00:00:00.001Z'))).toEqual('금방');
+      expect(fromNow(new Date('2020-01-01 00:00:00.999Z'))).toEqual('금방');
+    });
+  });
 });
