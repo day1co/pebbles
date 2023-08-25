@@ -21,7 +21,7 @@
     "prepublishOnly": "npm run build",
     "serve": "echo no serve",
     "start": "npm run serve",
-    "test": "jest --coverage --detectOpenHandles --forceExit --ci --silent --runInBand",
+    "test": "jest --coverage --verbose",
     "watch": "tsc -w"
   },
   "dependencies": {

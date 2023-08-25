@@ -11,7 +11,7 @@ import {
   ONE_SECOND_IN_MILLI,
   TIMESTAMP_FORMAT,
 } from './date-util.const';
-import type { LocalDateTimeFormatOpts } from './date-util.interface';
+import type { LocalDateTimeFormatOpts, TimeAnnotationSet } from './date-util.interface';
 import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
 import { DatePropertyType, DateType, TimeZoneType } from './date-util-base.type';
 import { LoggerFactory } from '../logger';
@@ -202,12 +202,18 @@ export namespace DateUtil {
     return calcDatetime(date, { day: 1 }).getDate() === 1;
   }
 
-  export function diff(since: DateType, until: DateType, type: DatePropertyType): number {
+  export function diff(
+    since: DateType,
+    until: DateType,
+    type: DatePropertyType,
+    opts: { ignoreAccuracy: boolean } = { ignoreAccuracy: false }
+  ): number {
+    const ignoreAccuracy = opts.ignoreAccuracy;
     const sinceDate = parse(since);
     const untilDate = parse(until);
 
     if (untilDate < sinceDate) {
-      return -diff(until, since, type);
+      return -diff(until, since, type, { ignoreAccuracy });
     }
 
     const diffSeconds = (untilDate.getTime() - sinceDate.getTime()) / ONE_SECOND_IN_MILLI;
@@ -218,7 +224,7 @@ export namespace DateUtil {
         result = diffMonth(sinceDate, untilDate) / 12;
         break;
       case 'month':
-        result = diffMonth(sinceDate, untilDate);
+        result = diffMonth(sinceDate, untilDate, { ignoreAccuracy });
         break;
       case 'day':
         result = diffSeconds / ONE_DAY_IN_SECOND;
@@ -468,6 +474,50 @@ export namespace DateUtil {
 
     return hour + min + second;
   }
+
+  // TODO: Use LocaleType for `locale` when adding other locales.
+  export function fromNow(date: DateType, locale: 'ko' = 'ko') {
+    const TIME_ANNOTATION_SET: Record<'ko', TimeAnnotationSet> = {
+      ko: {
+        SSS: '금방',
+        s: '초',
+        m: '분',
+        H: '시간',
+        D: '일',
+        M: '달',
+        Y: '년',
+      },
+    };
+    const localeAnnotation = TIME_ANNOTATION_SET[locale];
+    const until = parse(date);
+    const now = new Date();
+
+    const yearDiff = Math.abs(diff(now, until, 'year'));
+    if (yearDiff !== 0) {
+      return `${yearDiff}${localeAnnotation.Y}`;
+    }
+    const monthDiff = Math.abs(diff(now, until, 'month', { ignoreAccuracy: true }));
+    if (monthDiff !== 0) {
+      return `${monthDiff}${localeAnnotation.M}`;
+    }
+    const dayDiff = Math.abs(diff(now, until, 'day'));
+    if (dayDiff !== 0) {
+      return `${dayDiff}${localeAnnotation.D}`;
+    }
+    const hourDiff = Math.abs(diff(now, until, 'hour'));
+    if (hourDiff !== 0) {
+      return `${hourDiff}${localeAnnotation.H}`;
+    }
+    const minuteDiff = Math.abs(diff(now, until, 'minute'));
+    if (minuteDiff !== 0) {
+      return `${minuteDiff}${localeAnnotation.m}`;
+    }
+    const secondDiff = Math.abs(diff(now, until, 'second'));
+    if (secondDiff !== 0) {
+      return `${secondDiff}${localeAnnotation.s}`;
+    }
+    return localeAnnotation.SSS;
+  }
 }
 
 function subtractOneDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
@@ -507,16 +557,20 @@ function getTimezoneOffsetString(timeZone: TimeZoneType, separatorFlag: boolean)
   return `${sign}${offsetHoursString}${separator}${offsetMinutesString}`;
 }
 
-function diffMonth(since: Date, until: Date): number {
+function diffMonth(since: Date, until: Date, opts: { ignoreAccuracy: boolean } = { ignoreAccuracy: false }): number {
   const diff = (until.getFullYear() - since.getFullYear()) * 12 + until.getMonth() - since.getMonth();
   const tempDate = new Date(since);
   tempDate.setMonth(tempDate.getMonth() + diff);
 
+  // Execute humanized vague calcuation only when diff is not 1.
+  const shouldHumanize = opts.ignoreAccuracy && diff !== 1;
+
   /*
     since와 until의 차이나는 month만큼 since 에서 더해준 tempDate
     tempDate가 until보다 더 큰 경우 실제 마지막 한달만큼은 차이가 안나는것이므로 -1
+    Ignore this logic if `shouldHumanize` is true
    */
-  if (tempDate > until) {
+  if (tempDate > until && !shouldHumanize) {
     return diff - 1;
   }
 
