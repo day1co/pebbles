@@ -455,7 +455,7 @@ describe('DateUtil', () => {
       jest.clearAllTimers();
     });
 
-    it('should return year diff from now', () => {
+    it('should return year diff from now if the diff is greater than or equal to a year', () => {
       expect(fromNow(new Date('2021-01-01'))).toEqual('1년');
       expect(fromNow(new Date('2019-01-01'))).toEqual('1년');
       expect(fromNow(new Date('2022-01-01'))).toEqual('2년');
@@ -466,37 +466,39 @@ describe('DateUtil', () => {
       expect(fromNow(new Date('2022-12-31'))).toEqual('2년');
       expect(fromNow(new Date('2018-12-31'))).not.toEqual('2년');
     });
-    it('should return month diff from now', () => {
+    it('should return month diff from now if the diff is greater than a month', () => {
       expect(fromNow(new Date('2020-12-01'))).toEqual('11달');
       expect(fromNow(new Date('2020-12-31'))).toEqual('11달');
       expect(fromNow(new Date('2020-02-01'))).toEqual('1달');
       expect(fromNow(new Date('2020-02-28'))).toEqual('1달');
       expect(fromNow(new Date('2019-12-01'))).toEqual('1달');
       expect(fromNow(new Date('2019-12-02'))).not.toEqual('1달');
+
+      // `shouldHumanize` cases
       expect(fromNow(new Date('2019-11-02'))).toEqual('2달');
       expect(fromNow(new Date('2019-11-30'))).toEqual('2달');
       expect(fromNow(new Date('2019-02-01'))).toEqual('11달');
       expect(fromNow(new Date('2019-02-02'))).toEqual('11달');
     });
-    it('should return day diff from now', () => {
+    it('should return day diff from now if the diff is greater than or equal to a day', () => {
       expect(fromNow(new Date('2020-01-02'))).toEqual('1일');
       expect(fromNow(new Date('2020-01-31'))).toEqual('30일');
       expect(fromNow(new Date('2019-12-31'))).toEqual('1일');
       expect(fromNow(new Date('2019-12-02'))).toEqual('30일');
     });
-    it('should return hour diff from now', () => {
+    it('should return hour diff from now if the diff is greater or equal than an hour', () => {
       expect(fromNow(new Date('2020-01-01 01:00:00Z'))).toEqual('1시간');
       expect(fromNow(new Date('2020-01-01 23:00:00Z'))).toEqual('23시간');
       expect(fromNow(new Date('2019-12-31 23:00:00Z'))).toEqual('1시간');
       expect(fromNow(new Date('2019-12-31 01:00:00Z'))).toEqual('23시간');
     });
-    it('should return minute diff from now', () => {
+    it('should return minute diff from now if the diff is greater or equal than a minute', () => {
       expect(fromNow(new Date('2020-01-01 00:59:00Z'))).toEqual('59분');
       expect(fromNow(new Date('2020-01-01 00:01:00Z'))).toEqual('1분');
       expect(fromNow(new Date('2019-12-31 23:01:00Z'))).toEqual('59분');
       expect(fromNow(new Date('2019-12-31 23:59:00Z'))).toEqual('1분');
     });
-    it('should return second diff from now', () => {
+    it('should return second diff from now if the diff is greater or equal than a second', () => {
       expect(fromNow(new Date('2020-01-01 00:00:59Z'))).toEqual('59초');
       expect(fromNow(new Date('2020-01-01 00:00:01Z'))).toEqual('1초');
       expect(fromNow(new Date('2019-12-31 23:59:01Z'))).toEqual('59초');
