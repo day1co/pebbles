@@ -62,7 +62,7 @@ export type { Tag, TemplateOpts } from './string-util';
 export { TimeRange } from './time-range';
 export type { TimeSection } from './time-range';
 export { TypeUtil } from './type-util';
-export type { NarrowableType } from './type-util';
+export type { NarrowableType, PickWithPartial, RequiredPartialProps, Nullable, Arrayable } from './type-util';
 export { byteUnitConverter, moneyUnitConverter } from './unit-util';
 export type { ByteUnitType, UnitConverter } from './unit-util';
 export { MoneyUtil } from './money-util';
