@@ -27,7 +27,8 @@
   "dependencies": {
     "axios": "^0.21.4",
     "mustache": "^4.2.0",
-    "pino": "^8.4.1"
+    "pino": "^8.4.1",
+    "pino-datadog-transport": "^1.3.0"
   },
   "devDependencies": {
     "@day1co/eslint-config": "^1.0.0",
