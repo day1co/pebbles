@@ -5,8 +5,28 @@ import type { LogLevel } from '../logger.type';
 export class PinoLogger implements Logger {
   private readonly logger: pino.Logger;
 
-  constructor(name: string) {
-    this.logger = pino({ name, level: 'debug' });
+  constructor(name: string, transportOption?: { apiKey: string; site: string }) {
+    const pinoConfig = { name, level: 'debug' };
+    const apiKeyAuth = transportOption?.apiKey ?? (process.env.DD_API_KEY as any);
+    this.logger = apiKeyAuth
+      ? pino(
+          pinoConfig,
+          pino.transport({
+            target: 'pino-datadog-transport',
+            options: {
+              ddClientConf: {
+                authMethods: {
+                  apiKeyAuth,
+                },
+              },
+              ddServerConf: {
+                site: transportOption?.site ?? 'datadoghq.eu',
+              },
+              service: name,
+            },
+          })
+        )
+      : pino(pinoConfig);
   }
 
   set logLevel(level: LogLevel) {
