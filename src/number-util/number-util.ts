@@ -22,7 +22,7 @@ export namespace NumberUtil {
     return !isNaN(num) && isFinite(num) && num === parseFloat(numStr);
   }
 
-  export const toPermyriad = (value: number, digits = 2): number | undefined => {
+  export const toPermyriad = (value: number, digits = 2): number => {
     if (isNaN(value)) {
       throw new Error(`unable to convert "${value}" to number type`);
     }
