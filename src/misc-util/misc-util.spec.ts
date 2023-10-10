@@ -43,4 +43,29 @@ describe('Miscellaneous Util', () => {
       expect(() => MiscUtil.getPagination({ offset: 0, limit: 0, count: 10 })).toThrow();
     });
   });
+
+  describe('setNextPagination', () => {
+    test('정상실행', () => {
+      const result = MiscUtil.setNextPagination({ page: 2, limit: 30 });
+      expect(result).toStrictEqual({ limit: 30, offset: 30 });
+    });
+
+    test('페이지가 정수가 아닌 경우 Exception', () => {
+      expect(() => {
+        MiscUtil.setNextPagination({ page: 0.2, limit: 30 });
+      }).toThrow(Error);
+    });
+
+    test('페이지가 0보다 같거나 작은 경우 Exception', () => {
+      expect(() => {
+        MiscUtil.setNextPagination({ page: 0, limit: 30 });
+      }).toThrow(Error);
+    });
+
+    test('페이지당 갯수가 0보다 같거나 작은 경우 Exception', () => {
+      expect(() => {
+        MiscUtil.setNextPagination({ page: 1, limit: 0 });
+      }).toThrow(Error);
+    });
+  });
 });
