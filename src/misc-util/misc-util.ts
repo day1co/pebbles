@@ -28,4 +28,18 @@ export namespace MiscUtil {
 
     return { firstPage, lastPage, currentPage, pages };
   }
+
+  export function setNextPagination({ page, limit }: { page: number; limit: number }) {
+    if (!Number.isInteger(page) || !Number.isInteger(limit)) {
+      throw new Error(`page or count number is not Integer type (page: ${page}, count: ${limit})`);
+    }
+
+    if (page <= 0 || limit <= 0) {
+      throw new Error(`page or count number less than or equal to 0 (page: ${page}, count: ${limit})`);
+    }
+
+    const offset = (page - 1) * limit;
+
+    return { offset, limit };
+  }
 }
