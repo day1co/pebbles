@@ -29,7 +29,17 @@ export namespace MiscUtil {
     return { firstPage, lastPage, currentPage, pages };
   }
 
-  export function setNextPagination({ page, limit }: { page: number; limit: number }) {
+  export function setNextPagination({
+    page,
+    limit,
+    maxLimit = 100,
+    isNext = true,
+  }: {
+    page: number;
+    limit: number;
+    maxLimit?: number;
+    isNext?: boolean;
+  }) {
     if (!Number.isInteger(page) || !Number.isInteger(limit)) {
       throw new Error(`page or count number is not Integer type (page: ${page}, count: ${limit})`);
     }
@@ -38,8 +48,13 @@ export namespace MiscUtil {
       throw new Error(`page or count number less than or equal to 0 (page: ${page}, count: ${limit})`);
     }
 
-    const offset = (page - 1) * limit;
+    if (maxLimit < limit) {
+      throw new Error(`limit number lager than maxLimit (limit: ${limit}, maxLimit: ${maxLimit})`);
+    }
 
-    return { offset, limit };
+    const offset = (page - 1) * limit;
+    const count = isNext ? ++limit : limit;
+
+    return { offset, limit: count };
   }
 }
