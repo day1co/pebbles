@@ -45,8 +45,13 @@ describe('Miscellaneous Util', () => {
   });
 
   describe('setNextPagination', () => {
-    test('정상실행', () => {
+    test('정상실행(isNext: true)', () => {
       const result = MiscUtil.setNextPagination({ page: 2, limit: 30 });
+      expect(result).toStrictEqual({ limit: 31, offset: 30 });
+    });
+
+    test('정상실행(isNext: false)', () => {
+      const result = MiscUtil.setNextPagination({ page: 2, limit: 30, isNext: false });
       expect(result).toStrictEqual({ limit: 30, offset: 30 });
     });
 
@@ -65,6 +70,12 @@ describe('Miscellaneous Util', () => {
     test('페이지당 갯수가 0보다 같거나 작은 경우 Exception', () => {
       expect(() => {
         MiscUtil.setNextPagination({ page: 1, limit: 0 });
+      }).toThrow(Error);
+    });
+
+    test('limit가 maxLimit를 넘어서는 경우 Exception', () => {
+      expect(() => {
+        MiscUtil.setNextPagination({ page: 1, limit: 1000 });
       }).toThrow(Error);
     });
   });
