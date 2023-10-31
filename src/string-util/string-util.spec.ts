@@ -143,6 +143,34 @@ describe('StringUtil', () => {
       expect(StringUtil.maskPrivacy(testAddress9, 'address')).toBe(expectedTestAddress9);
       expect(StringUtil.maskPrivacy(testAddress10, 'address')).toBe(expectedTestAddress10);
     });
+
+    it('should mask resident number', () => {
+      const testResidentNumber1 = '990101';
+      const testResidentNumber2 = '990101-1234567';
+      const testResidentNumber3 = '990101-123';
+      const testResidentNumber4 = '9901011234567';
+      const testResidentNumber5 = '999';
+
+      expect(StringUtil.maskPrivacy(testResidentNumber1, 'resident')).toBe('990101');
+      expect(StringUtil.maskPrivacy(testResidentNumber2, 'resident')).toBe('990101-*******');
+      expect(StringUtil.maskPrivacy(testResidentNumber3, 'resident')).toBe('990101-***');
+      expect(StringUtil.maskPrivacy(testResidentNumber4, 'resident')).toBe('990101*******');
+      expect(StringUtil.maskPrivacy(testResidentNumber5, 'resident')).toBe('999');
+    });
+
+    it('should mask offshoring number', () => {
+      const testOffshoring1 = '123456';
+      const testOffshoring2 = '123-456-7890';
+      const testOffshoring3 = '123-456789-0123';
+      const testOffshoring4 = '1234567890';
+      const testOffshoring5 = '123';
+
+      expect(StringUtil.maskPrivacy(testOffshoring1, 'offshoring')).toBe('******');
+      expect(StringUtil.maskPrivacy(testOffshoring2, 'offshoring')).toBe('***-***-****');
+      expect(StringUtil.maskPrivacy(testOffshoring3, 'offshoring')).toBe('***-******-****');
+      expect(StringUtil.maskPrivacy(testOffshoring4, 'offshoring')).toBe('**********');
+      expect(StringUtil.maskPrivacy(testOffshoring5, 'offshoring')).toBe('***');
+    });
   });
 
   describe('midMask', () => {

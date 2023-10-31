@@ -1,1 +1,1 @@
-export type PrivacyType = 'name' | 'phone' | 'email' | 'bankAccount' | 'address';
+export type PrivacyType = 'name' | 'phone' | 'email' | 'bankAccount' | 'address' | 'resident' | 'offshoring';
