@@ -23,17 +23,23 @@ const EMOJI_ZERO_WIDTH_JOINER = '\u200D';
 
 export namespace StringUtil {
   export function maskPrivacy(text: string, type: PrivacyType): string {
-    const maskingRule: Record<PrivacyType, MaskingRange> = {
+    if (type === 'offshoring') {
+      return text.replaceAll(/[0-9]/g, '*');
+    }
+
+    const maskingRule: Record<Exclude<PrivacyType, 'offshoring'>, MaskingRange> = {
       name: { start: 1, end: text.length - 1 },
       phone: { start: 3, end: text.length - 4 },
       email: { start: 2, end: text.indexOf('@') },
       bankAccount: { start: 3, end: text.length - 3 },
       address: { start: getMaskingStartIndexOfAddress(text), end: text.length },
+      resident: { start: text.charAt(6) === '-' ? 7 : 6, end: text.length },
     };
 
     const start = maskingRule[type].start;
     const end = maskingRule[type].end;
     const length = type === 'name' ? end - start || 1 : end - start;
+
     return getMaskedString({ text, length, maskingStart: start });
 
     function getMaskedString({ text, length, maskingStart }: MaskingOpts): string {
