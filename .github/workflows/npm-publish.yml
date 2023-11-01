@@ -72,9 +72,9 @@ jobs:
           fetch-depth: 100 # 최근 100개 커밋에서 package.json 버전변경 확인
           token: ${{ env.PUSH_TOKEN }}
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '20.x'
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@day1co'
