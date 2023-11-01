@@ -11,38 +11,17 @@ defaults:
     shell: bash
 
 jobs:
-  build:
+  ci-test:
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.pull_request.labels.*.name), 'ci-skip')"
     timeout-minutes: 10
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - name: Prepare
+        uses: day1co/actions/composites/prepare-node@main
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
-          cache-dependency-path: './package-lock.json'
-      - name: Prepare dot npmrc for private registry
-        run: echo //npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }} >> .npmrc
-      - name: Bootstrap
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        run: npm ci
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
+          npm-token: ${{ secrets.GH_TOKEN }}
       - name: Build Test
         run: npm run build
-        env:
-          NODE_ENV: dev
-          CI: true
       - name: Pebbles Test
         run: npm run test
-        env:
-          NODE_ENV: test
-          CI: true
