@@ -37,4 +37,19 @@ export namespace NumberUtil {
 
     return Number((value / 10_000).toFixed(digits));
   };
+
+  export const decimalRoundUp = (floatValue: number, decimal = 5) => {
+    if (isNaN(floatValue)) {
+      throw new Error(`unable to convert "${floatValue}" to number type`);
+    }
+    const factor = Math.pow(10, decimal);
+    return Math.round(floatValue * factor);
+  };
+
+  export const decimalRoundDown = (value: number, decimal = 5) => {
+    if (isNaN(value)) {
+      throw new Error(`unable to convert "${value}" to number type`);
+    }
+    return value / Math.pow(10, decimal);
+  };
 }
