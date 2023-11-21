@@ -123,6 +123,36 @@ describe('TimeRange Util', () => {
 
         expect(timeRange.totalInterval()).toEqual(totalInterval);
       });
+
+      it('cale decimal points in the totalPlayTime', async () => {
+        const timeRange1 = new TimeRange();
+        timeRange1.add({
+          start: 99.9,
+          end: 100.1,
+          interval: 10,
+        });
+        // native JS 100.1 - 99.9 = 0.19999999999998863
+        expect(timeRange1.totalPlayTime()).toEqual(0.2);
+
+        const timeRange2 = new TimeRange();
+        timeRange2.add({
+          start: 0,
+          end: 59.08332,
+          interval: 59.08332,
+        });
+        timeRange2.add({
+          start: 227.26884,
+          end: 230.481,
+          interval: 6.7765600000000035,
+        });
+        /**
+         * 59.08332 = 59.08332 - 0
+         * 3.21216 = 230.481 - 227.26884
+         * 62.29548 = 59.08332 + 7.23656
+         * native JS 62.29547999999998
+         */
+        expect(timeRange2.totalPlayTime()).toEqual(62.29548);
+      });
     });
   });
 });

@@ -82,4 +82,29 @@ describe('NumberUtil', () => {
       expect(NumberUtil.fromPermyriad(0)).toEqual(0);
     });
   });
+
+  describe('decimalRoundUp & Down', () => {
+    it('should throw', () => {
+      expect(() => NumberUtil.decimalRoundUp(NaN)).toThrow();
+      expect(() => NumberUtil.decimalRoundDown(NaN)).toThrow();
+    });
+
+    it('should convert from decimal places up', () => {
+      expect(NumberUtil.decimalRoundUp(100, 3)).toEqual(100000);
+      expect(NumberUtil.decimalRoundUp(1.23456, 5)).toEqual(123456);
+      expect(NumberUtil.decimalRoundUp(100.2, 5)).toEqual(10020000);
+      expect(NumberUtil.decimalRoundUp(100.123456789, 2)).toEqual(10012);
+      expect(NumberUtil.decimalRoundUp(100.123456789, 5)).toEqual(10012346);
+      expect(NumberUtil.decimalRoundUp(203.502)).toEqual(20350200);
+    });
+
+    it('should convert from decimal places down', () => {
+      expect(NumberUtil.decimalRoundDown(100000, 3)).toEqual(100);
+      expect(NumberUtil.decimalRoundDown(123456, 5)).toEqual(1.23456);
+      expect(NumberUtil.decimalRoundDown(10020000, 5)).toEqual(100.2);
+      expect(NumberUtil.decimalRoundDown(10012, 2)).toEqual(100.12);
+      expect(NumberUtil.decimalRoundDown(10012345, 5)).toEqual(100.12345);
+      expect(NumberUtil.decimalRoundDown(20350200)).toEqual(203.502);
+    });
+  });
 });
