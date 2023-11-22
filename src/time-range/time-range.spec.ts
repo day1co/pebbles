@@ -152,6 +152,45 @@ describe('TimeRange Util', () => {
          * native JS 62.29547999999998
          */
         expect(timeRange2.totalPlayTime()).toEqual(62.29548);
+
+        const timeRange3 = new TimeRange([], 1);
+        timeRange3.add({
+          start: 0,
+          end: 59.08332,
+          interval: 59.08332,
+        });
+        timeRange3.add({
+          start: 227.26884,
+          end: 230.481,
+          interval: 6.7765600000000035,
+        });
+        expect(timeRange3.totalPlayTime()).toEqual(62.3);
+
+        const timeRange4 = new TimeRange([], 2);
+        for (let i = 0; i < 10; i++) {
+          const o: TimeSection = {
+            start: i * 10,
+            end: i * 10 + 10,
+            interval: 10,
+          };
+          timeRange4.add(o);
+        }
+        timeRange4.merge();
+        expect(timeRange4.totalPlayTime()).toEqual(100);
+
+        const timeRange5 = new TimeRange([], 5);
+        timeRange5.add({
+          start: 0,
+          end: 100,
+          interval: 100,
+        });
+        timeRange5.add({
+          start: 90,
+          end: 60 * 60 * 1000000 + 0.99, // 1,000,000 hours
+          interval: 60 * 60 * 1000000 + 0.99,
+        });
+        timeRange5.merge();
+        expect(timeRange5.totalPlayTime()).toEqual(3600000000.99);
       });
     });
   });

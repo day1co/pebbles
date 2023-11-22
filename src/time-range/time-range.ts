@@ -3,10 +3,10 @@ import { TimeSection } from './time-range.interface';
 
 export class TimeRange {
   private section!: Array<TimeSection>;
-  readonly decimalByKollus: number;
-  constructor(loadSection: Array<TimeSection> = []) {
+  readonly decimalPlaces: number;
+  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 5) {
     this.section = loadSection;
-    this.decimalByKollus = 5; // https://catenoid-support.atlassian.net/wiki/spaces/SUP/pages/3312250/V+G+Controller#progress
+    this.decimalPlaces = decimalPlaces;
   }
   add(piece: TimeSection) {
     this.section.push(piece);
@@ -43,12 +43,11 @@ export class TimeRange {
     }, 0);
   }
   totalPlayTime() {
-    return this.section.reduce((p, v) => {
-      const end = NumberUtil.decimalRoundUp(v.end, this.decimalByKollus);
-      const start = NumberUtil.decimalRoundUp(v.start, this.decimalByKollus);
-      const value = NumberUtil.decimalRoundUp(p, this.decimalByKollus);
-      p = value + (end - start);
-      return NumberUtil.decimalRoundDown(p, this.decimalByKollus);
+    const result = this.section.reduce((p, v) => {
+      const end = NumberUtil.decimalRoundUp(v.end, this.decimalPlaces);
+      const start = NumberUtil.decimalRoundUp(v.start, this.decimalPlaces);
+      return p + (end - start);
     }, 0);
+    return NumberUtil.decimalRoundDown(result, this.decimalPlaces);
   }
 }

@@ -38,7 +38,7 @@ export namespace NumberUtil {
     return Number((value / 10_000).toFixed(digits));
   };
 
-  export const decimalRoundUp = (floatValue: number, decimal = 5) => {
+  export const decimalRoundUp = (floatValue: number, decimal = 2) => {
     if (isNaN(floatValue)) {
       throw new Error(`unable to convert "${floatValue}" to number type`);
     }
@@ -46,7 +46,7 @@ export namespace NumberUtil {
     return Math.round(floatValue * factor);
   };
 
-  export const decimalRoundDown = (value: number, decimal = 5) => {
+  export const decimalRoundDown = (value: number, decimal = 2) => {
     if (isNaN(value)) {
       throw new Error(`unable to convert "${value}" to number type`);
     }
