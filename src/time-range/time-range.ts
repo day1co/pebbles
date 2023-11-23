@@ -24,7 +24,9 @@ export class TimeRange {
           const prevSection: TimeSection = p[p.length - 1];
           if (prevSection.end >= v.start) {
             prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
-            prevSection.interval += v.interval;
+            prevSection.interval = NumberUtil.decimalRoundDown(
+              NumberUtil.decimalRoundUp(prevSection.interval) + NumberUtil.decimalRoundUp(v.interval)
+            );
           } else {
             p.push(v);
           }
@@ -37,10 +39,12 @@ export class TimeRange {
     return this.section;
   }
   totalInterval() {
-    return this.section.reduce((p, v) => {
-      p = p + v.interval;
+    const result = this.section.reduce((p, v) => {
+      const interval = NumberUtil.decimalRoundUp(v.interval, this.decimalPlaces);
+      p = p + interval;
       return p;
     }, 0);
+    return NumberUtil.decimalRoundDown(result, this.decimalPlaces);
   }
   totalPlayTime() {
     const result = this.section.reduce((p, v) => {

@@ -124,6 +124,27 @@ describe('TimeRange Util', () => {
         expect(timeRange.totalInterval()).toEqual(totalInterval);
       });
 
+      it('decimal merge to one', async () => {
+        const timeRange = new TimeRange();
+        timeRange.add({
+          start: 1.1,
+          end: 11.1,
+          interval: 9.1,
+        });
+        timeRange.add({
+          start: 1.2,
+          end: 30.2,
+          interval: 10.2,
+        });
+        // native JS 9.1 + 10.2 = 19.299999999999997
+        expect(timeRange.totalInterval()).toEqual(19.3);
+        expect(timeRange.value().length).toEqual(2);
+        timeRange.merge(true);
+        expect(timeRange.value().length).toEqual(1);
+        expect(timeRange.value()[0].interval).toEqual(19.3);
+        expect(timeRange.value()[0].end).toEqual(30.2);
+      });
+
       it('cale decimal points in the totalPlayTime', async () => {
         const timeRange1 = new TimeRange();
         timeRange1.add({
