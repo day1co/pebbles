@@ -90,6 +90,7 @@ describe('NumberUtil', () => {
     });
 
     it('should convert from decimal places up', () => {
+      expect(NumberUtil.decimalRoundUp(100, 0)).toEqual(100);
       expect(NumberUtil.decimalRoundUp(100, 3)).toEqual(100000);
       expect(NumberUtil.decimalRoundUp(1.23456, 5)).toEqual(123456);
       expect(NumberUtil.decimalRoundUp(100.2, 5)).toEqual(10020000);
@@ -100,6 +101,7 @@ describe('NumberUtil', () => {
     });
 
     it('should convert from decimal places down', () => {
+      expect(NumberUtil.decimalRoundDown(100000, 0)).toEqual(100000);
       expect(NumberUtil.decimalRoundDown(100000, 3)).toEqual(100);
       expect(NumberUtil.decimalRoundDown(123456, 5)).toEqual(1.23456);
       expect(NumberUtil.decimalRoundDown(10020000, 5)).toEqual(100.2);
