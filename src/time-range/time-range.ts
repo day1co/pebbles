@@ -4,7 +4,7 @@ import { TimeSection } from './time-range.interface';
 export class TimeRange {
   private section!: Array<TimeSection>;
   readonly decimalPlaces: number;
-  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 5) {
+  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 0) {
     this.section = loadSection;
     this.decimalPlaces = decimalPlaces;
   }

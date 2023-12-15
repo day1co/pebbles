@@ -96,8 +96,8 @@ describe('NumberUtil', () => {
       expect(NumberUtil.decimalRoundUp(100.2, 5)).toEqual(10020000);
       expect(NumberUtil.decimalRoundUp(100.123456789, 2)).toEqual(10012);
       expect(NumberUtil.decimalRoundUp(100.123456789, 5)).toEqual(10012346);
-      expect(NumberUtil.decimalRoundUp(203.502)).toEqual(20350);
-      expect(NumberUtil.decimalRoundUp(203.509)).toEqual(20351);
+      expect(NumberUtil.decimalRoundUp(203.202)).toEqual(203);
+      expect(NumberUtil.decimalRoundUp(203.509)).toEqual(204);
     });
 
     it('should convert from decimal places down', () => {
@@ -107,7 +107,7 @@ describe('NumberUtil', () => {
       expect(NumberUtil.decimalRoundDown(10020000, 5)).toEqual(100.2);
       expect(NumberUtil.decimalRoundDown(10012, 2)).toEqual(100.12);
       expect(NumberUtil.decimalRoundDown(10012345, 5)).toEqual(100.12345);
-      expect(NumberUtil.decimalRoundDown(20351)).toEqual(203.51);
+      expect(NumberUtil.decimalRoundDown(203)).toEqual(203);
     });
   });
 });
