@@ -125,7 +125,7 @@ describe('TimeRange Util', () => {
       });
 
       it('decimal merge to one', async () => {
-        const timeRange = new TimeRange();
+        const timeRange = new TimeRange([], 5);
         timeRange.add({
           start: 1.1,
           end: 11.1,
@@ -146,7 +146,7 @@ describe('TimeRange Util', () => {
       });
 
       it('cale decimal points in the totalPlayTime', async () => {
-        const timeRange1 = new TimeRange();
+        const timeRange1 = new TimeRange([], 5);
         timeRange1.add({
           start: 99.9,
           end: 100.1,
@@ -155,7 +155,7 @@ describe('TimeRange Util', () => {
         // native JS 100.1 - 99.9 = 0.19999999999998863
         expect(timeRange1.totalPlayTime()).toEqual(0.2);
 
-        const timeRange2 = new TimeRange();
+        const timeRange2 = new TimeRange([], 5);
         timeRange2.add({
           start: 0,
           end: 59.08332,
