@@ -212,6 +212,20 @@ describe('TimeRange Util', () => {
         });
         timeRange5.merge();
         expect(timeRange5.totalPlayTime()).toEqual(3600000000.99);
+
+        const timeRange6 = new TimeRange([], 0);
+        timeRange6.add({
+          start: 0,
+          end: 100,
+          interval: 100,
+        });
+        timeRange6.add({
+          start: 90,
+          end: 60 * 60 * 1000000 + 0.99, // 1,000,000 hours
+          interval: 60 * 60 * 1000000 + 0.99,
+        });
+        timeRange6.merge();
+        expect(timeRange6.totalPlayTime()).toEqual(3600000001);
       });
     });
   });
