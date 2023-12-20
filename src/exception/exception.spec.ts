@@ -1,11 +1,11 @@
 import {
   BadRequestException,
-  CredentialChangedException,
   ClientException,
+  CredentialChangedException,
   ForbiddenException,
   NotFoundException,
-  UnauthorizedException,
   TokenExpiredException,
+  UnauthorizedException,
 } from './client-exception';
 import { CustomException } from './custom-exception';
 import { DataException, InternalServerException, ServerException } from './server-exception';
@@ -23,10 +23,10 @@ describe('error', () => {
       expect(e.cause).toBeUndefined();
     });
     test('should have specified property', () => {
-      const e = new CustomException(123, 'hello', error);
+      const e = new CustomException(301, 'hello', error);
       expect(e).toBeInstanceOf(CustomException);
       expect(e).toBeInstanceOf(Error);
-      expect(e.code).toBe(123);
+      expect(e.code).toBe(301);
       expect(e.message).toBe('hello');
       expect(e.cause).toBe(error);
     });
@@ -42,11 +42,11 @@ describe('error', () => {
       expect(e.cause).toBeUndefined();
     });
     test('should have specified property', () => {
-      const e = new ClientException(123, 'hello', error);
+      const e = new ClientException(400, 'hello', error);
       expect(e).toBeInstanceOf(ClientException);
       expect(e).toBeInstanceOf(CustomException);
       expect(e).toBeInstanceOf(Error);
-      expect(e.code).toBe(123);
+      expect(e.code).toBe(400);
       expect(e.message).toBe('hello');
       expect(e.cause).toBe(error);
     });
@@ -172,11 +172,11 @@ describe('ServerException', () => {
     expect(e.cause).toBeUndefined();
   });
   test('should have specified property', () => {
-    const e = new ServerException(123, 'hello', error);
+    const e = new ServerException(502, 'hello', error);
     expect(e).toBeInstanceOf(ServerException);
     expect(e).toBeInstanceOf(CustomException);
     expect(e).toBeInstanceOf(Error);
-    expect(e.code).toBe(123);
+    expect(e.code).toBe(502);
     expect(e.message).toBe('hello');
     expect(e.cause).toBe(error);
   });
