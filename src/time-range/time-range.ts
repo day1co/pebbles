@@ -12,6 +12,7 @@ export class TimeRange {
     this.section.push(piece);
   }
   merge(debug = false) {
+    // eslint-disable-next-line no-console
     if (debug) console.log('merging:', this.section);
     this.section = this.section
       .sort((a: TimeSection, b: TimeSection) => {
@@ -33,6 +34,7 @@ export class TimeRange {
         }
         return p;
       }, []);
+    // eslint-disable-next-line no-console
     if (debug) console.log('merged:', this.section);
   }
   value() {
