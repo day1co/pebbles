@@ -125,7 +125,7 @@ describe('TimeRange Util', () => {
       });
 
       it('decimal merge to one', async () => {
-        const timeRange = new TimeRange();
+        const timeRange = new TimeRange([], 1);
         timeRange.add({
           start: 1.1,
           end: 11.1,
@@ -146,7 +146,7 @@ describe('TimeRange Util', () => {
       });
 
       it('cale decimal points in the totalPlayTime', async () => {
-        const timeRange1 = new TimeRange();
+        const timeRange1 = new TimeRange([], 1);
         timeRange1.add({
           start: 99.9,
           end: 100.1,
@@ -155,7 +155,7 @@ describe('TimeRange Util', () => {
         // native JS 100.1 - 99.9 = 0.19999999999998863
         expect(timeRange1.totalPlayTime()).toEqual(0.2);
 
-        const timeRange2 = new TimeRange();
+        const timeRange2 = new TimeRange([], 5);
         timeRange2.add({
           start: 0,
           end: 59.08332,
@@ -212,6 +212,47 @@ describe('TimeRange Util', () => {
         });
         timeRange5.merge();
         expect(timeRange5.totalPlayTime()).toEqual(3600000000.99);
+
+        const timeRange6 = new TimeRange();
+        timeRange6.add({
+          start: 0,
+          end: 100,
+          interval: 100,
+        });
+        timeRange6.add({
+          start: 90,
+          end: 60 * 60 * 1000000 + 0.99, // 1,000,000 hours
+          interval: 60 * 60 * 1000000 + 0.99,
+        });
+        timeRange6.merge();
+        expect(timeRange6.totalPlayTime()).toEqual(3600000001);
+
+        const timeRange8 = new TimeRange();
+        timeRange8.add({
+          start: 0,
+          end: 59.08332,
+          interval: 59.08332,
+        });
+        timeRange8.add({
+          start: 227.26884,
+          end: 230.481,
+          interval: 6.7765600000000035,
+        });
+        expect(timeRange8.totalPlayTime()).toEqual(62);
+      });
+
+      it('increased correction totalPlayTime', async () => {
+        const timeRange1 = new TimeRange();
+        expect(timeRange1.increaseCorrection(100)).toEqual(100);
+
+        const timeRange2 = new TimeRange(); // 0.01%
+        expect(timeRange2.increaseCorrection(10000)).toEqual(10001);
+
+        const timeRange3 = new TimeRange([], 0, 0.001); // 0.1%
+        expect(timeRange3.increaseCorrection(20000)).toEqual(20020);
+
+        const timeRange4 = new TimeRange([], 0, 0.01); // 1%
+        expect(timeRange4.increaseCorrection(30000)).toEqual(30300);
       });
     });
   });

@@ -42,6 +42,9 @@ export namespace NumberUtil {
     if (isNaN(floatValue)) {
       throw new Error(`unable to convert "${floatValue}" to number type`);
     }
+    if (decimal === 0) {
+      return Math.round(floatValue);
+    }
     const factor = Math.pow(10, decimal);
     return Math.round(floatValue * factor);
   };
@@ -49,6 +52,9 @@ export namespace NumberUtil {
   export const decimalRoundDown = (value: number, decimal = 2) => {
     if (isNaN(value)) {
       throw new Error(`unable to convert "${value}" to number type`);
+    }
+    if (decimal === 0) {
+      return value;
     }
     return value / Math.pow(10, decimal);
   };
