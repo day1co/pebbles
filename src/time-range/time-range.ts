@@ -4,16 +4,13 @@ import { TimeSection } from './time-range.interface';
 /**
  * @params loadSection: TimeSection 배열
  * @params decimalPlaces: TimeSection 계산시 소수점 자리수를 설정하여 반올림 처리 (default 0)
- * @params correction: 모든 클립 playtime의 오차 보정 수치 (default 0.01%)
  */
 export class TimeRange {
   private section!: Array<TimeSection>;
   decimalPlaces: number;
-  correction: number;
-  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 0, correction = 0.0001) {
+  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 0) {
     this.section = loadSection;
     this.decimalPlaces = decimalPlaces;
-    this.correction = correction;
   }
   add(piece: TimeSection) {
     this.section.push(piece);
@@ -62,8 +59,5 @@ export class TimeRange {
       return p + (end - start);
     }, 0);
     return NumberUtil.decimalRoundDown(result, this.decimalPlaces);
-  }
-  increaseCorrection(allPlayTime: number) {
-    return allPlayTime + Math.round(allPlayTime * this.correction);
   }
 }
