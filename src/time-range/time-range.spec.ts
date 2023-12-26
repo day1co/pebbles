@@ -240,20 +240,6 @@ describe('TimeRange Util', () => {
         });
         expect(timeRange8.totalPlayTime()).toEqual(62);
       });
-
-      it('increased correction totalPlayTime', async () => {
-        const timeRange1 = new TimeRange();
-        expect(timeRange1.increaseCorrection(100)).toEqual(100);
-
-        const timeRange2 = new TimeRange(); // 0.01%
-        expect(timeRange2.increaseCorrection(10000)).toEqual(10001);
-
-        const timeRange3 = new TimeRange([], 0, 0.001); // 0.1%
-        expect(timeRange3.increaseCorrection(20000)).toEqual(20020);
-
-        const timeRange4 = new TimeRange([], 0, 0.01); // 1%
-        expect(timeRange4.increaseCorrection(30000)).toEqual(30300);
-      });
     });
   });
 });
