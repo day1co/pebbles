@@ -5,6 +5,9 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/day1co/pebbles.git"
@@ -36,6 +39,7 @@
     "@tsconfig/node-lts": "^20.1.0",
     "@types/jest": "^29.5.11",
     "@types/mustache": "^4.2.5",
+    "@types/node": "^20.10.5",
     "@types/pino": "^7.0.4",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
