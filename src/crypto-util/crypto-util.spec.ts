@@ -22,6 +22,14 @@ describe('CryptoUtil', () => {
     });
   });
 
+  describe('createAesKey', () => {
+    it('should return a Uint8Array', async () => {
+      const result = await CryptoUtil.createAesKey(256);
+      expect(result).toBeInstanceOf(Uint8Array);
+      expect(result.length).toBe(32);
+    });
+  });
+
   describe('encodeBase64', () => {
     it('should accept string and return a base64 encoded string', () => {
       const result = CryptoUtil.encodeBase64('hello world');
