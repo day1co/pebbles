@@ -1,5 +1,6 @@
 export { ArrayUtil } from './array-util';
 export { BooleanUtil } from './boolean-util';
+export { CryptoUtil } from './crypto-util';
 export {
   DateUtil,
   DATE_FORMAT,
