@@ -1,13 +1,6 @@
 import type { webcrypto } from 'crypto';
 
-declare global {
-  namespace globalThis {
-    // eslint-disable-next-line no-var
-    var crypto: typeof webcrypto;
-  }
-}
-
-const crypto = globalThis.crypto;
+const crypto = (globalThis as any).crypto as typeof webcrypto;
 
 export namespace CryptoUtil {
   export const sha256 = async (data: string | Uint8Array): Promise<Uint8Array> => {
