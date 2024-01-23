@@ -518,6 +518,19 @@ export namespace DateUtil {
     }
     return localeAnnotation.SSS;
   }
+
+  export function getDatetimeByTimeZone(date: Date, timeZone: TimeZoneType = 'Asia/Seoul'): Date {
+    if (!isValidDate(date) || date.getUTCHours() !== 0) {
+      // TODO: utc가 아니면 해당 날짜를 utc로 변환하여 진행
+      throw new Error(`Invalid input argument: ${date}`);
+    }
+
+    const localOffset = date.getTimezoneOffset() / ONE_MINUTE_IN_SECOND;
+    const offset = localOffset + parseInt(getTimezoneOffsetString(timeZone, false).substring(0, 3));
+    const utcDatetime = DateUtil.calcDatetime(date, { hour: -offset });
+
+    return new Date(DateUtil.format(utcDatetime, { format: DATETIME_FORMAT }));
+  }
 }
 
 function subtractOneDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {

@@ -510,4 +510,33 @@ describe('DateUtil', () => {
       expect(fromNow(new Date('2020-01-01 00:00:00.999Z'))).toEqual('금방');
     });
   });
+
+  describe('getDatetimeByTimeZone', () => {
+    const getDatetimeByTimeZone = DateUtil.getDatetimeByTimeZone;
+    const localTime = new Date('2022-10-20 00:00:00.000Z');
+
+    it('should return date with given ko timezone', () => {
+      const offset = localTime.getTimezoneOffset() / 60 + 9;
+      const utcTime = DateUtil.calcDatetime(localTime, { hour: -offset });
+
+      const convertedTime = getDatetimeByTimeZone(localTime, 'Asia/Seoul');
+      expect(convertedTime).toEqual(utcTime);
+    });
+
+    it('should return date with given pst timezone', () => {
+      const offset = localTime.getTimezoneOffset() / 60 - 8;
+      const utcTime = DateUtil.calcDatetime(localTime, { hour: -offset });
+
+      const convertedTime = getDatetimeByTimeZone(localTime, 'PST');
+      expect(convertedTime).toEqual(utcTime);
+    });
+
+    it('should return date with given utc timezone', () => {
+      const offset = localTime.getTimezoneOffset() / 60;
+      const utcTime = DateUtil.calcDatetime(localTime, { hour: -offset });
+
+      const convertedTime = getDatetimeByTimeZone(localTime, 'UTC');
+      expect(convertedTime).toEqual(utcTime);
+    });
+  });
 });
