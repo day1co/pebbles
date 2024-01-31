@@ -30,7 +30,9 @@ export class TimeRange {
           if (prevSection.end >= v.start) {
             prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
             prevSection.interval = NumberUtil.decimalRoundDown(
-              NumberUtil.decimalRoundUp(prevSection.interval) + NumberUtil.decimalRoundUp(v.interval)
+              NumberUtil.decimalRoundUp(prevSection.interval, this.decimalPlaces) +
+                NumberUtil.decimalRoundUp(v.interval, this.decimalPlaces),
+              this.decimalPlaces
             );
           } else {
             p.push(v);
