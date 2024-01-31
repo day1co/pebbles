@@ -18,6 +18,7 @@ export class TimeRange {
   merge(debug = false) {
     // eslint-disable-next-line no-console
     if (debug) console.log('merging:', this.section);
+    const decimalPlaces = this.decimalPlaces ? this.decimalPlaces : undefined;
     this.section = this.section
       .sort((a: TimeSection, b: TimeSection) => {
         return a.start >= b.start ? 1 : -1;
@@ -30,7 +31,9 @@ export class TimeRange {
           if (prevSection.end >= v.start) {
             prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
             prevSection.interval = NumberUtil.decimalRoundDown(
-              NumberUtil.decimalRoundUp(prevSection.interval) + NumberUtil.decimalRoundUp(v.interval)
+              NumberUtil.decimalRoundUp(prevSection.interval, decimalPlaces) +
+                NumberUtil.decimalRoundUp(v.interval, decimalPlaces),
+              decimalPlaces
             );
           } else {
             p.push(v);
