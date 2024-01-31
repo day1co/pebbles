@@ -342,6 +342,18 @@ describe('StringUtil', () => {
     it('should return fallback for the not-valid-in-Korea phone number', () => {
       expect(normalizePhoneNumber('01012345678a', 'fallback')).toBe('fallback');
     });
+
+    it('should return empty string not string type property', () => {
+      expect(normalizePhoneNumber(821012345678 as any)).toBe('');
+      expect(normalizePhoneNumber(null as any)).toBe('');
+      expect(normalizePhoneNumber(undefined as any)).toBe('');
+    });
+
+    it('should return fallback for not string type property', () => {
+      expect(normalizePhoneNumber(821012345678 as any, 'fallback')).toBe('fallback');
+      expect(normalizePhoneNumber(null as any, 'fallback')).toBe('fallback');
+      expect(normalizePhoneNumber(undefined as any, 'fallback')).toBe('fallback');
+    });
   });
 
   describe('isValidKoreaPhoneNumber', () => {
