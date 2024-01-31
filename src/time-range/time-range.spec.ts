@@ -143,6 +143,22 @@ describe('TimeRange Util', () => {
         expect(timeRange.value().length).toEqual(1);
         expect(timeRange.value()[0].interval).toEqual(19.3);
         expect(timeRange.value()[0].end).toEqual(30.2);
+
+        const timeRange2 = new TimeRange([], 5);
+        timeRange2.add({
+          start: 1.11111,
+          end: 11.11111,
+          interval: 9.111111,
+        });
+        timeRange2.add({
+          start: 1.22222,
+          end: 30.22222,
+          interval: 10.22222,
+        });
+        timeRange2.merge(true);
+        expect(timeRange2.value().length).toEqual(1);
+        expect(timeRange2.value()[0].interval).toEqual(19.33333);
+        expect(timeRange2.value()[0].end).toEqual(30.22222);
       });
 
       it('cale decimal points in the totalPlayTime', async () => {
