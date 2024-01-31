@@ -174,7 +174,7 @@ export namespace StringUtil {
   export function normalizePhoneNumber(str: string, fallback?: unknown): string {
     if (typeof str !== 'string') {
       if (!fallback) {
-        throw new Error('Not a valid phone number');
+        throw new Error('Not a valid phone number. phone number must be a string');
       }
       return typeof fallback === 'function' ? fallback() : fallback;
     }
