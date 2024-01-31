@@ -345,7 +345,7 @@ describe('StringUtil', () => {
 
     it('should return Error for not string type property without fallback', () => {
       expect(() => normalizePhoneNumber(821012345678 as any)).toThrowError(
-        'Not a valid phone number.phone number must be a string'
+        'Not a valid phone number. phone number must be a string'
       );
       expect(() => normalizePhoneNumber(null as any)).toThrowError(
         'Not a valid phone number. phone number must be a string'
