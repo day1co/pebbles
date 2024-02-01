@@ -343,14 +343,14 @@ describe('StringUtil', () => {
       expect(normalizePhoneNumber('01012345678a', 'fallback')).toBe('fallback');
     });
 
-    it('should return Error for not string type property without fallback', () => {
-      expect(() => normalizePhoneNumber(821012345678 as any)).toThrowError(
+    it('should throw error for not string type property without fallback', () => {
+      expect(() => normalizePhoneNumber(821012345678 as any)).toThrow(
         'Not a valid phone number. phone number must be a string'
       );
-      expect(() => normalizePhoneNumber(null as any)).toThrowError(
+      expect(() => normalizePhoneNumber(null as any)).toThrow(
         'Not a valid phone number. phone number must be a string'
       );
-      expect(() => normalizePhoneNumber(undefined as any)).toThrowError(
+      expect(() => normalizePhoneNumber(undefined as any)).toThrow(
         'Not a valid phone number. phone number must be a string'
       );
     });
