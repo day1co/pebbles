@@ -1,5 +1,5 @@
-import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
 import type { MoneyUnitType } from './money-unit-converter.type';
+import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
 
 class MoneyUnitConverter implements UnitConverter<MoneyUnitType> {
   // HIW 20230104

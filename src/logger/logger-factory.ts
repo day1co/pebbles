@@ -1,5 +1,5 @@
-import type { Logger } from './logger.interface';
 import { PinoLogger } from './logger-impl/pino-logger';
+import type { Logger } from './logger.interface';
 
 export class LoggerFactory {
   private readonly loggerMap: Map<string, Logger>;
