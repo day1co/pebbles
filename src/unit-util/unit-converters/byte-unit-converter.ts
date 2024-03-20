@@ -1,5 +1,5 @@
-import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
 import type { ByteUnitType } from './byte-unit-converter.type';
+import type { ConvertOpts, UnitConverter } from '../unit-util.interface';
 
 const BYTE_UNIT_SQRT_DIFF = 3;
 const BYTE_UNIT_MULTIPLE_DIFF = 1000;
