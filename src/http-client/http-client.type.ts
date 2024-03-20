@@ -1,10 +1,9 @@
 import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 export type HttpReqConfig = AxiosRequestConfig;
-export type HttpResponse<T> = AxiosResponse<T>;
+export type HttpResponse<T, D> = AxiosResponse<T, D>;
 
 /** @deprecated */
-export type HttpRes<T> = HttpResponse<T>;
+export type HttpRes<T, D> = HttpResponse<T, D>;
 
-export type AxiosErrorType = AxiosError;
-export type AxiosResponseType = AxiosResponse<{ data: { name: string; message: string } }>;
+export type HttpError<T, D> = AxiosError<T, D>;
