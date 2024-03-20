@@ -49,7 +49,7 @@ export {
   UnknownException,
 } from './exception';
 export { HttpClient, HttpState } from './http-client';
-export type { HttpReqConfig, HttpRes, HttpResponse } from './http-client';
+export type { HttpReqConfig, HttpRes, HttpResponse, HttpError } from './http-client';
 export { LoggerFactory } from './logger';
 export type { Logger, LogLevel } from './logger';
 export { MapUtil } from './map-util';
