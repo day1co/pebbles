@@ -36,12 +36,12 @@ export namespace ObjectUtil {
   }
 
   export function deepClone<Type extends ObjectType>(obj: Type): Type {
-    const constructor = obj.constructor as new (...arg: unknown[]) => Type;
+    const initiator = obj.constructor as new (...arg: unknown[]) => Type;
 
     if (obj instanceof Date) {
-      return new constructor(obj.getTime());
+      return new initiator(obj.getTime());
     } else if (obj instanceof Map || obj instanceof Set || Array.isArray(obj)) {
-      const result = new constructor();
+      const result = new initiator();
       const iterator = obj.entries();
 
       for (const item of iterator) {
@@ -58,16 +58,16 @@ export namespace ObjectUtil {
 
       return result;
     } else if (obj instanceof RegExp) {
-      return new constructor(obj);
+      return new initiator(obj);
     } else if (obj instanceof ArrayBuffer) {
-      const clonedBuf = new constructor(obj.byteLength);
+      const clonedBuf = new initiator(obj.byteLength);
       new Uint8Array(clonedBuf as unknown as ArrayBuffer).set(new Uint8Array(obj));
       return clonedBuf;
     } else if (obj instanceof Function) {
       return obj;
     }
 
-    const clonedObj = constructor ? new constructor() : (new Object() as Type);
+    const clonedObj = initiator instanceof Function ? new initiator() : (new Object() as Type);
     getAllPropertyKeys(obj).forEach((key) => {
       let value;
       if (obj[key] instanceof Object) {
