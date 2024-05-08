@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ClientException,
+  ConflictException,
   CredentialChangedException,
   ForbiddenException,
   NotFoundException,
@@ -239,6 +240,24 @@ describe('TokenExpiredException', () => {
     expect(e).toBeInstanceOf(TokenExpiredException);
     expect(e).toBeInstanceOf(ClientException);
     expect(e.code).toBe(401);
+    expect(e.message).toBe('hello');
+    expect(e.cause).toBe(error);
+  });
+});
+describe('ConflictException', () => {
+  test('should have default property', () => {
+    const e = new ConflictException();
+    expect(e).toBeInstanceOf(ConflictException);
+    expect(e).toBeInstanceOf(ClientException);
+    expect(e.code).toBe(409);
+    expect(e.message).toBe('CONFLICT');
+    expect(e.cause).toBeUndefined();
+  });
+  test('should have specified property', () => {
+    const e = new ConflictException('hello', error);
+    expect(e).toBeInstanceOf(ConflictException);
+    expect(e).toBeInstanceOf(ClientException);
+    expect(e.code).toBe(409);
     expect(e.message).toBe('hello');
     expect(e.cause).toBe(error);
   });
