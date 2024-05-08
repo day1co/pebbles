@@ -47,6 +47,7 @@ export {
   TokenExpiredException,
   UnauthorizedException,
   UnknownException,
+  ConflictException,
 } from './exception';
 export { HttpClient, HttpState } from './http-client';
 export type { HttpReqConfig, HttpRes, HttpResponse, HttpError } from './http-client';
