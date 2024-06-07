@@ -257,5 +257,31 @@ describe('TimeRange Util', () => {
         expect(timeRange8.totalPlayTime()).toEqual(62);
       });
     });
+
+    describe('revert time section', () => {
+      it('unwatched time range', async () => {
+        const timeRange = new TimeRange();
+        timeRange.add({ end: 6.74336, start: 0, interval: 6.74336 });
+        timeRange.add({ end: 67.15486, start: 17, interval: 50.15486 });
+        timeRange.add({ end: 78.2383, start: 78, interval: 0.2383 });
+        timeRange.add({ end: 120.04749, start: 89.00053, interval: 31.04696 });
+        timeRange.add({ end: 197.02565, start: 141, interval: 56.02565 });
+        timeRange.add({ end: 221.35117, start: 219, interval: 2.35117 });
+        timeRange.add({ end: 242.54008, start: 233, interval: 9.54008 });
+        timeRange.add({ end: 419.22133, start: 294, interval: 125.22133 });
+
+        const result = timeRange.getUnwatchedTimeRange(500);
+        expect(result).toEqual([
+          { start: 6.74336, end: 17 },
+          { start: 67.15486, end: 78 },
+          { start: 78.2383, end: 89.00053 },
+          { start: 120.04749, end: 141 },
+          { start: 197.02565, end: 219 },
+          { start: 221.35117, end: 233 },
+          { start: 242.54008, end: 294 },
+          { start: 419.22133, end: 500 },
+        ]);
+      });
+    });
   });
 });
