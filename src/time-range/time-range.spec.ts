@@ -258,8 +258,8 @@ describe('TimeRange Util', () => {
       });
     });
 
-    describe('revert time section', () => {
-      it('unwatched time range', async () => {
+    describe('no time section', () => {
+      it('should be return unwatched time range', async () => {
         const timeRange = new TimeRange();
         timeRange.add({ end: 6.74336, start: 0, interval: 6.74336 });
         timeRange.add({ end: 67.15486, start: 17, interval: 50.15486 });
@@ -281,6 +281,11 @@ describe('TimeRange Util', () => {
           { start: 242.54008, end: 294 },
           { start: 419.22133, end: 500 },
         ]);
+      });
+      it('should be return entire section, if no section watched', async () => {
+        const timeRange = new TimeRange();
+        const result = timeRange.getUnwatchedTimeRange(500);
+        expect(result).toEqual([{ start: 0, end: 500 }]);
       });
     });
   });
