@@ -74,6 +74,16 @@ export class TimeRange {
     // 정렬된 시청 구간을 기준으로 미시청 구간을 계산
     const timeRange = this.section.sort((a, b) => a.start - b.start);
 
+    // 시청 구간이 없는 경우 클립 전체를 미시청 구간으로 간주
+    if (timeRange.length === 0) {
+      return [
+        {
+          start: 0,
+          end: endTime,
+        },
+      ];
+    }
+
     // 클립의 시작부터 첫 시청 구간의 시작까지의 미시청 구간 추가
     if (timeRange[0].start > 0) {
       unwatchedTimeRange.push({
