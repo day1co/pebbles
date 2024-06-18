@@ -103,7 +103,9 @@ export class TimeRange {
     }
 
     // 마지막 시청 구간의 끝부터 클립의 끝까지의 미시청 구간 추가
-    if (timeRange[timeRange.length - 1].end < endTime) {
+    const start = NumberUtil.decimalRoundUp(timeRange[timeRange.length - 1].end, this.decimalPlaces);
+    const end = NumberUtil.decimalRoundUp(endTime, this.decimalPlaces);
+    if (start < end) {
       unwatchedTimeRange.push({
         start: timeRange[timeRange.length - 1].end,
         end: endTime,

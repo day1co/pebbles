@@ -260,7 +260,7 @@ describe('TimeRange Util', () => {
 
     describe('no time section', () => {
       it('should be return unwatched time range', async () => {
-        const timeRange = new TimeRange();
+        const timeRange = new TimeRange([], 5);
         timeRange.add({ end: 6.74336, start: 0, interval: 6.74336 });
         timeRange.add({ end: 67.15486, start: 17, interval: 50.15486 });
         timeRange.add({ end: 78.2383, start: 78, interval: 0.2383 });
@@ -286,6 +286,11 @@ describe('TimeRange Util', () => {
         const timeRange = new TimeRange();
         const result = timeRange.getUnwatchedTimeRange(500);
         expect(result).toEqual([{ start: 0, end: 500 }]);
+      });
+      it('should be return empty section, if full watched - decimalPlaces', async () => {
+        const timeRange = new TimeRange([{ end: 9.74336, start: 0, interval: 9.74336 }], 0);
+        const result = timeRange.getUnwatchedTimeRange(10);
+        expect(result).toEqual([]);
       });
     });
   });
