@@ -15,6 +15,6 @@ export const ONE_HOUR_IN_MILLI = ONE_HOUR_IN_SECOND * ONE_SECOND_IN_MILLI;
 export const ONE_DAY_IN_MILLI = ONE_DAY_IN_SECOND * ONE_SECOND_IN_MILLI;
 
 export const TIMEZONE_SEOUL = 'Asia/Seoul';
-export const TIMEZONE_PST = 'PST';
+export const TIMEZONE_PST = 'PST8PDT';
 export const TIMEZONE_TOKYO = 'Asia/Tokyo';
 export const TIMEZONE_UTC = 'UTC';
