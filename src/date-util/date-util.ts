@@ -16,7 +16,7 @@ import {
 import type { LocalDateTimeFormatOpts, TimeAnnotationSet } from './date-util.interface';
 import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
 
-const timeZoneMap: Record<TimeZoneType, number> = { 'Asia/Seoul': 540, 'Asia/Tokyo': 540, PST: -480, UTC: 0 };
+const timeZoneMap: Record<TimeZoneType, number> = { 'Asia/Seoul': 540, 'Asia/Tokyo': 540, PST8PDT: -480, UTC: 0 };
 const logger = LoggerFactory.getLogger('pebbles:date-util');
 
 export namespace DateUtil {

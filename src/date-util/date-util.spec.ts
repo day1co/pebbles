@@ -350,7 +350,7 @@ describe('DateUtil', () => {
       expect(
         format(testDatetime, { format: 'YYYY-MM-DDTHH:mm:ss.SSSZZ', isUtc: false, timeZone: 'Asia/Seoul' })
       ).toEqual(`2022-02-23T10:23:45.678+0900`);
-      expect(format(testDatetime, { isUtc: false, timeZone: 'PST' })).toBe('2022-02-22 17:23:45');
+      expect(format(testDatetime, { isUtc: false, timeZone: 'PST8PDT' })).toBe('2022-02-22 17:23:45');
     });
   });
 
@@ -367,7 +367,7 @@ describe('DateUtil', () => {
       expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT, isUtc: false, timeZone: 'Asia/Seoul' })).toEqual(
         `2022-02-23T10:23:45+09:00`
       );
-      expect(formatInIso8601(testDatetime, { isUtc: false, timeZone: 'PST' })).toEqual('2022-02-22T17:23:45-08:00');
+      expect(formatInIso8601(testDatetime, { isUtc: false, timeZone: 'PST8PDT' })).toEqual('2022-02-22T17:23:45-08:00');
     });
   });
 
