@@ -1,4 +1,3 @@
-import pino from 'pino';
 import type { LogLevel } from './logger.type';
 
 export interface Logger {
@@ -9,5 +8,13 @@ export interface Logger {
   warn(msgTemplate?: string, ...args: unknown[]): void;
   error(msgTemplate?: string, ...args: unknown[]): void;
   log(msgTemplate?: string, ...args: unknown[]): void;
-  child(options: Record<string, unknown>): pino.Logger;
+}
+
+export interface ObjectLogger {
+  traceObject(o: object, msg: string): void;
+  debugObject(o: object, msg: string): void;
+  infoObject(o: object, msg: string): void;
+  warnObject(o: object, msg: string): void;
+  errorObject(o: object, msg: string): void;
+  logObject(o: object, msg: string): void;
 }

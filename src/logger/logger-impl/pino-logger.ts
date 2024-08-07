@@ -1,8 +1,8 @@
 import pino from 'pino';
-import type { Logger } from '../logger.interface';
+import type { Logger, ObjectLogger } from '../logger.interface';
 import type { LogLevel } from '../logger.type';
 
-export class PinoLogger implements Logger {
+export class PinoLogger implements Logger, ObjectLogger {
   private readonly logger: pino.Logger;
 
   constructor(name: string) {
@@ -32,8 +32,27 @@ export class PinoLogger implements Logger {
   error(msgTemplate = '', ...args: unknown[]): void {
     this.logger.error(msgTemplate, ...args);
   }
-  child(options: Record<string, unknown>): pino.Logger {
-    return this.logger.child(options);
+
+  traceObject(o: object = {}, msg: string = ''): void {
+    this.logger.child(o).trace(msg);
   }
+
+  debugObject(o: object = {}, msg: string = ''): void {
+    this.logger.child(o).debug(msg);
+  }
+
+  infoObject(o: object = {}, msg: string = ''): void {
+    this.logger.child(o).debug(msg);
+  }
+
+  warnObject(o: object = {}, msg: string = ''): void {
+    this.logger.child(o).debug(msg);
+  }
+
+  errorObject(o: object = {}, msg: string = ''): void {
+    this.logger.child(o).debug(msg);
+  }
+
   log = this.debug;
+  logObject = this.debugObject;
 }
