@@ -6,4 +6,8 @@ describe('Logger', () => {
     const logger2 = LoggerFactory.getLogger('pebbles:logger');
     expect(logger1 === logger2).toBe(true);
   });
+  it('child 는 같은 이름이지만 다른 obj', () => {
+    const logger = LoggerFactory.getLogger('pebbles:logger');
+    expect(logger === logger.child({ a: 1 })).toBe(false);
+  });
 });
