@@ -32,6 +32,8 @@ export class PinoLogger implements Logger {
   error(msgTemplate = '', ...args: unknown[]): void {
     this.logger.error(msgTemplate, ...args);
   }
-
+  child(options: Record<string, unknown>): pino.Logger {
+    return this.logger.child(options);
+  }
   log = this.debug;
 }
