@@ -5,8 +5,16 @@ import type { LogLevel } from '../logger.type';
 export class PinoLogger implements Logger {
   private readonly logger: pino.Logger;
 
-  constructor(name: string) {
-    this.logger = pino({ name, level: 'debug' });
+  constructor(name: string);
+  constructor(args: Record<string, unknown>, logger: pino.Logger);
+  constructor(nameOrArgs: string | Record<string, unknown>, logger?: pino.Logger) {
+    if (typeof nameOrArgs === 'string') {
+      this.logger = pino({ name: nameOrArgs, level: 'debug' });
+    } else if (typeof nameOrArgs === 'object' && logger) {
+      this.logger = logger.child(nameOrArgs);
+    } else {
+      throw new Error('Invalid arguments');
+    }
   }
 
   set logLevel(level: LogLevel) {
@@ -32,8 +40,14 @@ export class PinoLogger implements Logger {
   error(msgTemplate = '', ...args: unknown[]): void {
     this.logger.error(msgTemplate, ...args);
   }
-  child(options: Record<string, unknown>): pino.Logger {
-    return this.logger.child(options);
+
+  child(args: Record<string, unknown>): Logger {
+    return new PinoLogger(args, this.logger);
   }
+
+  flat(msgTemplate: string = '', args: Record<string, unknown>): void {
+    this.logger.child(args).debug(msgTemplate);
+  }
+
   log = this.debug;
 }
