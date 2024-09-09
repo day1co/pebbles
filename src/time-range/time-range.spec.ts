@@ -293,5 +293,51 @@ describe('TimeRange Util', () => {
         expect(result).toEqual([]);
       });
     });
+
+    describe('check buffer Constructor', () => {
+      it('start interval 1, start+10 = end, buffer sec 60, merge to one', async () => {
+        const loadSection: Array<TimeSection> = [];
+        const bufferSec: number = 60;
+        for (let i = 0; i < 10; i++) {
+          const o: TimeSection = {
+            start: i,
+            end: i + 10,
+            interval: 10,
+          };
+          loadSection.push(o);
+        }
+        const timeRange = new TimeRange(loadSection, 0, bufferSec);
+        expect(timeRange.value().length).toEqual(10);
+
+        timeRange.merge(true);
+
+        expect(timeRange.value().length).toEqual(1);
+        expect(timeRange.value()[0].start).toEqual(0);
+        expect(timeRange.value()[0].end).toEqual(bufferSec + 19);
+      });
+      it('split start and end, merge to one', async () => {
+        const bufferSec: number = 20;
+        const timeRange = new TimeRange([], 0, bufferSec);
+        let ts: TimeSection = {
+          start: 10,
+          end: 20,
+          interval: 10,
+        };
+        timeRange.add(ts);
+
+        ts = {
+          start: 30,
+          end: 40,
+          interval: 10,
+        };
+        timeRange.add(ts);
+
+        expect(timeRange.value().length).toEqual(4);
+
+        timeRange.merge(true);
+
+        expect(timeRange.value().length).toEqual(1);
+      });
+    });
   });
 });

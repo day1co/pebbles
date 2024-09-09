@@ -8,14 +8,34 @@ import { TimeSection } from './time-range.interface';
 export class TimeRange {
   private section!: Array<TimeSection>;
   decimalPlaces: number;
+  bufferSec: number;
 
-  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 0) {
+  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 0, bufferSec = 0) {
     this.section = loadSection;
     this.decimalPlaces = decimalPlaces;
+    this.bufferSec = bufferSec;
+
+    if (this.bufferSec > 0) {
+      for (let i = 0; i < this.section.length; i++) {
+        const bufferStart = Math.min(this.section[i].start - this.bufferSec, 0);
+        this.section[i].start = Math.max(0, this.section[i].start - this.bufferSec);
+        this.section[i].end = this.section[i].end + this.bufferSec;
+        this.section[i].interval = bufferStart + this.section[i].interval + this.bufferSec * 2;
+      }
+    }
   }
 
   add(piece: TimeSection) {
     this.section.push(piece);
+
+    if (this.bufferSec > 0) {
+      const bufferStart = Math.min(piece.start - this.bufferSec, 0);
+      this.section.push({
+        start: Math.max(0, piece.start - this.bufferSec),
+        end: piece.end + this.bufferSec,
+        interval: bufferStart + piece.interval + this.bufferSec * 2,
+      });
+    }
   }
 
   merge(debug = false) {
