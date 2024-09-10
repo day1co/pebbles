@@ -332,11 +332,13 @@ describe('TimeRange Util', () => {
         };
         timeRange.add(ts);
 
-        expect(timeRange.value().length).toEqual(4);
+        expect(timeRange.value().length).toEqual(2);
 
         timeRange.merge(true);
 
         expect(timeRange.value().length).toEqual(1);
+        expect(timeRange.value()[0].start).toEqual(0);
+        expect(timeRange.value()[0].end).toEqual(bufferSec + 40);
       });
     });
   });
