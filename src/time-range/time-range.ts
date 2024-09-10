@@ -26,8 +26,6 @@ export class TimeRange {
   }
 
   add(piece: TimeSection) {
-    this.section.push(piece);
-
     if (this.bufferSec > 0) {
       const bufferStart = Math.min(piece.start - this.bufferSec, 0);
       this.section.push({
@@ -35,6 +33,8 @@ export class TimeRange {
         end: piece.end + this.bufferSec,
         interval: bufferStart + piece.interval + this.bufferSec * 2,
       });
+    } else {
+      this.section.push(piece);
     }
   }
 
