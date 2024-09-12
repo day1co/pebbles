@@ -319,18 +319,18 @@ describe('TimeRange Util', () => {
         const bufferSec: number = 20;
         const timeRange = new TimeRange([], 0, bufferSec);
         let ts: TimeSection = {
-          start: 10,
-          end: 20,
+          start: 20,
+          end: 30,
           interval: 10,
         };
-        timeRange.add(ts);
+        timeRange.bufferAdd(ts);
 
         ts = {
           start: 30,
-          end: 40,
-          interval: 10,
+          end: 31,
+          interval: 1,
         };
-        timeRange.add(ts);
+        timeRange.bufferAdd(ts);
 
         expect(timeRange.value().length).toEqual(2);
 
@@ -338,7 +338,7 @@ describe('TimeRange Util', () => {
 
         expect(timeRange.value().length).toEqual(1);
         expect(timeRange.value()[0].start).toEqual(0);
-        expect(timeRange.value()[0].end).toEqual(bufferSec + 40);
+        expect(timeRange.value()[0].end).toEqual(bufferSec + 31);
       });
     });
   });
