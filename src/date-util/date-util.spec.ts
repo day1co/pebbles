@@ -510,4 +510,29 @@ describe('DateUtil', () => {
       expect(fromNow(new Date('2020-01-01 00:00:00.999Z'))).toEqual('금방');
     });
   });
+
+  describe('isAdult', () => {
+    beforeAll(() => {
+      jest.useFakeTimers().setSystemTime(new Date('2024-10-01'));
+    });
+    afterAll(() => {
+      jest.clearAllTimers();
+    });
+
+    it('should return true if the age is over 19', () => {
+      expect(DateUtil.isAdult(new Date('2000-10-01'))).toBe(true);
+      expect(DateUtil.isAdult(new Date('2003-10-01'))).toBe(true);
+      expect(DateUtil.isAdult(new Date('2005-10-01'))).toBe(true);
+      expect(DateUtil.isAdult('2000-10-01')).toBe(true);
+      expect(DateUtil.isAdult('2003-10-01')).toBe(true);
+      expect(DateUtil.isAdult('2005-10-01')).toBe(true);
+    });
+
+    it('should return false if the age is under 19', () => {
+      expect(DateUtil.isAdult(new Date('2005-10-02'))).toBe(false);
+      expect(DateUtil.isAdult(new Date('2022-10-01'))).toBe(false);
+      expect(DateUtil.isAdult('2005-10-02')).toBe(false);
+      expect(DateUtil.isAdult('2022-10-01')).toBe(false);
+    });
+  });
 });

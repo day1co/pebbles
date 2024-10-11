@@ -12,6 +12,7 @@ import {
   ONE_MINUTE_IN_SECOND,
   ONE_SECOND_IN_MILLI,
   TIMESTAMP_FORMAT,
+  ADULT_AGE_DEFAULT,
 } from './date-util.const';
 import type { LocalDateTimeFormatOpts, TimeAnnotationSet } from './date-util.interface';
 import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
@@ -517,6 +518,13 @@ export namespace DateUtil {
       return `${secondDiff}${localeAnnotation.s}`;
     }
     return localeAnnotation.SSS;
+  }
+
+  export function isAdult(birth: DateType): boolean {
+    const now = new Date();
+    const age = diff(birth, now, 'year');
+
+    return age >= ADULT_AGE_DEFAULT;
   }
 }
 

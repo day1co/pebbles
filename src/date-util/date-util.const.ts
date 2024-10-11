@@ -18,3 +18,5 @@ export const TIMEZONE_SEOUL = 'Asia/Seoul';
 export const TIMEZONE_PST = 'PST8PDT';
 export const TIMEZONE_TOKYO = 'Asia/Tokyo';
 export const TIMEZONE_UTC = 'UTC';
+
+export const ADULT_AGE_DEFAULT = 19;
