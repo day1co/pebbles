@@ -1,5 +1,13 @@
 import { DateUtil } from './date-util';
-import { DATE_FORMAT, DATETIME_FORMAT, DATETIME_FORMAT_WITH_MILLIS, TIMESTAMP_FORMAT } from './date-util.const';
+import {
+  DATE_FORMAT,
+  DATETIME_FORMAT,
+  DATETIME_FORMAT_WITH_MILLIS,
+  TIMESTAMP_FORMAT,
+  TIMEZONE_PST,
+  TIMEZONE_SEOUL,
+  TIMEZONE_TOKYO,
+} from './date-util.const';
 
 const testDateStr = '2022-02-23';
 const testDatetimeStr1 = '2022-02-23 01:23';
@@ -512,27 +520,94 @@ describe('DateUtil', () => {
   });
 
   describe('isAdult', () => {
-    beforeAll(() => {
-      jest.useFakeTimers().setSystemTime(new Date('2024-10-01'));
-    });
-    afterAll(() => {
-      jest.clearAllTimers();
+    const isAdult = DateUtil.isAdult;
+
+    describe('PST timezone(-1 day)', () => {
+      beforeAll(() => {
+        jest.useFakeTimers().setSystemTime(new Date('2024-10-01 06:59:00Z')); // 2024-09-30 23:59:00 GMT-0700
+      });
+      afterAll(() => {
+        jest.clearAllTimers();
+      });
+      it('should return true if the age is over 19', () => {
+        expect(isAdult(DateUtil.parse('2000-10-01'), TIMEZONE_PST)).toBe(true); // 23
+        expect(isAdult(DateUtil.parse('2003-10-01'), TIMEZONE_PST)).toBe(true); // 20
+        expect(isAdult(DateUtil.parse('2005-09-30'), TIMEZONE_PST)).toBe(true); // 19
+
+        expect(isAdult('2000-10-01', TIMEZONE_PST)).toBe(true);
+        expect(isAdult('2003-10-01', TIMEZONE_PST)).toBe(true);
+        expect(isAdult('2005-09-30', TIMEZONE_PST)).toBe(true);
+      });
+
+      it('should return false if the age is under 19', () => {
+        expect(isAdult(DateUtil.parse('2022-10-01'), TIMEZONE_PST)).toBe(false); // 1
+        expect(isAdult(DateUtil.parse('2005-10-01'), TIMEZONE_PST)).toBe(false); // 18
+
+        expect(isAdult('2022-10-01', TIMEZONE_PST)).toBe(false);
+        expect(isAdult('2005-10-01', TIMEZONE_PST)).toBe(false);
+      });
     });
 
-    it('should return true if the age is over 19', () => {
-      expect(DateUtil.isAdult(new Date('2000-10-01'))).toBe(true);
-      expect(DateUtil.isAdult(new Date('2003-10-01'))).toBe(true);
-      expect(DateUtil.isAdult(new Date('2005-10-01'))).toBe(true);
-      expect(DateUtil.isAdult('2000-10-01')).toBe(true);
-      expect(DateUtil.isAdult('2003-10-01')).toBe(true);
-      expect(DateUtil.isAdult('2005-10-01')).toBe(true);
+    describe('PST timezone(normal day)', () => {
+      beforeAll(() => {
+        jest.useFakeTimers().setSystemTime(new Date('2024-10-01 07:00:00Z')); // 2024-10-01 00:00:00 GMT-0700
+      });
+      afterAll(() => {
+        jest.clearAllTimers();
+      });
+      it('should return true if the age is over 19', () => {
+        expect(isAdult(DateUtil.parse('2000-10-01'), TIMEZONE_PST)).toBe(true); // 23
+        expect(isAdult(DateUtil.parse('2003-10-01'), TIMEZONE_PST)).toBe(true); // 20
+        expect(isAdult(DateUtil.parse('2005-10-01'), TIMEZONE_PST)).toBe(true); // 19
+
+        expect(isAdult('2000-10-01', TIMEZONE_PST)).toBe(true);
+        expect(isAdult('2003-10-01', TIMEZONE_PST)).toBe(true);
+        expect(isAdult('2005-10-01', TIMEZONE_PST)).toBe(true);
+      });
+
+      it('should return false if the age is under 19', () => {
+        expect(isAdult(DateUtil.parse('2022-10-01'), TIMEZONE_PST)).toBe(false); // 2
+        expect(isAdult(DateUtil.parse('2005-10-02'), TIMEZONE_PST)).toBe(false); // 18
+
+        expect(isAdult('2022-10-01', TIMEZONE_PST)).toBe(false);
+        expect(isAdult('2005-10-02', TIMEZONE_PST)).toBe(false);
+      });
     });
 
-    it('should return false if the age is under 19', () => {
-      expect(DateUtil.isAdult(new Date('2005-10-02'))).toBe(false);
-      expect(DateUtil.isAdult(new Date('2022-10-01'))).toBe(false);
-      expect(DateUtil.isAdult('2005-10-02')).toBe(false);
-      expect(DateUtil.isAdult('2022-10-01')).toBe(false);
+    describe('Seoul AND Tokyo timezone', () => {
+      beforeAll(() => {
+        jest.useFakeTimers().setSystemTime(new Date('2024-10-01 06:59:00Z')); // 2024-10-01 15:59:00 GMT+0900
+      });
+      afterAll(() => {
+        jest.clearAllTimers();
+      });
+      it('should return true if the age is over 19', () => {
+        expect(isAdult(DateUtil.parse('2000-10-01'), TIMEZONE_SEOUL)).toBe(true); // 24
+        expect(isAdult(DateUtil.parse('2000-10-01'), TIMEZONE_TOKYO)).toBe(true); // 24
+        expect(isAdult(DateUtil.parse('2003-10-01'), TIMEZONE_SEOUL)).toBe(true); // 21
+        expect(isAdult(DateUtil.parse('2003-10-01'), TIMEZONE_TOKYO)).toBe(true); // 21
+        expect(isAdult(DateUtil.parse('2005-10-01'), TIMEZONE_SEOUL)).toBe(true); // 19
+        expect(isAdult(DateUtil.parse('2005-10-01'), TIMEZONE_TOKYO)).toBe(true); // 19
+
+        expect(isAdult('2000-10-01', TIMEZONE_SEOUL)).toBe(true);
+        expect(isAdult('2000-10-01', TIMEZONE_TOKYO)).toBe(true);
+        expect(isAdult('2003-10-01', TIMEZONE_SEOUL)).toBe(true);
+        expect(isAdult('2003-10-01', TIMEZONE_TOKYO)).toBe(true);
+        expect(isAdult('2005-10-01', TIMEZONE_SEOUL)).toBe(true);
+        expect(isAdult('2005-10-01', TIMEZONE_TOKYO)).toBe(true);
+      });
+
+      it('should return false if the age is under 19', () => {
+        expect(isAdult(DateUtil.parse('2022-10-01'), TIMEZONE_SEOUL)).toBe(false); // 2
+        expect(isAdult(DateUtil.parse('2022-10-01'), TIMEZONE_TOKYO)).toBe(false); // 2
+        expect(isAdult(DateUtil.parse('2005-10-02'), TIMEZONE_SEOUL)).toBe(false); // 18
+        expect(isAdult(DateUtil.parse('2005-10-02'), TIMEZONE_TOKYO)).toBe(false); // 18
+
+        expect(isAdult('2022-10-01', TIMEZONE_SEOUL)).toBe(false);
+        expect(isAdult('2022-10-01', TIMEZONE_TOKYO)).toBe(false);
+        expect(isAdult('2005-10-02', TIMEZONE_SEOUL)).toBe(false);
+        expect(isAdult('2005-10-02', TIMEZONE_TOKYO)).toBe(false);
+      });
     });
   });
 });
