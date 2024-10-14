@@ -520,9 +520,10 @@ export namespace DateUtil {
     return localeAnnotation.SSS;
   }
 
-  export function isAdult(birth: DateType): boolean {
+  export function isAdult(birth: DateType, timeZone: TimeZoneType): boolean {
     const now = new Date();
-    const age = diff(birth, now, 'year');
+    const timeZoneNow = format(now, { format: 'YYYY-MM-DD', isUtc: false, timeZone });
+    const age = diff(birth, timeZoneNow, 'year');
 
     return age >= ADULT_AGE_DEFAULT;
   }
