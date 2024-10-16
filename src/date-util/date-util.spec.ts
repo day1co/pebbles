@@ -537,6 +537,9 @@ describe('DateUtil', () => {
         expect(isAdult('2000-10-01', TIMEZONE_PST)).toBe(true);
         expect(isAdult('2003-10-01', TIMEZONE_PST)).toBe(true);
         expect(isAdult('2005-09-30', TIMEZONE_PST)).toBe(true);
+        expect(isAdult(DateUtil.parseByFormat('20001001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(true);
+        expect(isAdult(DateUtil.parseByFormat('20031001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(true);
+        expect(isAdult(DateUtil.parseByFormat('20050930', 'YYYYMMDD'), TIMEZONE_PST)).toBe(true);
       });
 
       it('should return false if the age is under 19', () => {
@@ -545,6 +548,8 @@ describe('DateUtil', () => {
 
         expect(isAdult('2022-10-01', TIMEZONE_PST)).toBe(false);
         expect(isAdult('2005-10-01', TIMEZONE_PST)).toBe(false);
+        expect(isAdult(DateUtil.parseByFormat('20221001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(false);
+        expect(isAdult(DateUtil.parseByFormat('20051001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(false);
       });
     });
 
@@ -563,6 +568,10 @@ describe('DateUtil', () => {
         expect(isAdult('2000-10-01', TIMEZONE_PST)).toBe(true);
         expect(isAdult('2003-10-01', TIMEZONE_PST)).toBe(true);
         expect(isAdult('2005-10-01', TIMEZONE_PST)).toBe(true);
+
+        expect(isAdult(DateUtil.parseByFormat('20001001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(true);
+        expect(isAdult(DateUtil.parseByFormat('20031001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(true);
+        expect(isAdult(DateUtil.parseByFormat('20051001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(true);
       });
 
       it('should return false if the age is under 19', () => {
@@ -571,6 +580,8 @@ describe('DateUtil', () => {
 
         expect(isAdult('2022-10-01', TIMEZONE_PST)).toBe(false);
         expect(isAdult('2005-10-02', TIMEZONE_PST)).toBe(false);
+        expect(isAdult(DateUtil.parseByFormat('20221001', 'YYYYMMDD'), TIMEZONE_PST)).toBe(false);
+        expect(isAdult(DateUtil.parseByFormat('20051002', 'YYYYMMDD'), TIMEZONE_PST)).toBe(false);
       });
     });
 
@@ -595,6 +606,10 @@ describe('DateUtil', () => {
         expect(isAdult('2003-10-01', TIMEZONE_TOKYO)).toBe(true);
         expect(isAdult('2005-10-01', TIMEZONE_SEOUL)).toBe(true);
         expect(isAdult('2005-10-01', TIMEZONE_TOKYO)).toBe(true);
+
+        expect(isAdult(DateUtil.parseByFormat('20001001', 'YYYYMMDD'), TIMEZONE_SEOUL)).toBe(true);
+        expect(isAdult(DateUtil.parseByFormat('20031001', 'YYYYMMDD'), TIMEZONE_SEOUL)).toBe(true);
+        expect(isAdult(DateUtil.parseByFormat('20051001', 'YYYYMMDD'), TIMEZONE_SEOUL)).toBe(true);
       });
 
       it('should return false if the age is under 19', () => {
@@ -607,6 +622,9 @@ describe('DateUtil', () => {
         expect(isAdult('2022-10-01', TIMEZONE_TOKYO)).toBe(false);
         expect(isAdult('2005-10-02', TIMEZONE_SEOUL)).toBe(false);
         expect(isAdult('2005-10-02', TIMEZONE_TOKYO)).toBe(false);
+
+        expect(isAdult(DateUtil.parseByFormat('20221001', 'YYYYMMDD'), TIMEZONE_SEOUL)).toBe(false);
+        expect(isAdult(DateUtil.parseByFormat('20051002', 'YYYYMMDD'), TIMEZONE_SEOUL)).toBe(false);
       });
     });
   });
