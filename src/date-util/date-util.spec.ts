@@ -227,6 +227,164 @@ describe('DateUtil', () => {
     });
   });
 
+  describe('startOfByTimezone', () => {
+    const startOfByTimezone = DateUtil.startOfByTimezone;
+
+    it('주어진 속성의 시작 시간을 반환해야 한다', () => {
+      const targetDate = new Date('2024-02-15T16:15:15Z');
+      const timezone = 'Asia/Seoul';
+
+      const result1 = startOfByTimezone({ date: targetDate, property: 'month', timezone });
+      const result2 = startOfByTimezone({ date: targetDate, property: 'year', timezone });
+      const result3 = startOfByTimezone({ date: targetDate, property: 'day', timezone });
+      const result4 = startOfByTimezone({ date: targetDate, property: 'hour', timezone });
+      const result6 = startOfByTimezone({ date: targetDate, property: 'minute', timezone });
+
+      expect(result1).toEqual(new Date('2024-01-31T15:00:00Z'));
+      expect(result2).toEqual(new Date('2023-12-31T15:00:00Z'));
+      expect(result3).toEqual(new Date('2024-02-15T15:00:00Z'));
+      expect(result4).toEqual(new Date('2024-02-15T16:00:00Z'));
+      expect(result6).toEqual(new Date('2024-02-15T16:15:00Z'));
+    });
+
+    it('연말 전환을 올바르게 처리해야 한다', () => {
+      const targetDate = new Date('2023-12-31T15:01:30Z');
+      const timezone = 'Asia/Seoul';
+
+      const result = startOfByTimezone({ date: targetDate, property: 'minute', timezone });
+
+      expect(result).toEqual(new Date('2023-12-31T15:01:00Z'));
+    });
+
+    describe('KST는 15시 기준으로 날짜가 다르다', () => {
+      it('15시 이전 시각을 올바르게 처리한다.', () => {
+        const targetDate = new Date('2024-02-29T00:00:00Z');
+        const timezone = 'Asia/Seoul';
+
+        const result = startOfByTimezone({ date: targetDate, property: 'month', timezone });
+
+        expect(result).toEqual(new Date('2024-01-31T15:00:00Z'));
+      });
+
+      it('15시 이후 시각을 올바르게 처리한다.', () => {
+        const targetDate = new Date('2024-02-29T15:00:00Z');
+        const timezone = 'Asia/Seoul';
+
+        const result = startOfByTimezone({ date: targetDate, property: 'month', timezone });
+
+        expect(result).toEqual(new Date('2024-02-29T15:00:00Z'));
+      });
+    });
+
+    describe('시간대가 다른 경우', () => {
+      it('서울', () => {
+        const targetDate = new Date('2024-02-15T16:15:15Z');
+        const timezone = 'Asia/Seoul';
+
+        const result = startOfByTimezone({ date: targetDate, property: 'day', timezone });
+
+        expect(result).toEqual(new Date('2024-02-15T15:00:00Z'));
+      });
+
+      it('PST', () => {
+        const targetDate = new Date('2024-02-15T16:15:15Z');
+        const timezone = 'PST8PDT';
+
+        const result = startOfByTimezone({ date: targetDate, property: 'day', timezone });
+
+        expect(result).toEqual(new Date('2024-02-15T08:00:00Z'));
+      });
+    });
+  });
+
+  describe('endOfByTimezone', () => {
+    const endOfByTimezone = DateUtil.endOfByTimezone;
+
+    it('주어진 속성의 끝 시간을 반환해야 한다', () => {
+      const targetDate = new Date('2024-02-15T16:15:15Z');
+      const timezone = 'Asia/Seoul';
+
+      const result = endOfByTimezone({ date: targetDate, property: 'month', timezone });
+      const result2 = endOfByTimezone({ date: targetDate, property: 'year', timezone });
+      const result3 = endOfByTimezone({ date: targetDate, property: 'day', timezone });
+      const result4 = endOfByTimezone({ date: targetDate, property: 'hour', timezone });
+      const result6 = endOfByTimezone({ date: targetDate, property: 'minute', timezone });
+
+      expect(result).toEqual(new Date('2024-02-29T15:00:00Z'));
+      expect(result2).toEqual(new Date('2024-12-31T15:00:00Z'));
+      expect(result3).toEqual(new Date('2024-02-16T15:00:00Z'));
+      expect(result4).toEqual(new Date('2024-02-15T17:00:00Z'));
+      expect(result6).toEqual(new Date('2024-02-15T16:16:00Z'));
+    });
+
+    it('주어진 속성의 끝 시간을 반환해야 한다. 2', () => {
+      const targetDate = new Date('2022-12-31T17:00:00Z');
+      const timezone = 'Asia/Seoul';
+
+      const result = endOfByTimezone({ date: targetDate, property: 'year', timezone });
+
+      expect(result).toEqual(new Date('2023-12-31T15:00:00Z'));
+    });
+
+    it('연말 전환을 올바르게 처리해야 한다', () => {
+      const targetDate = new Date('2023-12-15T00:00:00Z');
+      const timezone = 'Asia/Seoul';
+
+      const result = endOfByTimezone({ date: targetDate, property: 'month', timezone });
+
+      expect(result).toEqual(new Date('2023-12-31T15:00:00Z'));
+    });
+
+    it('윤년을 올바르게 처리해야 한다 (15시 이후)', () => {
+      const targetDate = new Date('2023-12-31T16:00:00Z');
+      const timezone = 'Asia/Seoul';
+
+      const result = endOfByTimezone({ date: targetDate, property: 'year', timezone });
+
+      expect(result).toEqual(new Date('2024-12-31T15:00:00Z'));
+    });
+
+    describe('15시 기준으로 날짜가 다르다', () => {
+      it('15시 이전 시각을 올바르게 처리한다.', () => {
+        const targetDate = new Date('2024-02-29T00:00:00Z');
+        const timezone = 'Asia/Seoul';
+
+        const result = endOfByTimezone({ date: targetDate, property: 'month', timezone });
+
+        expect(result).toEqual(new Date('2024-02-29T15:00:00Z'));
+      });
+
+      it('15시 이후 시각을 올바르게 처리한다.', () => {
+        const targetDate = new Date('2024-12-31T15:01:00Z');
+        const timezone = 'Asia/Seoul';
+
+        const result = endOfByTimezone({ date: targetDate, property: 'minute', timezone });
+
+        expect(result).toEqual(new Date('2024-12-31T15:02:00Z'));
+      });
+    });
+
+    describe('시간대가 다른 경우', () => {
+      it('서울', () => {
+        const targetDate = new Date('2024-02-29T16:15:15Z');
+        const timezone = 'Asia/Seoul';
+
+        const result = endOfByTimezone({ date: targetDate, property: 'month', timezone });
+
+        expect(result).toEqual(new Date('2024-03-31T15:00:00Z'));
+      });
+
+      it('UTC', () => {
+        const targetDate = new Date('2024-02-15T16:15:15Z');
+        const timezone = 'UTC';
+
+        const result = endOfByTimezone({ date: targetDate, property: 'month', timezone });
+
+        expect(result).toEqual(new Date('2024-03-01T00:00:00Z'));
+      });
+    });
+  });
+
   describe('isLastDateOfMonth', () => {
     const isLastDateOfMonth = DateUtil.isLastDateOfMonth;
     it('should accept Date object and check last date of the month', () => {
@@ -625,6 +783,34 @@ describe('DateUtil', () => {
 
         expect(isAdult(DateUtil.parseByFormat('20221001', 'YYYYMMDD'), TIMEZONE_SEOUL)).toBe(false);
         expect(isAdult(DateUtil.parseByFormat('20051002', 'YYYYMMDD'), TIMEZONE_SEOUL)).toBe(false);
+      });
+
+      describe('getTimezoneOffsetInHours', () => {
+        const getTimezoneOffsetInHours = DateUtil.getTimezoneOffsetInHours;
+
+        it('Asia/Seoul', () => {
+          const date = new Date('2022-02-23T00:00:00Z');
+          const timezone = 'Asia/Seoul';
+          expect(getTimezoneOffsetInHours(date, timezone)).toBe(9);
+        });
+
+        it('Asia/Tokyo', () => {
+          const date = new Date('2022-02-23T00:00:00Z');
+          const timezone = 'Asia/Tokyo';
+          expect(getTimezoneOffsetInHours(date, timezone)).toBe(9);
+        });
+
+        it('PST8PDT', () => {
+          const date = new Date('2022-02-23T00:00:00Z');
+          const timezone = 'PST8PDT';
+          expect(getTimezoneOffsetInHours(date, timezone)).toBe(-8);
+        });
+
+        it('UTC', () => {
+          const date = new Date('2022-02-23T00:00:00Z');
+          const timezone = 'UTC';
+          expect(getTimezoneOffsetInHours(date, timezone)).toBe(0);
+        });
       });
     });
   });
