@@ -151,6 +151,113 @@ export namespace DateUtil {
     }
   }
 
+  export function startOfByTimezone({
+    date,
+    property,
+    timezone,
+  }: {
+    date: DateType;
+    property: DatePropertyType;
+    timezone: TimeZoneType;
+  }): Date {
+    const parsedDate = parse(date);
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: timezone,
+    };
+
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(parsedDate);
+
+    const dateMap: Map<string, string | undefined> = new Map([
+      ['year', undefined],
+      ['month', undefined],
+      ['day', undefined],
+      ['hour', undefined],
+      ['minute', undefined],
+      ['second', undefined],
+    ]);
+
+    switch (property) {
+      case 'year':
+        dateMap.set('month', '01');
+      case 'month':
+        dateMap.set('day', '01');
+      case 'day':
+        dateMap.set('hour', '00');
+      case 'hour':
+        dateMap.set('minute', '00');
+      case 'minute':
+        dateMap.set('second', '00');
+    }
+
+    parts.forEach(({ type, value }) => {
+      const dateMapValue = dateMap.get(type);
+      if (!dateMapValue) {
+        dateMap.set(type, value);
+      }
+    });
+
+    if (dateMap.get('hour') === '24') {
+      dateMap.set('hour', '00');
+    }
+
+    const isoString = `${dateMap.get('year')}-${dateMap.get('month')}-${dateMap.get('day')}T${dateMap.get(
+      'hour'
+    )}:${dateMap.get('minute')}:${dateMap.get('second')}`;
+    const timezoneOffsetString = getTimezoneOffsetString(timezone, false);
+    return new Date(`${isoString}${timezoneOffsetString}`);
+  }
+
+  export function endOfByTimezone({
+    date,
+    property,
+    timezone,
+  }: {
+    date: DateType;
+    property: DatePropertyType;
+    timezone: TimeZoneType;
+  }): Date {
+    const parsedDate = new Date(date);
+
+    switch (property) {
+      case 'year':
+        parsedDate.setUTCFullYear(parsedDate.getUTCFullYear() + 1);
+        break;
+      case 'month':
+        parsedDate.setUTCHours(parsedDate.getUTCHours() + getTimezoneOffsetInHours(parsedDate, timezone));
+        parsedDate.setUTCMonth(parsedDate.getUTCMonth() + 1, 1);
+        break;
+      case 'day':
+        parsedDate.setUTCDate(parsedDate.getUTCDate() + 1);
+        break;
+      case 'hour':
+        parsedDate.setUTCHours(parsedDate.getUTCHours() + 1);
+        break;
+      case 'minute':
+        parsedDate.setUTCMinutes(parsedDate.getUTCMinutes() + 1);
+        break;
+    }
+
+    const result = startOfByTimezone({ date: parsedDate, property, timezone });
+
+    return result;
+  }
+
+  export function getTimezoneOffsetInHours(date: Date, timezone: string) {
+    const timezoneDate = new Date(date.toLocaleString('en-US', { timeZone: timezone }));
+    const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+
+    const offset = (timezoneDate.getTime() - utcDate.getTime()) / ONE_HOUR_IN_MILLI;
+    return offset;
+  }
+
   /** @deprecated */
   export function beginOfMonth(date: DateType = new Date()): Date {
     return startOf(date, 'month');
@@ -161,6 +268,7 @@ export namespace DateUtil {
     return startOf(date, 'day');
   }
 
+  /** @deprecated */
   export function endOf(date: DateType, property: DatePropertyType): Date {
     const parsedDate = parse(date);
     const result = new Date(parsedDate.getFullYear(), 11, 31, 23, 59, 59, 999);
