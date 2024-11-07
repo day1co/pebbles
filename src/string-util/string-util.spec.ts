@@ -9,6 +9,7 @@ describe('StringUtil', () => {
       expect(StringUtil.maskPrivacy('', 'email')).toBe('');
       expect(StringUtil.maskPrivacy('', 'name')).toBe('');
       expect(StringUtil.maskPrivacy('', 'phone')).toBe('');
+      expect(StringUtil.maskPrivacy('', 'default')).toBe('');
     });
 
     it('should mask names except the first and last characters', () => {
@@ -170,6 +171,18 @@ describe('StringUtil', () => {
       expect(StringUtil.maskPrivacy(testOffshoring3, 'offshoring')).toBe('***-******-****');
       expect(StringUtil.maskPrivacy(testOffshoring4, 'offshoring')).toBe('**********');
       expect(StringUtil.maskPrivacy(testOffshoring5, 'offshoring')).toBe('***');
+    });
+
+    it('should mask the entire string when the type is default', () => {
+      const testDefault1 = '123456';
+      const testDefault2 = '010101';
+      const testDefault3 = '19800101';
+      const testDefault4 = '성별';
+
+      expect(StringUtil.maskPrivacy(testDefault1, 'default')).toBe('******');
+      expect(StringUtil.maskPrivacy(testDefault2, 'default')).toBe('******');
+      expect(StringUtil.maskPrivacy(testDefault3, 'default')).toBe('********');
+      expect(StringUtil.maskPrivacy(testDefault4, 'default')).toBe('**');
     });
   });
 
