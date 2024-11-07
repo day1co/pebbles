@@ -34,6 +34,7 @@ export namespace StringUtil {
       bankAccount: { start: 3, end: text.length - 3 },
       address: { start: getMaskingStartIndexOfAddress(text), end: text.length },
       resident: { start: text.charAt(6) === '-' ? 7 : 6, end: text.length },
+      default: { start: 0, end: text.length },
     };
 
     const start = maskingRule[type].start;
