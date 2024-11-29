@@ -7,6 +7,7 @@ export {
   TokenExpiredException,
   UnauthorizedException,
   ConflictException,
+  UnprocessableEntityException,
 } from './client-exception';
 export { CustomException } from './custom-exception';
 export { DataException, InternalServerException, ServerException, UnknownException } from './server-exception';
