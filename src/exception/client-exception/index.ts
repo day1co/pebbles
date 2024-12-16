@@ -7,3 +7,4 @@ export { TokenExpiredException } from './token-expired-exception';
 export { UnauthorizedException } from './unauthorized-exception';
 export { ConflictException } from './conflict-exception';
 export { UnprocessableEntityException } from './unprocessable-entity-exception';
+export { TooManyRequestsException } from './too-many-requests-exception';
