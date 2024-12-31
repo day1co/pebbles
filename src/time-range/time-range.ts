@@ -78,7 +78,13 @@ export class TimeRange {
   totalInterval() {
     const result = this.section.reduce((p, v) => {
       const interval = NumberUtil.decimalRoundUp(v.interval, this.decimalPlaces);
-      p = p + interval;
+
+      //XXX: 반올림 때문에 interval이 end-start보다 작은 경우가 있음
+      const end = NumberUtil.decimalRoundUp(v.end, this.decimalPlaces);
+      const start = NumberUtil.decimalRoundUp(v.start, this.decimalPlaces);
+      const roundSumInterval = end - start;
+
+      p = p + (interval > roundSumInterval ? interval : roundSumInterval);
       return p;
     }, 0);
     return NumberUtil.decimalRoundDown(result, this.decimalPlaces);

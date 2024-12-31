@@ -129,19 +129,18 @@ describe('TimeRange Util', () => {
         timeRange.add({
           start: 1.1,
           end: 11.1,
-          interval: 9.1,
+          interval: 10,
         });
         timeRange.add({
           start: 1.2,
           end: 30.2,
-          interval: 10.2,
+          interval: 29,
         });
-        // native JS 9.1 + 10.2 = 19.299999999999997
-        expect(timeRange.totalInterval()).toEqual(19.3);
+        expect(timeRange.totalInterval()).toEqual(39);
         expect(timeRange.value().length).toEqual(2);
         timeRange.merge(true);
         expect(timeRange.value().length).toEqual(1);
-        expect(timeRange.value()[0].interval).toEqual(19.3);
+        expect(timeRange.value()[0].interval).toEqual(39);
         expect(timeRange.value()[0].end).toEqual(30.2);
 
         const timeRange2 = new TimeRange([], 5);
@@ -256,6 +255,16 @@ describe('TimeRange Util', () => {
         });
         expect(timeRange8.totalPlayTime()).toEqual(62);
       });
+
+      it('add the larger value of interval and diff from start and end to totalInterval ', async () => {
+        const timeRange = new TimeRange([], 0);
+        timeRange.add({ end: 28.37231, start: 0, interval: 28.37231 });
+        timeRange.add({ end: 13.87707, start: 0, interval: 13.87707 });
+        timeRange.add({ end: 99.76297, start: 85.45316, interval: 14.30981 });
+        timeRange.add({ end: 360.66692, start: 314.84983, interval: 45.81709 });
+
+        expect(timeRange.totalInterval()).toBeGreaterThanOrEqual(timeRange.totalPlayTime());
+      });
     });
 
     describe('no time section', () => {
@@ -297,7 +306,7 @@ describe('TimeRange Util', () => {
     describe('check buffer Constructor', () => {
       it('start interval 1, start+10 = end, buffer sec 60, merge to one', async () => {
         const loadSection: Array<TimeSection> = [];
-        const bufferSec: number = 60;
+        const bufferSec = 60;
         for (let i = 0; i < 10; i++) {
           const o: TimeSection = {
             start: i,
@@ -316,7 +325,7 @@ describe('TimeRange Util', () => {
         expect(timeRange.value()[0].end).toEqual(bufferSec + 19);
       });
       it('split start and end, merge to one', async () => {
-        const bufferSec: number = 20;
+        const bufferSec = 20;
         const timeRange = new TimeRange([], 0, bufferSec);
         let ts: TimeSection = {
           start: 20,
