@@ -1,3 +1,4 @@
+import { TextEncoder } from 'node:util';
 import { CryptoUtil } from './crypto-util';
 
 describe('CryptoUtil', () => {
@@ -47,6 +48,21 @@ describe('CryptoUtil', () => {
       const data = 'aGVsbG8gd29ybGQ=';
       const result = CryptoUtil.decodeBase64(data);
       expect(result).toEqual(new TextEncoder().encode('hello world'));
+    });
+  });
+
+  describe('ezwelSeed', () => {
+    it('should return encrypted string', () => {
+      const data = '{"code": "hello world", "message": "안녕하세요"}';
+      const r1 = CryptoUtil.encodeSeedString(data, { seedKey: 'string_x_sixteen' });
+      expect(r1).toBe('LUPvDxmJToRCZcl56a7j+b1X1NV+6PMiBLm7SkLALDqyIfqCsHla0jkDuzoIn60G52VI68uIO51li9JAFsksAA==');
+    });
+
+    it('should return decrypted string', () => {
+      const data = 'LUPvDxmJToRCZcl56a7j+b1X1NV+6PMiBLm7SkLALDqyIfqCsHla0jkDuzoIn60G52VI68uIO51li9JAFsksAA==';
+      const r1 = CryptoUtil.decodeSeedString(data, { seedKey: 'string_x_sixteen' });
+      expect(r1.trim()).toBe('{"code": "hello world", "message": "안녕하세요"}');
+      expect(JSON.parse(r1)).toEqual({ code: 'hello world', message: '안녕하세요' });
     });
   });
 });
