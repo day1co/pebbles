@@ -1,4 +1,3 @@
-import { TextEncoder } from 'node:util';
 import { CryptoJS, buildHexString } from './ezwel-seed';
 import type { webcrypto } from 'crypto';
 
