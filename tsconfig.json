@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "./lib",
+    "allowJs": true,
+    "checkJs": false,
     "skipLibCheck": true
   },
   "extends": "@day1co/tsconfig/backend.json",
