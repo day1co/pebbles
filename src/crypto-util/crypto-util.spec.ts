@@ -1,4 +1,3 @@
-import { TextEncoder } from 'node:util';
 import { CryptoUtil } from './crypto-util';
 
 describe('CryptoUtil', () => {
