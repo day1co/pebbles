@@ -1,6 +1,7 @@
 import { ObjectKeyType, ObjectType } from './object-util.type';
 
-export function serialize(obj: Readonly<ObjectType>): string | null {
+/** @deprecated use JSON.stringify instead */
+export function serialize(obj: any): string | null {
   try {
     return JSON.stringify(obj);
   } catch {
@@ -8,7 +9,8 @@ export function serialize(obj: Readonly<ObjectType>): string | null {
   }
 }
 
-export function deserialize(str: string): ObjectType | null {
+/** @deprecated use JSON.parse instead */
+export function deserialize(str: string): any {
   try {
     return JSON.parse(str);
   } catch {
@@ -16,6 +18,7 @@ export function deserialize(str: string): ObjectType | null {
   }
 }
 
+/** @deprecated use '== null' instead */
 export function isNullish(value: unknown): value is null | undefined {
   return value === undefined || value === null;
 }
@@ -34,6 +37,7 @@ export function isEmpty(value: unknown): boolean {
   return true;
 }
 
+/** @deprecated use window.structuredClone() instead */
 export function deepClone<Type extends ObjectType>(obj: Type): Type {
   const initiator = obj.constructor as new (...arg: unknown[]) => Type;
 
