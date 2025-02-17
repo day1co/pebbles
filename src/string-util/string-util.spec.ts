@@ -3,12 +3,12 @@ import {
   getNonce,
   isValidEmail,
   isValidKoreaPhoneNumber,
-  join,
+  joinStrings,
   joinTags,
   maskPrivacy,
   normalizePhoneNumber,
   renderTemplate,
-  split,
+  splitString,
   splitTags,
 } from './string-util';
 import { TemplateOpts } from './string-util.interface';
@@ -454,17 +454,17 @@ describe('splitTags', () => {
   });
 });
 
-describe('split', () => {
+describe('splitString', () => {
   it('should return array of text', () => {
     const str = 'one, two , ,  three , four  ,five six ';
-    expect(split(str)).toEqual(['one', 'two', 'three', 'four', 'five six']);
+    expect(splitString(str)).toEqual(['one', 'two', 'three', 'four', 'five six']);
   });
   it('should return empty array when tags are invalid', () => {
     const str = ' , , ';
-    expect(split(str)).toEqual([]);
+    expect(splitString(str)).toEqual([]);
   });
   it('should return empty array when empty string is given', () => {
-    expect(split('')).toEqual([]);
+    expect(splitString('')).toEqual([]);
   });
 });
 
@@ -481,16 +481,16 @@ describe('joinTags', () => {
   });
 });
 
-describe('join', () => {
+describe('joinStrings', () => {
   it('should return string when a list of text is given', () => {
     const textList = ['one ', ' two', ' three ', 'four', 'five six'];
-    expect(join(textList)).toBe('one,two,three,four,five six');
+    expect(joinStrings(textList)).toBe('one,two,three,four,five six');
   });
   it('should return empty string when only empty strings are given', () => {
-    expect(join([' ', '  '])).toBe('');
+    expect(joinStrings([' ', '  '])).toBe('');
   });
   it(`should return '' when empty array is given`, () => {
-    expect(join([])).toBe('');
+    expect(joinStrings([])).toBe('');
   });
 });
 

@@ -168,12 +168,12 @@ export function isValidEmail(str: string): boolean {
 }
 
 export function splitTags(str: string, separator = ','): Tag[] {
-  return split(str, separator).map((text) => {
+  return splitString(str, separator).map((text) => {
     return { text };
   });
 }
 
-export function split(str: string, separator = ','): string[] {
+export function splitString(str: string, separator = ','): string[] {
   return str.split(separator).reduce((textList: string[], text) => {
     text = text.trim();
     if (text.length > 0) {
@@ -187,10 +187,10 @@ export function joinTags(tags: Readonly<Tag[]>, separator = ','): string {
   const textList = tags.map((tag) => {
     return tag.text;
   });
-  return join(textList, separator);
+  return joinStrings(textList, separator);
 }
 
-export function join(textList: string[], separator = ','): string {
+export function joinStrings(textList: string[], separator = ','): string {
   return textList.reduce((joinedText: string, text) => {
     if (joinedText) {
       joinedText += separator;

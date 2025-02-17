@@ -3,12 +3,12 @@ export {
   getNonce,
   isValidEmail,
   isValidKoreaPhoneNumber,
-  join,
+  joinStrings,
   joinTags,
   maskPrivacy,
   normalizePhoneNumber,
   renderTemplate,
-  split,
+  splitString,
   splitTags,
 } from './string-util';
 export { UTF8_BOM_STR } from './string-util.const';
