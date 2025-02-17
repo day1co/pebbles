@@ -1,5 +1,4 @@
-/** @deprecated will be removed soon */
-export function parseBooleanString(boolStr: string): boolean {
+export function valueOfBoolean(boolStr: string): boolean {
   const TRUE_REGEXP = /^(t(rue)?|y(es)?|on|1)$/i;
   const FALSE_REGEXP = /^(f(alse)?|n(o)?|off|0)$/i;
 
