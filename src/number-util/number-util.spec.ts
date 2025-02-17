@@ -1,12 +1,4 @@
-import {
-  decimalRoundDown,
-  decimalRoundUp,
-  fromPermyriad,
-  intValueOf,
-  isNumeric,
-  toPermyriad,
-  valueOfNumber,
-} from './number-util';
+import { decimalRoundDown, decimalRoundUp, fromPermyriad, intValueOf, isNumeric, toPermyriad } from './number-util';
 
 describe('intValueOf', () => {
   it('should throw with incompatible input', () => {
@@ -25,23 +17,6 @@ describe('intValueOf', () => {
     expect(intValueOf(String(Number.MAX_SAFE_INTEGER))).toEqual(Number.MAX_SAFE_INTEGER);
     expect(intValueOf(String(Number.MIN_SAFE_INTEGER))).toEqual(Number.MIN_SAFE_INTEGER);
     expect(intValueOf(String(Number.MAX_VALUE))).toEqual(Number.MAX_VALUE);
-  });
-});
-
-describe('valueOfNumber', () => {
-  it('should throw with incompatible input', () => {
-    expect(() => valueOfNumber('abc')).toThrow();
-    expect(() => valueOfNumber('4a')).toThrow();
-    expect(() => valueOfNumber('1.2.3')).toThrow();
-    expect(() => valueOfNumber('')).toThrow();
-  });
-  it('should return parameter in number type', () => {
-    expect(valueOfNumber('-1')).toEqual(-1);
-    expect(valueOfNumber('0')).toEqual(0);
-    expect(valueOfNumber('1.2')).toEqual(1.2);
-    expect(valueOfNumber('-1.2')).toEqual(-1.2);
-    expect(valueOfNumber('-93339.228883747849')).toEqual(-93339.22888374786);
-    expect(valueOfNumber('9488848.29000004833')).toEqual(9488848.290000048);
   });
 });
 
