@@ -168,7 +168,10 @@ export function isValidEmail(str: string): boolean {
 }
 
 export function splitTags(str: string, separator: string | RegExp = ','): Tag[] {
-  return str.split(separator).filter(_ => _.length).map((text) => ({ text: text.trim() }));
+  return str
+    .split(separator)
+    .map((text) => ({ text: text.trim() }))
+    .filter((_) => _.text);
 }
 
 /** @deprecated do .split().map().filter() yourself */
@@ -183,7 +186,10 @@ export function splitString(str: string, separator = ','): string[] {
 }
 
 export function joinTags(tags: Readonly<Tag[]>, separator = ','): string {
-  return tags.map((tag) => tag.text).join(separator)
+  return tags
+    .map((tag) => tag.text?.trim())
+    .filter((text) => text)
+    .join(separator);
 }
 
 /** @deprecated do .map().join() yourself */
