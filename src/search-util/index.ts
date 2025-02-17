@@ -1,1 +1,1 @@
-export { SearchUtil } from './search-util';
+export { binarySearch } from './search-util';
