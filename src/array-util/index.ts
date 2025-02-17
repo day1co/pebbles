@@ -1,1 +1,1 @@
-export { ArrayUtil } from './array-util';
+export { innerJoin, leftJoin } from './array-util';
