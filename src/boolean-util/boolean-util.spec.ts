@@ -1,24 +1,24 @@
-import { valueOfBoolean } from './boolean-util';
+import { parseBoolean } from './boolean-util';
 
-describe('valueOfBoolean', () => {
+describe('parseBoolean', () => {
   it('should throw with incompatible input', () => {
-    expect(() => valueOfBoolean('abc')).toThrow();
-    expect(() => valueOfBoolean('1111')).toThrow();
-    expect(() => valueOfBoolean('')).toThrow();
-    expect(() => valueOfBoolean('nay')).toThrow();
+    expect(() => parseBoolean('abc')).toThrow();
+    expect(() => parseBoolean('1111')).toThrow();
+    expect(() => parseBoolean('')).toThrow();
+    expect(() => parseBoolean('nay')).toThrow();
   });
   it('should return parameter in boolean type', () => {
-    expect(valueOfBoolean('true')).toEqual(true);
-    expect(valueOfBoolean('false')).toEqual(false);
-    expect(valueOfBoolean('1')).toEqual(true);
-    expect(valueOfBoolean('0')).toEqual(false);
-    expect(valueOfBoolean('yes')).toEqual(true);
-    expect(valueOfBoolean('no')).toEqual(false);
-    expect(valueOfBoolean('Y')).toEqual(true);
-    expect(valueOfBoolean('N')).toEqual(false);
-    expect(valueOfBoolean('On')).toEqual(true);
-    expect(valueOfBoolean('Off')).toEqual(false);
-    expect(valueOfBoolean('TRUE')).toEqual(true);
-    expect(valueOfBoolean('FALSE')).toEqual(false);
+    expect(parseBoolean('true')).toEqual(true);
+    expect(parseBoolean('false')).toEqual(false);
+    expect(parseBoolean('1')).toEqual(true);
+    expect(parseBoolean('0')).toEqual(false);
+    expect(parseBoolean('yes')).toEqual(true);
+    expect(parseBoolean('no')).toEqual(false);
+    expect(parseBoolean('Y')).toEqual(true);
+    expect(parseBoolean('N')).toEqual(false);
+    expect(parseBoolean('On')).toEqual(true);
+    expect(parseBoolean('Off')).toEqual(false);
+    expect(parseBoolean('TRUE')).toEqual(true);
+    expect(parseBoolean('FALSE')).toEqual(false);
   });
 });

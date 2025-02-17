@@ -1,9 +1,1 @@
-export {
-  decimalRoundDown,
-  decimalRoundUp,
-  fromPermyriad,
-  intValueOf,
-  isNumeric,
-  toPermyriad,
-  valueOfNumber,
-} from './number-util';
+export { decimalRoundDown, decimalRoundUp, fromPermyriad, intValueOf, isNumeric, toPermyriad } from './number-util';
