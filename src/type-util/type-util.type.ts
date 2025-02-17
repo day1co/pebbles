@@ -8,7 +8,7 @@ export type RequiredPartialProps<T, C extends keyof T> = T & {
   [K in C]-?: T[K];
 };
 
-// https://github.com/day1coloso/coloso/pull/7036#issuecomment-2661939732
+// 타입의 명확성을 나타내는 범용적인 네이밍, 타입 적용
 export type Nullish<T> = T | null | undefined;
 export type Nullable<T> = T | null;
 export type Arrayable<T> = T | Array<T>;
