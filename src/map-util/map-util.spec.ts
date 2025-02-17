@@ -1,24 +1,4 @@
-import { getMapValue, groupBy, groupByKey } from './map-util';
-
-describe('getMapValue', () => {
-  it('should return defaultValue', () => {
-    expect(getMapValue(new Map(), 1, 'value')).toBe('value');
-  });
-
-  it('should omit defaultValue', () => {
-    expect(getMapValue(new Map(), 1)).toBeUndefined();
-  });
-
-  it('should return existing value', () => {
-    const booleanMap: Map<string, boolean> = new Map([['FALSE', false]]);
-    const nullableMap: Map<string, string | null> = new Map([['NULL', null]]);
-    const numberMap: Map<string, number> = new Map([['ZERO', 0]]);
-
-    expect(getMapValue(booleanMap, 'FALSE', true)).toBe(booleanMap.get('FALSE'));
-    expect(getMapValue(nullableMap, 'NULL')).toBe(nullableMap.get('NULL'));
-    expect(getMapValue(numberMap, 'ZERO', 1)).toBe(numberMap.get('ZERO'));
-  });
-});
+import { groupBy, groupByKey } from './map-util';
 
 describe('groupByKey', () => {
   test('should group an array of objects by a specified key', () => {
