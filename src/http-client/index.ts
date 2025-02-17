@@ -1,3 +1,3 @@
 export { HttpClient } from './http-client';
+export type { HttpError, HttpReqConfig, HttpResponse } from './http-client.type';
 export { HttpState } from './http-state.enum';
-export type { HttpReqConfig, HttpRes, HttpResponse, HttpError } from './http-client.type';
