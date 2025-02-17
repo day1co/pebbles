@@ -30,7 +30,7 @@ class ByteUnitConverter implements UnitConverter<ByteUnitType> {
     return this.toString(converted, outputUnit);
   }
 
-  private toString(value: number, outputUnit: ByteUnitType): string {
+  public toString(value: number, outputUnit: ByteUnitType): string {
     const retValue = value < 1 ? value : Math.round(value);
     return `${retValue} ${this.byteUnitNotationMap[outputUnit]}`;
   }
