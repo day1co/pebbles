@@ -1,1 +1,1 @@
-export { valueOfBoolean } from './boolean-util';
+export { parseBoolean } from './boolean-util';
