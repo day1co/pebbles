@@ -1,1 +1,1 @@
-export { getMapValue, groupBy, groupByKey } from './map-util';
+export { groupBy, groupByKey } from './map-util';
