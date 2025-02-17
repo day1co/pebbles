@@ -1,2 +1,9 @@
-export { TypeUtil } from './type-util';
-export type { NarrowableType, PickWithPartial, RequiredPartialProps, Nullable, Arrayable } from './type-util.type';
+export { makeLiteralTypeList } from './type-util';
+export type {
+  Arrayable,
+  NarrowableType,
+  Nullable,
+  Nullish,
+  PickWithPartial,
+  RequiredPartialProps,
+} from './type-util.type';
