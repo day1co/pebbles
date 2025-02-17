@@ -17,14 +17,6 @@ export interface FormatOpts<Type extends string> {
   timeZone: TimeZoneType;
 }
 
-/** @deprecated */
-export interface LocalDateTimeFormatOpts {
-  withYear?: boolean;
-  timeZone: TimeZoneType;
-  locale: LocaleType;
-  formatStyle: 'long' | '2-digit';
-}
-
 export interface TimeAnnotationSet {
   SSS: string;
   s: string;

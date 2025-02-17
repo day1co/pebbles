@@ -1,4 +1,31 @@
-export { DateUtil } from './date-util';
+export {
+  isValidDate,
+  parseDate,
+  parseByFormatDate,
+  parseTimestamp,
+  parseUnixTime,
+  calcDatetime,
+  startOfDate,
+  startOfByTimezone,
+  endOfByTimezone,
+  getTimezoneOffsetInHours,
+  isLastDateOfMonth,
+  diffDate,
+  minDate,
+  formatDate,
+  formatInIso8601,
+  getDateString,
+  getDatetimeString,
+  getTimestampString,
+  getTimeStringFromSeconds,
+  durationTo,
+  fromNow,
+  isAdult,
+  subtractOneDayIfLocalTimeIsMidnight,
+  format12HourInLocale,
+  getTimezoneOffsetString,
+  diffMonth,
+} from './date-util';
 export {
   DATE_FORMAT,
   DATETIME_FORMAT,
@@ -18,6 +45,6 @@ export {
   TIMEZONE_PST,
   TIMEZONE_TOKYO,
 } from './date-util.const';
-export type { DatetimeProperties, FormatOpts, LocalDateTimeFormatOpts } from './date-util.interface';
+export type { DatetimeProperties, FormatOpts } from './date-util.interface';
 export type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
 export type { DatePropertyType, DateType, Iso8601FormatType, LocaleType, TimeZoneType } from './date-util-base.type';
