@@ -1,26 +1,24 @@
-import { BooleanUtil } from './boolean-util';
+import { valueOfBoolean } from './boolean-util';
 
-describe('BooleanUtil', () => {
-  describe('valueOf', () => {
-    it('should throw with incompatible input', () => {
-      expect(() => BooleanUtil.valueOf('abc')).toThrow();
-      expect(() => BooleanUtil.valueOf('1111')).toThrow();
-      expect(() => BooleanUtil.valueOf('')).toThrow();
-      expect(() => BooleanUtil.valueOf('nay')).toThrow();
-    });
-    it('should return parameter in boolean type', () => {
-      expect(BooleanUtil.valueOf('true')).toEqual(true);
-      expect(BooleanUtil.valueOf('false')).toEqual(false);
-      expect(BooleanUtil.valueOf('1')).toEqual(true);
-      expect(BooleanUtil.valueOf('0')).toEqual(false);
-      expect(BooleanUtil.valueOf('yes')).toEqual(true);
-      expect(BooleanUtil.valueOf('no')).toEqual(false);
-      expect(BooleanUtil.valueOf('Y')).toEqual(true);
-      expect(BooleanUtil.valueOf('N')).toEqual(false);
-      expect(BooleanUtil.valueOf('On')).toEqual(true);
-      expect(BooleanUtil.valueOf('Off')).toEqual(false);
-      expect(BooleanUtil.valueOf('TRUE')).toEqual(true);
-      expect(BooleanUtil.valueOf('FALSE')).toEqual(false);
-    });
+describe('valueOfBoolean', () => {
+  it('should throw with incompatible input', () => {
+    expect(() => valueOfBoolean('abc')).toThrow();
+    expect(() => valueOfBoolean('1111')).toThrow();
+    expect(() => valueOfBoolean('')).toThrow();
+    expect(() => valueOfBoolean('nay')).toThrow();
+  });
+  it('should return parameter in boolean type', () => {
+    expect(valueOfBoolean('true')).toEqual(true);
+    expect(valueOfBoolean('false')).toEqual(false);
+    expect(valueOfBoolean('1')).toEqual(true);
+    expect(valueOfBoolean('0')).toEqual(false);
+    expect(valueOfBoolean('yes')).toEqual(true);
+    expect(valueOfBoolean('no')).toEqual(false);
+    expect(valueOfBoolean('Y')).toEqual(true);
+    expect(valueOfBoolean('N')).toEqual(false);
+    expect(valueOfBoolean('On')).toEqual(true);
+    expect(valueOfBoolean('Off')).toEqual(false);
+    expect(valueOfBoolean('TRUE')).toEqual(true);
+    expect(valueOfBoolean('FALSE')).toEqual(false);
   });
 });
