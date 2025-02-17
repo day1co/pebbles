@@ -1,1 +1,1 @@
-export { MoneyUtil } from './money-util';
+export { convertLocalCurrencyFormat } from './money-util';
