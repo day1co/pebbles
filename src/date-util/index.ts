@@ -6,12 +6,7 @@ export {
   endOfByTimezone,
   format12HourInLocale,
   formatDate,
-  formatInIso8601,
   fromNow,
-  getDateString,
-  getDatetimeString,
-  getTimestampString,
-  getTimeStringFromSeconds,
   getTimezoneOffsetInHours,
   getTimezoneOffsetString,
   isAdult,
@@ -26,7 +21,6 @@ export {
   startOfDate,
   subtractOneDayIfLocalTimeIsMidnight,
 } from './date-util';
-
 export type { DatePropertyType, DateType, Iso8601FormatType, LocaleType, TimeZoneType } from './date-util-base.type';
 export {
   DATE_FORMAT,

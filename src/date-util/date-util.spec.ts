@@ -4,11 +4,7 @@ import {
   durationTo,
   endOfByTimezone,
   formatDate,
-  formatInIso8601,
   fromNow,
-  getDateString,
-  getDatetimeString,
-  getTimestampString,
   getTimezoneOffsetInHours,
   isAdult,
   isLastDateOfMonth,
@@ -23,7 +19,6 @@ import {
 } from './date-util';
 import {
   DATE_FORMAT,
-  DATETIME_FORMAT,
   DATETIME_FORMAT_WITH_MILLIS,
   TIMESTAMP_FORMAT,
   TIMEZONE_PST,
@@ -484,49 +479,6 @@ describe('format', () => {
       formatDate(testDatetime, { format: 'YYYY-MM-DDTHH:mm:ss.SSSZZ', isUtc: false, timeZone: 'Asia/Seoul' })
     ).toEqual(`2022-02-23T10:23:45.678+0900`);
     expect(formatDate(testDatetime, { isUtc: false, timeZone: 'PST8PDT' })).toBe('2022-02-22 17:23:45');
-  });
-});
-
-describe('formatInIso8601', () => {
-  it('should return formatted date string in ISO format string', () => {
-    const testDatetime = new Date(testDatetimeStr8);
-    expect(formatInIso8601(testDatetime, { format: DATE_FORMAT })).toEqual(testDateStr);
-    expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT })).toEqual(testDatetimeStr5);
-    expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT_WITH_MILLIS })).toEqual(testDatetimeStr8);
-  });
-  it('should return formatted date string of local time', () => {
-    const testDatetime = new Date(testDatetimeStr8);
-    expect(formatInIso8601(testDatetime, { format: DATETIME_FORMAT, isUtc: false, timeZone: 'Asia/Seoul' })).toEqual(
-      `2022-02-23T10:23:45+09:00`
-    );
-    expect(formatInIso8601(testDatetime, { isUtc: false, timeZone: 'PST8PDT' })).toEqual('2022-02-22T17:23:45-08:00');
-  });
-});
-
-describe('getDateString', () => {
-  it('should return formatted date string', () => {
-    expect(getDateString(new Date(testDatetimeStr8))).toBe(testDateStr);
-  });
-  it('should return formatted date string of local time', () => {
-    expect(getDateString(new Date(testDatetimeStr6), false)).toBe(testDateStr);
-  });
-});
-
-describe('getDatetimeString', () => {
-  it('should return format datetime string', () => {
-    expect(getDatetimeString(new Date(testDatetimeStr8))).toBe(testDatetimeStr5);
-  });
-  it('should return formatted datetime string of local time', () => {
-    expect(getDatetimeString(new Date(testDatetimeStr8), false)).toBe('2022-02-23 10:23:45');
-  });
-});
-
-describe('getTimestampString', () => {
-  it('should return formatted timestamp string', () => {
-    expect(getTimestampString(new Date(testDatetimeStr8))).toBe(testTimestampStr);
-  });
-  it('should return formatted timestamp string of local time', () => {
-    expect(getTimestampString(new Date(testDatetimeStr8), false)).toBe('20220223102345678');
   });
 });
 
