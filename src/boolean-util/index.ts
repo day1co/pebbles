@@ -1,1 +1,1 @@
-export { BooleanUtil } from './boolean-util';
+export { valueOfBoolean } from './boolean-util';

@@ -1,4 +1,4 @@
-import { MiscUtil } from '../misc-util';
+import { getRandomInt } from '../misc-util';
 import { TimeRange } from './time-range';
 import { TimeSection } from './time-range.interface';
 
@@ -108,7 +108,7 @@ describe('TimeRange Util', () => {
         const testArray = [1, 3, 0, 2, 7, 8, 5, 6, 9, 4];
         let totalInterval = 0;
         for (const i of testArray) {
-          const r = MiscUtil.getRandomInt(1, 10);
+          const r = getRandomInt(1, 10);
           const o: TimeSection = {
             start: i * r,
             end: i * r + r,

@@ -1,4 +1,4 @@
-import { NumberUtil } from '../number-util';
+import { decimalRoundDown, decimalRoundUp } from '../number-util';
 import { TimeSection } from './time-range.interface';
 
 /**
@@ -56,9 +56,8 @@ export class TimeRange {
           const prevSection: TimeSection = p[p.length - 1];
           if (prevSection.end >= v.start) {
             prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
-            prevSection.interval = NumberUtil.decimalRoundDown(
-              NumberUtil.decimalRoundUp(prevSection.interval, this.decimalPlaces) +
-                NumberUtil.decimalRoundUp(v.interval, this.decimalPlaces),
+            prevSection.interval = decimalRoundDown(
+              decimalRoundUp(prevSection.interval, this.decimalPlaces) + decimalRoundUp(v.interval, this.decimalPlaces),
               this.decimalPlaces
             );
           } else {
@@ -77,26 +76,26 @@ export class TimeRange {
 
   totalInterval() {
     const result = this.section.reduce((p, v) => {
-      const interval = NumberUtil.decimalRoundUp(v.interval, this.decimalPlaces);
+      const interval = decimalRoundUp(v.interval, this.decimalPlaces);
 
       //XXX: 반올림 때문에 interval이 end-start보다 작은 경우가 있음
-      const end = NumberUtil.decimalRoundUp(v.end, this.decimalPlaces);
-      const start = NumberUtil.decimalRoundUp(v.start, this.decimalPlaces);
+      const end = decimalRoundUp(v.end, this.decimalPlaces);
+      const start = decimalRoundUp(v.start, this.decimalPlaces);
       const roundSumInterval = end - start;
 
       p = p + (interval > roundSumInterval ? interval : roundSumInterval);
       return p;
     }, 0);
-    return NumberUtil.decimalRoundDown(result, this.decimalPlaces);
+    return decimalRoundDown(result, this.decimalPlaces);
   }
 
   totalPlayTime() {
     const result = this.section.reduce((p, v) => {
-      const end = NumberUtil.decimalRoundUp(v.end, this.decimalPlaces);
-      const start = NumberUtil.decimalRoundUp(v.start, this.decimalPlaces);
+      const end = decimalRoundUp(v.end, this.decimalPlaces);
+      const start = decimalRoundUp(v.start, this.decimalPlaces);
       return p + (end - start);
     }, 0);
-    return NumberUtil.decimalRoundDown(result, this.decimalPlaces);
+    return decimalRoundDown(result, this.decimalPlaces);
   }
 
   getUnwatchedTimeRange(endTime: number) {
@@ -133,8 +132,8 @@ export class TimeRange {
     }
 
     // 마지막 시청 구간의 끝부터 클립의 끝까지의 미시청 구간 추가
-    const start = NumberUtil.decimalRoundUp(timeRange[timeRange.length - 1].end, this.decimalPlaces);
-    const end = NumberUtil.decimalRoundUp(endTime, this.decimalPlaces);
+    const start = decimalRoundUp(timeRange[timeRange.length - 1].end, this.decimalPlaces);
+    const end = decimalRoundUp(endTime, this.decimalPlaces);
     if (start < end) {
       unwatchedTimeRange.push({
         start: timeRange[timeRange.length - 1].end,
