@@ -7,7 +7,7 @@ export function intValueOf(numStr: string): number {
   return result;
 }
 
-export function parseNumber(numStr: string): number {
+export function valueOfNumber(numStr: string): number {
   const result = Number(numStr);
 
   if (!numStr || !Number.isFinite(result)) {

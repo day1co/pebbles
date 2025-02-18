@@ -4,8 +4,8 @@ import {
   fromPermyriad,
   intValueOf,
   isNumeric,
-  parseNumber,
   toPermyriad,
+  valueOfNumber,
 } from './number-util';
 
 describe('intValueOf', () => {
@@ -28,20 +28,20 @@ describe('intValueOf', () => {
   });
 });
 
-describe('parseNumber', () => {
+describe('valueOfNumber', () => {
   it('should throw with incompatible input', () => {
-    expect(() => parseNumber('abc')).toThrow();
-    expect(() => parseNumber('4a')).toThrow();
-    expect(() => parseNumber('1.2.3')).toThrow();
-    expect(() => parseNumber('')).toThrow();
+    expect(() => valueOfNumber('abc')).toThrow();
+    expect(() => valueOfNumber('4a')).toThrow();
+    expect(() => valueOfNumber('1.2.3')).toThrow();
+    expect(() => valueOfNumber('')).toThrow();
   });
   it('should return parameter in number type', () => {
-    expect(parseNumber('-1')).toEqual(-1);
-    expect(parseNumber('0')).toEqual(0);
-    expect(parseNumber('1.2')).toEqual(1.2);
-    expect(parseNumber('-1.2')).toEqual(-1.2);
-    expect(parseNumber('-93339.228883747849')).toEqual(-93339.22888374786);
-    expect(parseNumber('9488848.29000004833')).toEqual(9488848.290000048);
+    expect(valueOfNumber('-1')).toEqual(-1);
+    expect(valueOfNumber('0')).toEqual(0);
+    expect(valueOfNumber('1.2')).toEqual(1.2);
+    expect(valueOfNumber('-1.2')).toEqual(-1.2);
+    expect(valueOfNumber('-93339.228883747849')).toEqual(-93339.22888374786);
+    expect(valueOfNumber('9488848.29000004833')).toEqual(9488848.290000048);
   });
 });
 

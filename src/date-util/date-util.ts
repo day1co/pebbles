@@ -1,6 +1,7 @@
 import { LoggerFactory } from '../logger';
 import { DatePropertyType, DateType, TimeZoneType } from './date-util-base.type';
 import {
+  ADULT_AGE_DEFAULT,
   DATE_FORMAT,
   DATETIME_FORMAT,
   LOCAL_DATETIME_FORMAT,
@@ -12,7 +13,6 @@ import {
   ONE_MINUTE_IN_SECOND,
   ONE_SECOND_IN_MILLI,
   TIMESTAMP_FORMAT,
-  ADULT_AGE_DEFAULT,
 } from './date-util.const';
 import type { TimeAnnotationSet } from './date-util.interface';
 import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
