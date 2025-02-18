@@ -2,10 +2,10 @@ import {
   DATE_FORMAT,
   DATETIME_FORMAT,
   DATETIME_FORMAT_WITH_MILLIS,
-  TIMEZONE_UTC,
   TIMEZONE_PST,
-  TIMEZONE_TOKYO,
   TIMEZONE_SEOUL,
+  TIMEZONE_TOKYO,
+  TIMEZONE_UTC,
 } from './date-util.const';
 
 export type DateType = string | number | Date;

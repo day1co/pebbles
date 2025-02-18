@@ -4,6 +4,6 @@ export {
   fromPermyriad,
   intValueOf,
   isNumeric,
-  parseNumber,
   toPermyriad,
+  valueOfNumber,
 } from './number-util';
