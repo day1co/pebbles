@@ -2,6 +2,7 @@ import { LoggerFactory } from '../logger';
 import { DatePropertyType, DateType, TimeZoneType } from './date-util-base.type';
 import {
   ADULT_AGE_DEFAULT,
+  DATE_FORMAT,
   DATETIME_FORMAT,
   LOCAL_DATETIME_FORMAT,
   ONE_DAY_IN_MILLI,
@@ -14,7 +15,7 @@ import {
   TIMESTAMP_FORMAT,
 } from './date-util.const';
 import type { TimeAnnotationSet } from './date-util.interface';
-import type { CalcDatetimeOpts, DatetimeFormatOpts } from './date-util.type';
+import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
 
 const timeZoneMap: Record<TimeZoneType, number> = { 'Asia/Seoul': 540, 'Asia/Tokyo': 540, PST8PDT: -480, UTC: 0 };
 const logger = LoggerFactory.getLogger('pebbles:date-util');
@@ -370,6 +371,61 @@ export function formatDate(d: Date, opts?: Readonly<DatetimeFormatOpts>): string
         return match;
     }
   });
+}
+
+/**
+ *
+ * @description It converts `date` in `opts.format` if it's given. Otherwise the default format would be `YYYY-MM-DDTHH:mm:ssZ`.
+ * - Other format options can be `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm:ss.SSSZ`.
+ */
+export function formatInIso8601(date: Date, opts?: Readonly<IsoDatetimeFormatOpts>): string {
+  const formatOpts: IsoDatetimeFormatOpts = opts ?? {};
+  formatOpts.format = opts?.format ?? DATETIME_FORMAT;
+  return formatDate(date, formatOpts);
+}
+
+/**
+ *
+ * @description It converts `date` in `YYYY-MM-DD` format.
+ */
+export function getDateString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
+  return formatDate(date, { format: DATE_FORMAT, isUtc, timeZone });
+}
+
+/**
+ *
+ * @description It converts `date` in `YYYY-MM-DDTHH:mm:ssZ` format if isUtc is true by default.
+ * Otherwise the format would be `YYYY-MM-DD HH:mm:ss`.
+ */
+export function getDatetimeString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
+  return formatDate(date, { isUtc, timeZone });
+}
+
+/**
+ *
+ * @description It converts `date` in `YYYYMMDDHHmmssSSS` format.
+ */
+export function getTimestampString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
+  return formatDate(date, { format: TIMESTAMP_FORMAT, isUtc, timeZone });
+}
+
+/**
+ *
+ * @description It converts `totalSeconds` in `hh:mm:ss` format.
+ */
+export function getTimeStringFromSeconds(totalSeconds: number): string {
+  if (totalSeconds < 0) {
+    throw new Error('Invalid number');
+  }
+
+  const seconds = totalSeconds % 60;
+  const totalMinutes = (totalSeconds - seconds) / 60;
+  const minutes = totalMinutes % 60;
+  const hh = String((totalMinutes - minutes) / 60).padStart(2, '0');
+  const mm = String(minutes).padStart(2, '0');
+  const ss = String(seconds).padStart(2, '0');
+
+  return `${hh}:${mm}:${ss}`;
 }
 
 export function durationTo(duration: string, unitType: DatePropertyType = 'second'): number {
