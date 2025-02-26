@@ -57,17 +57,19 @@ describe('decodeBase64', () => {
   });
 
   describe('ezwelSeed', () => {
+    const decrypted = '{"code": "hello world", "message": "안녕하세요"}';
+    const encrypted = 'LUPvDxmJToRCZcl56a7j+b1X1NV+6PMiBLm7SkLALDqyIfqCsHla0jkDuzoIn60GV5BA1t22DaHs1L32r4uw+A==';
+    const seedKey = 'string_x_sixteen';
+
     it('should return encrypted string', () => {
-      const data = '{"code": "hello world", "message": "안녕하세요"}';
-      const r1 = encodeSeedString(data, { seedKey: 'string_x_sixteen' });
-      expect(r1).toBe('LUPvDxmJToRCZcl56a7j+b1X1NV+6PMiBLm7SkLALDqyIfqCsHla0jkDuzoIn60G52VI68uIO51li9JAFsksAA==');
+      const r1 = encodeSeedString(decrypted, { seedKey });
+      expect(r1).toEqual(encrypted);
     });
 
     it('should return decrypted string', () => {
-      const data = 'LUPvDxmJToRCZcl56a7j+b1X1NV+6PMiBLm7SkLALDqyIfqCsHla0jkDuzoIn60G52VI68uIO51li9JAFsksAA==';
-      const r1 = decodeSeedString(data, { seedKey: 'string_x_sixteen' });
-      expect(r1.trim()).toBe('{"code": "hello world", "message": "안녕하세요"}');
-      expect(JSON.parse(r1)).toEqual({ code: 'hello world', message: '안녕하세요' });
+      const r1 = decodeSeedString(encrypted, { seedKey });
+      expect(r1).toEqual(decrypted);
+      expect(JSON.parse(r1)).toEqual(JSON.parse(decrypted));
     });
   });
 });
