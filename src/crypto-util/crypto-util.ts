@@ -1,7 +1,8 @@
-import { CryptoJS, buildHexString } from './ezwel-seed';
+import { EzwelCrypto } from './ezwel-seed';
 import type { webcrypto } from 'crypto';
 
 const crypto = (globalThis as any).crypto as typeof webcrypto;
+const ezwelCrypto = new EzwelCrypto();
 
 export namespace CryptoUtil {
   export const sha256 = async (data: string | Uint8Array): Promise<Uint8Array> => {
@@ -39,22 +40,11 @@ export namespace CryptoUtil {
   };
 
   export const encodeSeedString = (data: string, { seedKey }: { seedKey: string }): string => {
-    const encoded = CryptoJS.enc.Utf8.parse(data);
-    const key = CryptoJS.enc.Hex.parse(buildHexString(seedKey));
-    const encrypted = CryptoJS.SEED.encrypt(encoded, key, {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.ZeroPadding,
-    });
-    return encrypted.toString();
+    return encodeBase64(ezwelCrypto.encrypt(data, seedKey));
   };
 
   export const decodeSeedString = (hash: string, { seedKey }: { seedKey: string }): string => {
-    const key = CryptoJS.enc.Hex.parse(buildHexString(seedKey));
-    const decrypted = CryptoJS.SEED.decrypt(hash, key, {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.ZeroPadding,
-    });
-    const decoded = CryptoJS.enc.Utf8.stringify(decrypted);
-    return decoded.replaceAll(/\x00/g, '');
+    const decrypted = ezwelCrypto.decrypt(decodeBase64(hash), seedKey);
+    return new TextDecoder().decode(decrypted);
   };
 }
