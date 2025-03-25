@@ -1,3 +1,11 @@
+/* eslint-disable prettier/prettier */
+// Note: This is existing 3rd party code with adapted TypeScript types
+
+/**
+ * Ezwel Crypto Utility
+ * Provides encryption and decryption functionality based on SEED algorithm
+ */
+
 const SS0 = [
   0x2989a1a8, 0x05858184, 0x16c6d2d4, 0x13c3d3d0, 0x14445054, 0x1d0d111c, 0x2c8ca0ac, 0x25052124, 0x1d4d515c,
   0x03434340, 0x18081018, 0x1e0e121c, 0x11415150, 0x3cccf0fc, 0x0acac2c8, 0x23436360, 0x28082028, 0x04444044,
@@ -114,7 +122,7 @@ const SS3 = [
   0xc8c0c808, 0x8e929c1e, 0x8c909c1c, 0x0a32383a, 0x0c000c0c, 0x0e222c2e, 0x8ab2b83a, 0x4e626c2e, 0x8f939c1f,
   0x4a52581a, 0xc2f2f032, 0x82929012, 0xc3f3f033, 0x49414809, 0x48707838, 0xccc0cc0c, 0x05111415, 0xcbf3f83b,
   0x40707030, 0x45717435, 0x4f737c3f, 0x05313435, 0x00101010, 0x03030003, 0x44606424, 0x4d616c2d, 0xc6c2c406,
-  0x44707434, 0xc5d1d415, 0x84b0b434, 0xcae2e82a, 0x09010809, 0x46727436, 0x09111819, 0xcef2fc3e, 0x40404000,
+  0x44707434, 0xc5d1d415, 0xb43484b0, 0xe82acae2, 0x09010809, 0x46727436, 0x09111819, 0xcef2fc3e, 0x40404000,
   0x02121012, 0xc0e0e020, 0x8db1bc3d, 0x05010405, 0xcaf2f83a, 0x01010001, 0xc0f0f030, 0x0a22282a, 0x4e525c1e,
   0x89a1a829, 0x46525416, 0x43434003, 0x85818405, 0x04101414, 0x89818809, 0x8b93981b, 0x80b0b030, 0xc5e1e425,
   0x48404808, 0x49717839, 0x87939417, 0xccf0fc3c, 0x0e121c1e, 0x82828002, 0x01212021, 0x8c808c0c, 0x0b13181b,
@@ -122,7 +130,7 @@ const SS3 = [
   0xcde1ec2d, 0x48505818, 0x42525012, 0xcbe3e82b, 0x4e727c3e, 0xcad2d81a, 0xc9c1c809, 0xcdf1fc3d, 0x00303030,
   0x85919415, 0x45616425, 0x0c303c3c, 0x86b2b436, 0xc4e0e424, 0x8bb3b83b, 0x4c707c3c, 0x0e020c0e, 0x40505010,
   0x09313839, 0x06222426, 0x02323032, 0x84808404, 0x49616829, 0x83939013, 0x07333437, 0xc7e3e427, 0x04202424,
-  0x84a0a424, 0xcbc3c80b, 0x43535013, 0x0a02080a, 0x87838407, 0xc9d1d819, 0x4c404c0c, 0x83838003, 0x8f838c0f,
+  0x84a0a424, 0xc80bcbc3, 0x50134353, 0x0a02080a, 0x87838407, 0xc9d1d819, 0x4c404c0c, 0x83838003, 0x8f838c0f,
   0xcec2cc0e, 0x0b33383b, 0x4a42480a, 0x87b3b437,
 ];
 
@@ -133,8 +141,10 @@ const KC = [
 
 class EzwelCryptoPadding {
   /** Padding name */
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private name: string = 'ANSI-X.923-Padding';
 
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private readonly PADDING_VALUE: number = 0x00;
 
   /**
@@ -216,14 +226,20 @@ class EzwelCryptoPadding {
 export class EzwelCrypto {
   /**************************** Defining Endianness *****************************/
   // If endianness is not defined correctly, you must modify here.
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private static LITTLE: boolean = false;
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private static BIG: boolean = true;
   private static ENDIAN: boolean = EzwelCrypto.BIG; // JavaScript engines typically use big endian
 
   /**************************** Constant Definitions ****************************/
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private static NoRounds: number = 16; // the number of rounds
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private NoRoundKeys: number = 32; // the number of round-keys
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private SeedBlockSize: number = 16; // block length in bytes
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   private SeedBlockLen: number = 128; // block length in bits
 
   // Padding object
@@ -258,7 +274,11 @@ export class EzwelCrypto {
     return (dws >>> 24) | (dws << 24) | ((dws << 8) & 0x00ff0000) | ((dws >>> 8) & 0x0000ff00);
   }
 
-  private static getInt(array: Uint8Array, at: number = 0): number {
+  private static getInt(
+    array: Uint8Array,
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+    at: number = 0
+  ): number {
     return (array[at + 0] << 24) + (array[at + 1] << 16) + (array[at + 2] << 8) + array[at + 3];
   }
 

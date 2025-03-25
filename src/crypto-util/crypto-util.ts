@@ -5,6 +5,7 @@ import type { webcrypto } from 'crypto';
 let crypto: typeof webcrypto;
 if (typeof window === 'undefined') {
   // Node.js environment
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const nodeCrypto = require('crypto');
   crypto = nodeCrypto.webcrypto;
 } else {

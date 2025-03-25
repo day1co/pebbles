@@ -45,6 +45,7 @@ export class PinoLogger implements Logger {
     return new PinoLogger(args, this.logger);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   flat(msgTemplate: string = '', args: Record<string, unknown>): void {
     this.logger.child(args).debug(msgTemplate);
   }
