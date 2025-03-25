@@ -1,7 +1,16 @@
 import { EzwelCrypto } from './ezwel-seed';
 import type { webcrypto } from 'crypto';
 
-const crypto = (globalThis as any).crypto as typeof webcrypto;
+// Use Node.js crypto in Node environment, or browser crypto in browser environment
+let crypto: typeof webcrypto;
+if (typeof window === 'undefined') {
+  // Node.js environment
+  const nodeCrypto = require('crypto');
+  crypto = nodeCrypto.webcrypto;
+} else {
+  // Browser environment
+  crypto = (globalThis as any).crypto as typeof webcrypto;
+}
 const ezwelCrypto = new EzwelCrypto();
 
 export const sha256 = async (data: string | Uint8Array): Promise<Uint8Array> => {

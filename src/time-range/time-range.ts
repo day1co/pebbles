@@ -2,145 +2,205 @@ import { decimalRoundDown, decimalRoundUp } from '../number-util';
 import { TimeSection } from './time-range.interface';
 
 /**
- * @params loadSection: TimeSection 배열
- * @params decimalPlaces: TimeSection 계산시 소수점 자리수를 설정하여 반올림 처리 (default 0)
+ * TimeRange manages a collection of time sections with capabilities for merging overlapping sections,
+ * calculating total durations, and finding unwatched time periods.
+ * 
+ * @param sections Initial time sections to include
+ * @param decimalPlaces Decimal precision for time calculations (default 0)
+ * @param bufferSeconds Additional buffer time to add around sections (default 0)
  */
 export class TimeRange {
-  private section!: Array<TimeSection>;
-  decimalPlaces: number;
-  bufferSec: number;
+  private sections: Array<TimeSection>;
+  private readonly decimalPlaces: number;
+  private readonly bufferSeconds: number;
 
-  constructor(loadSection: Array<TimeSection> = [], decimalPlaces = 0, bufferSec = 0) {
-    this.section = loadSection;
+  constructor(sections: Array<TimeSection> = [], decimalPlaces = 0, bufferSeconds = 0) {
+    this.sections = [...sections];
     this.decimalPlaces = decimalPlaces;
-    this.bufferSec = bufferSec;
+    this.bufferSeconds = bufferSeconds;
 
-    if (this.bufferSec > 0) {
-      for (let i = 0; i < this.section.length; i++) {
-        const bufferStart = Math.min(this.section[i].start - this.bufferSec, 0);
-        this.section[i].start = Math.max(0, this.section[i].start - this.bufferSec);
-        this.section[i].end = this.section[i].end + this.bufferSec;
-        this.section[i].interval = bufferStart + this.section[i].interval + this.bufferSec * 2;
-      }
+    if (this.bufferSeconds > 0) {
+      this.applyBufferToAllSections();
     }
   }
 
-  add(piece: TimeSection) {
-    this.section.push(piece);
+  /**
+   * Adds a new time section to the collection
+   */
+  public add(section: TimeSection): void {
+    this.sections.push(section);
   }
 
-  bufferAdd(piece: TimeSection) {
-    if (this.bufferSec > 0) {
-      const bufferStart = Math.min(piece.start - this.bufferSec, 0);
-      this.section.push({
-        start: Math.max(0, piece.start - this.bufferSec),
-        end: piece.end + this.bufferSec,
-        interval: bufferStart + piece.interval + this.bufferSec * 2,
-      });
+  /**
+   * Adds a new time section with buffer applied
+   */
+  public bufferAdd(section: TimeSection): void {
+    if (this.bufferSeconds > 0) {
+      const bufferedSection = this.applyBufferToSection(section);
+      this.sections.push(bufferedSection);
     } else {
-      this.section.push(piece);
+      this.sections.push(section);
     }
   }
 
-  merge(debug = false) {
-    // eslint-disable-next-line no-console
-    if (debug) console.log('merging:', this.section);
-    this.section = this.section
-      .sort((a: TimeSection, b: TimeSection) => {
-        return a.start >= b.start ? 1 : -1;
-      })
-      .reduce((p: Array<TimeSection>, v: TimeSection) => {
-        if (p.length <= 0) {
-          p.push(v);
-        } else {
-          const prevSection: TimeSection = p[p.length - 1];
-          if (prevSection.end >= v.start) {
-            prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
-            prevSection.interval = decimalRoundDown(
-              decimalRoundUp(prevSection.interval, this.decimalPlaces) + decimalRoundUp(v.interval, this.decimalPlaces),
-              this.decimalPlaces
-            );
-          } else {
-            p.push(v);
-          }
-        }
-        return p;
-      }, []);
-    // eslint-disable-next-line no-console
-    if (debug) console.log('merged:', this.section);
-  }
-
-  value() {
-    return this.section;
-  }
-
-  totalInterval() {
-    const result = this.section.reduce((p, v) => {
-      const interval = decimalRoundUp(v.interval, this.decimalPlaces);
-
-      //XXX: 반올림 때문에 interval이 end-start보다 작은 경우가 있음
-      const end = decimalRoundUp(v.end, this.decimalPlaces);
-      const start = decimalRoundUp(v.start, this.decimalPlaces);
-      const roundSumInterval = end - start;
-
-      p = p + (interval > roundSumInterval ? interval : roundSumInterval);
-      return p;
-    }, 0);
-    return decimalRoundDown(result, this.decimalPlaces);
-  }
-
-  totalPlayTime() {
-    const result = this.section.reduce((p, v) => {
-      const end = decimalRoundUp(v.end, this.decimalPlaces);
-      const start = decimalRoundUp(v.start, this.decimalPlaces);
-      return p + (end - start);
-    }, 0);
-    return decimalRoundDown(result, this.decimalPlaces);
-  }
-
-  getUnwatchedTimeRange(endTime: number) {
-    const unwatchedTimeRange: Omit<TimeSection, 'interval'>[] = [];
-    // 정렬된 시청 구간을 기준으로 미시청 구간을 계산
-    const timeRange = this.section.sort((a, b) => a.start - b.start);
-
-    // 시청 구간이 없는 경우 클립 전체를 미시청 구간으로 간주
-    if (timeRange.length === 0) {
-      return [
-        {
-          start: 0,
-          end: endTime,
-        },
-      ];
+  /**
+   * Sorts and merges overlapping time sections
+   * @param enableLogging Whether to log the merging process
+   */
+  public merge(enableLogging = false): void {
+    if (enableLogging) {
+      console.log('Merging sections:', this.sections);
     }
 
-    // 클립의 시작부터 첫 시청 구간의 시작까지의 미시청 구간 추가
-    if (timeRange[0].start > 0) {
-      unwatchedTimeRange.push({
+    this.sections = this.sections
+      .sort(this.sortSectionsByStartTime)
+      .reduce(this.mergeOverlappingSections, []);
+
+    if (enableLogging) {
+      console.log('Merged result:', this.sections);
+    }
+  }
+
+  /**
+   * Returns all time sections
+   */
+  public value(): Array<TimeSection> {
+    return this.sections;
+  }
+
+  /**
+   * Calculates the total interval across all sections
+   */
+  public totalInterval(): number {
+    const result = this.sections.reduce((sum, section) => {
+      const interval = decimalRoundUp(section.interval, this.decimalPlaces);
+      const end = decimalRoundUp(section.end, this.decimalPlaces);
+      const start = decimalRoundUp(section.start, this.decimalPlaces);
+      const durationFromBounds = end - start;
+
+      // Use the larger of interval or calculated duration
+      const effectiveInterval = Math.max(interval, durationFromBounds);
+      return sum + effectiveInterval;
+    }, 0);
+
+    return decimalRoundDown(result, this.decimalPlaces);
+  }
+
+  /**
+   * Calculates the total play time across all sections
+   */
+  public totalPlayTime(): number {
+    const result = this.sections.reduce((sum, section) => {
+      const end = decimalRoundUp(section.end, this.decimalPlaces);
+      const start = decimalRoundUp(section.start, this.decimalPlaces);
+      return sum + (end - start);
+    }, 0);
+
+    return decimalRoundDown(result, this.decimalPlaces);
+  }
+
+  /**
+   * Identifies unwatched time ranges between 0 and endTime
+   * @param endTime The end time to consider
+   * @returns An array of {start, end} ranges representing unwatched periods
+   */
+  public getUnwatchedTimeRange(endTime: number): Array<Omit<TimeSection, 'interval'>> {
+    if (this.sections.length === 0) {
+      return [{ start: 0, end: endTime }];
+    }
+
+    const unwatchedRanges: Array<Omit<TimeSection, 'interval'>> = [];
+    const sortedSections = [...this.sections].sort((a, b) => a.start - b.start);
+    
+    // Add unwatched range from beginning if needed
+    if (sortedSections[0].start > 0) {
+      unwatchedRanges.push({
         start: 0,
-        end: timeRange[0].start,
+        end: sortedSections[0].start
       });
     }
 
-    // 시청 구간들 사이의 미시청 구간 계산
-    for (let i = 0; i < timeRange.length - 1; i++) {
-      if (timeRange[i].end < timeRange[i + 1].start) {
-        unwatchedTimeRange.push({
-          start: timeRange[i].end,
-          end: timeRange[i + 1].start,
+    // Add unwatched ranges between watched sections
+    for (let i = 0; i < sortedSections.length - 1; i++) {
+      if (sortedSections[i].end < sortedSections[i + 1].start) {
+        unwatchedRanges.push({
+          start: sortedSections[i].end,
+          end: sortedSections[i + 1].start
         });
       }
     }
 
-    // 마지막 시청 구간의 끝부터 클립의 끝까지의 미시청 구간 추가
-    const start = decimalRoundUp(timeRange[timeRange.length - 1].end, this.decimalPlaces);
-    const end = decimalRoundUp(endTime, this.decimalPlaces);
-    if (start < end) {
-      unwatchedTimeRange.push({
-        start: timeRange[timeRange.length - 1].end,
-        end: endTime,
+    // Add unwatched range at the end if needed
+    const lastSection = sortedSections[sortedSections.length - 1];
+    const lastSectionEnd = decimalRoundUp(lastSection.end, this.decimalPlaces);
+    const roundedEndTime = decimalRoundUp(endTime, this.decimalPlaces);
+    
+    if (lastSectionEnd < roundedEndTime) {
+      unwatchedRanges.push({
+        start: lastSection.end,
+        end: endTime
       });
     }
 
-    return unwatchedTimeRange;
+    return unwatchedRanges;
   }
+
+  /**
+   * Apply buffer to all existing sections
+   */
+  private applyBufferToAllSections(): void {
+    for (let i = 0; i < this.sections.length; i++) {
+      this.sections[i] = this.applyBufferToSection(this.sections[i]);
+    }
+  }
+
+  /**
+   * Apply buffer to a single section
+   */
+  private applyBufferToSection(section: TimeSection): TimeSection {
+    const adjustedStart = Math.max(0, section.start - this.bufferSeconds);
+    const startDifference = Math.min(section.start - this.bufferSeconds, 0);
+    
+    return {
+      start: adjustedStart,
+      end: section.end + this.bufferSeconds,
+      interval: startDifference + section.interval + this.bufferSeconds * 2
+    };
+  }
+
+  /**
+   * Sort function for ordering sections by start time
+   */
+  private sortSectionsByStartTime = (a: TimeSection, b: TimeSection): number => {
+    return a.start < b.start ? -1 : 1;
+  };
+
+  /**
+   * Reducer function to merge overlapping sections
+   */
+  private mergeOverlappingSections = (
+    mergedSections: Array<TimeSection>, 
+    currentSection: TimeSection
+  ): Array<TimeSection> => {
+    if (mergedSections.length === 0) {
+      return [currentSection];
+    }
+
+    const prevSection = mergedSections[mergedSections.length - 1];
+    
+    if (prevSection.end >= currentSection.start) {
+      // Sections overlap - merge them
+      prevSection.end = Math.max(prevSection.end, currentSection.end);
+      prevSection.interval = decimalRoundDown(
+        decimalRoundUp(prevSection.interval, this.decimalPlaces) + 
+        decimalRoundUp(currentSection.interval, this.decimalPlaces),
+        this.decimalPlaces
+      );
+    } else {
+      // No overlap - add as separate section
+      mergedSections.push(currentSection);
+    }
+    
+    return mergedSections;
+  };
 }
