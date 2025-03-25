@@ -49,12 +49,14 @@ export class TimeRange {
    */
   public merge(enableLogging = false): void {
     if (enableLogging) {
+      // eslint-disable-next-line no-console
       console.log('Merging sections:', this.sections);
     }
 
     this.sections = this.sections.sort(this.sortSectionsByStartTime).reduce(this.mergeOverlappingSections, []);
 
     if (enableLogging) {
+      // eslint-disable-next-line no-console
       console.log('Merged result:', this.sections);
     }
   }

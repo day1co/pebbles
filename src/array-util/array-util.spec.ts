@@ -21,10 +21,10 @@ describe('innerJoin', function () {
     });
 
     it('callback1, callback2 를 사용하는 경우', function () {
-      const callback1 = function (item: typeof arr1[0]) {
+      const callback1 = function (item: (typeof arr1)[0]) {
         return item.a;
       };
-      const callback2 = function (item: typeof arr2[0]) {
+      const callback2 = function (item: (typeof arr2)[0]) {
         return item.c;
       };
       const result = innerJoin(arr1, arr2, callback1, callback2);
@@ -51,10 +51,10 @@ describe('innerJoin', function () {
       expect(result).toEqual(expected);
     });
     it('callback1, callback2 를 사용하는 경우', function () {
-      const callback1 = function (item: typeof arr1[0]) {
+      const callback1 = function (item: (typeof arr1)[0]) {
         return item.a;
       };
-      const callback2 = function (item: typeof arr2[0]) {
+      const callback2 = function (item: (typeof arr2)[0]) {
         return item.c;
       };
       const result = innerJoin(arr1, arr2, callback1, callback2);
@@ -84,10 +84,10 @@ describe('leftJoin', () => {
       expect(result).toEqual(expected);
     });
     it('callback1, callback2 를 사용하는 경우', function () {
-      const callback1 = function (item: typeof arr1[0]) {
+      const callback1 = function (item: (typeof arr1)[0]) {
         return item.a;
       };
-      const callback2 = function (item: typeof arr2[0]) {
+      const callback2 = function (item: (typeof arr2)[0]) {
         return item.c;
       };
 
@@ -114,10 +114,10 @@ describe('leftJoin', () => {
       expect(result).toEqual(expected);
     });
     it('callback1, callback2 를 사용하는 경우', function () {
-      const callback1 = function (item: typeof arr1[0]) {
+      const callback1 = function (item: (typeof arr1)[0]) {
         return item.a;
       };
-      const callback2 = function (item: typeof arr2[0]) {
+      const callback2 = function (item: (typeof arr2)[0]) {
         return item.c;
       };
 
