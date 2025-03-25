@@ -4,7 +4,7 @@ import { TimeSection } from './time-range.interface';
 /**
  * TimeRange manages a collection of time sections with capabilities for merging overlapping sections,
  * calculating total durations, and finding unwatched time periods.
- * 
+ *
  * @param sections Initial time sections to include
  * @param decimalPlaces Decimal precision for time calculations (default 0)
  * @param bufferSeconds Additional buffer time to add around sections (default 0)
@@ -52,9 +52,7 @@ export class TimeRange {
       console.log('Merging sections:', this.sections);
     }
 
-    this.sections = this.sections
-      .sort(this.sortSectionsByStartTime)
-      .reduce(this.mergeOverlappingSections, []);
+    this.sections = this.sections.sort(this.sortSectionsByStartTime).reduce(this.mergeOverlappingSections, []);
 
     if (enableLogging) {
       console.log('Merged result:', this.sections);
@@ -111,12 +109,12 @@ export class TimeRange {
 
     const unwatchedRanges: Array<Omit<TimeSection, 'interval'>> = [];
     const sortedSections = [...this.sections].sort((a, b) => a.start - b.start);
-    
+
     // Add unwatched range from beginning if needed
     if (sortedSections[0].start > 0) {
       unwatchedRanges.push({
         start: 0,
-        end: sortedSections[0].start
+        end: sortedSections[0].start,
       });
     }
 
@@ -125,7 +123,7 @@ export class TimeRange {
       if (sortedSections[i].end < sortedSections[i + 1].start) {
         unwatchedRanges.push({
           start: sortedSections[i].end,
-          end: sortedSections[i + 1].start
+          end: sortedSections[i + 1].start,
         });
       }
     }
@@ -134,11 +132,11 @@ export class TimeRange {
     const lastSection = sortedSections[sortedSections.length - 1];
     const lastSectionEnd = decimalRoundUp(lastSection.end, this.decimalPlaces);
     const roundedEndTime = decimalRoundUp(endTime, this.decimalPlaces);
-    
+
     if (lastSectionEnd < roundedEndTime) {
       unwatchedRanges.push({
         start: lastSection.end,
-        end: endTime
+        end: endTime,
       });
     }
 
@@ -160,11 +158,11 @@ export class TimeRange {
   private applyBufferToSection(section: TimeSection): TimeSection {
     const adjustedStart = Math.max(0, section.start - this.bufferSeconds);
     const startDifference = Math.min(section.start - this.bufferSeconds, 0);
-    
+
     return {
       start: adjustedStart,
       end: section.end + this.bufferSeconds,
-      interval: startDifference + section.interval + this.bufferSeconds * 2
+      interval: startDifference + section.interval + this.bufferSeconds * 2,
     };
   }
 
@@ -179,7 +177,7 @@ export class TimeRange {
    * Reducer function to merge overlapping sections
    */
   private mergeOverlappingSections = (
-    mergedSections: Array<TimeSection>, 
+    mergedSections: Array<TimeSection>,
     currentSection: TimeSection
   ): Array<TimeSection> => {
     if (mergedSections.length === 0) {
@@ -187,20 +185,20 @@ export class TimeRange {
     }
 
     const prevSection = mergedSections[mergedSections.length - 1];
-    
+
     if (prevSection.end >= currentSection.start) {
       // Sections overlap - merge them
       prevSection.end = Math.max(prevSection.end, currentSection.end);
       prevSection.interval = decimalRoundDown(
-        decimalRoundUp(prevSection.interval, this.decimalPlaces) + 
-        decimalRoundUp(currentSection.interval, this.decimalPlaces),
+        decimalRoundUp(prevSection.interval, this.decimalPlaces) +
+          decimalRoundUp(currentSection.interval, this.decimalPlaces),
         this.decimalPlaces
       );
     } else {
       // No overlap - add as separate section
       mergedSections.push(currentSection);
     }
-    
+
     return mergedSections;
   };
 }
