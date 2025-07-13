@@ -57,7 +57,8 @@ export class TimeRange {
           if (prevSection.end >= v.start) {
             prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
             prevSection.interval = decimalRoundDown(
-              decimalRoundUp(prevSection.interval, this.decimalPlaces) + decimalRoundUp(v.interval, this.decimalPlaces),
+              decimalRoundUp(prevSection.interval, this.decimalPlaces) +
+                decimalRoundUp(v.interval, this.decimalPlaces),
               this.decimalPlaces
             );
           } else {

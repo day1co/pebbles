@@ -16,11 +16,19 @@ describe('byteUnitConverter', () => {
       const negativeValue2 = -0.001;
 
       expect(() =>
-        byteUnitConverter.convert({ value: negativeValue1, inputUnit: 'bytes', outputUnit: 'megabytes' })
+        byteUnitConverter.convert({
+          value: negativeValue1,
+          inputUnit: 'bytes',
+          outputUnit: 'megabytes',
+        })
       ).toThrow();
 
       expect(() =>
-        byteUnitConverter.convert({ value: negativeValue2, inputUnit: 'bytes', outputUnit: 'megabytes' })
+        byteUnitConverter.convert({
+          value: negativeValue2,
+          inputUnit: 'bytes',
+          outputUnit: 'megabytes',
+        })
       ).toThrow();
     });
 
@@ -64,10 +72,26 @@ describe('byteUnitConverter', () => {
     it('converts data size from inputUnit to outputUnit', () => {
       const value = 1000;
 
-      const test1 = byteUnitConverter.convert({ value, inputUnit: 'bytes', outputUnit: 'kilobytes' });
-      const test2 = byteUnitConverter.convert({ value, inputUnit: 'bytes', outputUnit: 'megabytes' });
-      const test3 = byteUnitConverter.convert({ value, inputUnit: 'megabytes', outputUnit: 'bytes' });
-      const test4 = byteUnitConverter.convert({ value, inputUnit: 'megabytes', outputUnit: 'kilobytes' });
+      const test1 = byteUnitConverter.convert({
+        value,
+        inputUnit: 'bytes',
+        outputUnit: 'kilobytes',
+      });
+      const test2 = byteUnitConverter.convert({
+        value,
+        inputUnit: 'bytes',
+        outputUnit: 'megabytes',
+      });
+      const test3 = byteUnitConverter.convert({
+        value,
+        inputUnit: 'megabytes',
+        outputUnit: 'bytes',
+      });
+      const test4 = byteUnitConverter.convert({
+        value,
+        inputUnit: 'megabytes',
+        outputUnit: 'kilobytes',
+      });
 
       expect(getSizeNum(test1)).toBeLessThan(value);
       expect(getSizeNum(test2)).toBeLessThan(value);

@@ -1,4 +1,8 @@
-export function binarySearch<T>(arr: T[], target: T, compareFn: (target: T, item: T) => number): T | undefined {
+export function binarySearch<T>(
+  arr: T[],
+  target: T,
+  compareFn: (target: T, item: T) => number
+): T | undefined {
   let left = 0;
   let right = arr.length - 1;
 

@@ -303,7 +303,9 @@ describe('isEqualObject', () => {
     expect(isEqualObject([], [])).toBe(true);
     expect(isEqualObject([null], [null])).toBe(true);
     expect(isEqualObject(new Set([1, 2, 3]), new Set([3, 2, 1]))).toBe(true);
-    expect(isEqualObject([new Set([1, 2, 3, 'foo', {}])], [new Set([1, 2, 3, 'foo', {}])])).toBe(true);
+    expect(isEqualObject([new Set([1, 2, 3, 'foo', {}])], [new Set([1, 2, 3, 'foo', {}])])).toBe(
+      true
+    );
     expect(isEqualObject([new Date(2021, 5, 23)], [new Date(2021, 5, 23)])).toBe(true);
     expect(isEqualObject(new Set([1, 2, 3, 'foo', {}]), new Set([1, 2, 3, 'foo', {}]))).toBe(true);
     expect(isEqualObject(new Map(), new Map())).toBe(true);
@@ -318,8 +320,15 @@ describe('isEqualObject', () => {
     expect(isEqualObject([undefined], [null])).toBe(false);
     expect(isEqualObject([], {})).toBe(false);
     expect(isEqualObject([new Date(2021, 5, 23)], [new Date(2021, 3, 23)])).toBe(false);
-    expect(isEqualObject([new Set([1, { a: new Set([1, {}]) }])], [new Set([1, { a: new Set([1, []]) }])])).toBe(false);
-    expect(isEqualObject(new Map([['foo', { a: 'foo' }]]), new Map([['foo', { a: 'bar' }]]))).toBe(false);
+    expect(
+      isEqualObject(
+        [new Set([1, { a: new Set([1, {}]) }])],
+        [new Set([1, { a: new Set([1, []]) }])]
+      )
+    ).toBe(false);
+    expect(isEqualObject(new Map([['foo', { a: 'foo' }]]), new Map([['foo', { a: 'bar' }]]))).toBe(
+      false
+    );
     function fn(str: string) {
       return str;
     }
@@ -334,7 +343,9 @@ describe('pick', () => {
     expect(pick({ foo: 1, bar: '2', baz: 3 }, ['foo', 'bar'])).toEqual({ foo: 1, bar: '2' });
     expect(pick({ foo: 1 }, ['bar'])).toEqual({});
     expect(pick({ foo: 1 }, [])).toEqual({});
-    expect(pick({ foo: 1, bar: '2', baz: { foo: 3, bar: 4, baz: 5 } }, ['foo', 'baz', 'qux'])).toEqual({
+    expect(
+      pick({ foo: 1, bar: '2', baz: { foo: 3, bar: 4, baz: 5 } }, ['foo', 'baz', 'qux'])
+    ).toEqual({
       foo: 1,
       baz: { foo: 3, bar: 4, baz: 5 },
     });

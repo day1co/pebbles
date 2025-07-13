@@ -1,7 +1,7 @@
 import { PageDetail, PageInfo, Pagination } from './misc-util.interface';
 
 export async function sleep(delay: number): Promise<unknown> {
-  return new Promise((resolve) => setTimeout(resolve, delay));
+  return new Promise(resolve => setTimeout(resolve, delay));
 }
 
 export function getRandomInt(min: number, max: number): number {
@@ -44,7 +44,9 @@ export function setNextPagination({
   }
 
   if (page <= 0 || limit <= 0) {
-    throw new Error(`page or count number less than or equal to 0 (page: ${page}, count: ${limit})`);
+    throw new Error(
+      `page or count number less than or equal to 0 (page: ${page}, count: ${limit})`
+    );
   }
 
   if (maxLimit < limit) {

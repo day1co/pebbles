@@ -35,7 +35,7 @@ export const encodeBase64 = (data: Uint8Array | string): string => {
 };
 
 export const decodeBase64 = (data: string): Uint8Array => {
-  return Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
+  return Uint8Array.from(atob(data), c => c.charCodeAt(0));
 };
 
 export const encodeSeedString = (data: string, { seedKey }: { seedKey: string }): string => {

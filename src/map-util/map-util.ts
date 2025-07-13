@@ -1,5 +1,5 @@
 export function groupByKey<T, K extends keyof T>(array: T[], key: K): Map<T[K], T[]> {
-  return groupBy(array, (item) => item[key]);
+  return groupBy(array, item => item[key]);
 }
 
 export function groupBy<T, K>(array: T[], callback: (item: T) => K): Map<K, T[]> {

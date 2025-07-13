@@ -17,7 +17,12 @@ import {
 import type { TimeAnnotationSet } from './date-util.interface';
 import type { CalcDatetimeOpts, DatetimeFormatOpts, IsoDatetimeFormatOpts } from './date-util.type';
 
-const timeZoneMap: Record<TimeZoneType, number> = { 'Asia/Seoul': 540, 'Asia/Tokyo': 540, PST8PDT: -480, UTC: 0 };
+const timeZoneMap: Record<TimeZoneType, number> = {
+  'Asia/Seoul': 540,
+  'Asia/Tokyo': 540,
+  PST8PDT: -480,
+  UTC: 0,
+};
 const logger = LoggerFactory.getLogger('pebbles:date-util');
 
 export function isValidDate(d: Date): boolean {
@@ -100,7 +105,9 @@ export function parseUnixTime(unixTime: number): Date {
   const MIN_SECOND = -8640000000000;
 
   if (unixTime > MAX_SECOND || unixTime < MIN_SECOND) {
-    throw new Error(`"${unixTime}" exceeds range of possible date value. MAX=${MAX_SECOND} and MIN=${MIN_SECOND}`);
+    throw new Error(
+      `"${unixTime}" exceeds range of possible date value. MAX=${MAX_SECOND} and MIN=${MIN_SECOND}`
+    );
   }
 
   return parseDate(unixTime * ONE_SECOND_IN_MILLI);
@@ -137,14 +144,19 @@ export function startOfDate(date: DateType, property: DatePropertyType): Date {
   switch (property) {
     case 'second':
       result.setSeconds(parsedDate.getSeconds());
+    // falls through
     case 'minute':
       result.setMinutes(parsedDate.getMinutes());
+    // falls through
     case 'hour':
       result.setHours(parsedDate.getHours());
+    // falls through
     case 'day':
       result.setDate(parsedDate.getDate());
+    // falls through
     case 'month':
       result.setMonth(parsedDate.getMonth());
+    // falls through
     case 'year':
       return result;
   }
@@ -186,14 +198,19 @@ export function startOfByTimezone({
   switch (property) {
     case 'year':
       dateMap.set('month', '01');
+    // falls through
     case 'month':
       dateMap.set('day', '01');
+    // falls through
     case 'day':
       dateMap.set('hour', '00');
+    // falls through
     case 'hour':
       dateMap.set('minute', '00');
+    // falls through
     case 'minute':
       dateMap.set('second', '00');
+      break;
   }
 
   parts.forEach(({ type, value }) => {
@@ -207,9 +224,9 @@ export function startOfByTimezone({
     dateMap.set('hour', '00');
   }
 
-  const isoString = `${dateMap.get('year')}-${dateMap.get('month')}-${dateMap.get('day')}T${dateMap.get(
-    'hour'
-  )}:${dateMap.get('minute')}:${dateMap.get('second')}`;
+  const isoString = `${dateMap.get('year')}-${dateMap.get('month')}-${dateMap.get(
+    'day'
+  )}T${dateMap.get('hour')}:${dateMap.get('minute')}:${dateMap.get('second')}`;
   const timezoneOffsetString = getTimezoneOffsetString(timezone, false);
   return new Date(`${isoString}${timezoneOffsetString}`);
 }
@@ -230,7 +247,9 @@ export function endOfByTimezone({
       parsedDate.setUTCFullYear(parsedDate.getUTCFullYear() + 1);
       break;
     case 'month':
-      parsedDate.setUTCHours(parsedDate.getUTCHours() + getTimezoneOffsetInHours(parsedDate, timezone));
+      parsedDate.setUTCHours(
+        parsedDate.getUTCHours() + getTimezoneOffsetInHours(parsedDate, timezone)
+      );
       parsedDate.setUTCMonth(parsedDate.getUTCMonth() + 1, 1);
       break;
     case 'day':
@@ -322,12 +341,14 @@ export function formatDate(d: Date, opts?: Readonly<DatetimeFormatOpts>): string
   const year = Number(new Intl.DateTimeFormat('en', { year: 'numeric', timeZone }).format(d));
   const month = new Intl.DateTimeFormat('en', { month: 'numeric', timeZone }).format(d);
   const date = new Intl.DateTimeFormat('en', { day: 'numeric', timeZone }).format(d);
-  const hour = Number(new Intl.DateTimeFormat('en', { hour: 'numeric', hourCycle: 'h23', timeZone }).format(d));
+  const hour = Number(
+    new Intl.DateTimeFormat('en', { hour: 'numeric', hourCycle: 'h23', timeZone }).format(d)
+  );
   const minute = new Intl.DateTimeFormat('en', { minute: 'numeric', timeZone }).format(d);
   const second = new Intl.DateTimeFormat('en', { second: 'numeric', timeZone }).format(d);
   const millisecond = String(d.getMilliseconds());
 
-  return formatStr.replace(/(Y{2,4}|M?M|D?D|H?H|m?m|s?s|S?S?S|Z?Z|ddd?d)/g, (match) => {
+  return formatStr.replace(/(Y{2,4}|M?M|D?D|H?H|m?m|s?s|S?S?S|Z?Z|ddd?d)/g, match => {
     switch (match) {
       case 'YYYY':
       case 'YY':
@@ -363,9 +384,10 @@ export function formatDate(d: Date, opts?: Readonly<DatetimeFormatOpts>): string
         return isUtc ? 'Z' : getTimezoneOffsetString(timeZone, match.length === 1);
 
       case 'ddd':
-      case 'dddd':
+      case 'dddd': {
         const weekday = match.length === 3 ? 'short' : 'long';
         return new Intl.DateTimeFormat(locale, { weekday, timeZone }).format(d);
+      }
 
       default:
         return match;
@@ -388,7 +410,11 @@ export function formatInIso8601(date: Date, opts?: Readonly<IsoDatetimeFormatOpt
  *
  * @description It converts `date` in `YYYY-MM-DD` format.
  */
-export function getDateString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
+export function getDateString(
+  date: Date,
+  isUtc = true,
+  timeZone: TimeZoneType = 'Asia/Seoul'
+): string {
   return formatDate(date, { format: DATE_FORMAT, isUtc, timeZone });
 }
 
@@ -397,7 +423,11 @@ export function getDateString(date: Date, isUtc = true, timeZone: TimeZoneType =
  * @description It converts `date` in `YYYY-MM-DDTHH:mm:ssZ` format if isUtc is true by default.
  * Otherwise the format would be `YYYY-MM-DD HH:mm:ss`.
  */
-export function getDatetimeString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
+export function getDatetimeString(
+  date: Date,
+  isUtc = true,
+  timeZone: TimeZoneType = 'Asia/Seoul'
+): string {
   return formatDate(date, { isUtc, timeZone });
 }
 
@@ -405,7 +435,11 @@ export function getDatetimeString(date: Date, isUtc = true, timeZone: TimeZoneTy
  *
  * @description It converts `date` in `YYYYMMDDHHmmssSSS` format.
  */
-export function getTimestampString(date: Date, isUtc = true, timeZone: TimeZoneType = 'Asia/Seoul'): string {
+export function getTimestampString(
+  date: Date,
+  isUtc = true,
+  timeZone: TimeZoneType = 'Asia/Seoul'
+): string {
   return formatDate(date, { format: TIMESTAMP_FORMAT, isUtc, timeZone });
 }
 
@@ -516,7 +550,9 @@ export function isAdult(birth: DateType, timeZone: TimeZoneType): boolean {
 
 export function subtractOneDayIfLocalTimeIsMidnight(d: Date, timeZone: string): Date {
   const isMidnight =
-    new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(d) === '24';
+    new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: timeZone }).format(
+      d
+    ) === '24';
   if (isMidnight) {
     return calcDatetime(d, { day: -1 });
   }
@@ -535,7 +571,7 @@ export function format12HourInLocale(str: string, locale: string): string {
   switch (locale) {
     case 'ko-KR':
     case 'ko':
-      return str.replace(INTL_MIDNIGHT_OR_NOON_KOR_REGEXP, (match) => ReplaceMap[match]);
+      return str.replace(INTL_MIDNIGHT_OR_NOON_KOR_REGEXP, match => ReplaceMap[match]);
     default:
       return str;
   }
@@ -556,7 +592,8 @@ export function diffMonth(
   until: Date,
   opts: { ignoreAccuracy: boolean } = { ignoreAccuracy: false }
 ): number {
-  const diff = (until.getFullYear() - since.getFullYear()) * 12 + until.getMonth() - since.getMonth();
+  const diff =
+    (until.getFullYear() - since.getFullYear()) * 12 + until.getMonth() - since.getMonth();
   const tempDate = new Date(since);
   tempDate.setMonth(tempDate.getMonth() + diff);
 

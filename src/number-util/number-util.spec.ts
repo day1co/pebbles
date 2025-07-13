@@ -1,4 +1,11 @@
-import { decimalRoundDown, decimalRoundUp, fromPermyriad, intValueOf, isNumeric, toPermyriad } from './number-util';
+import {
+  decimalRoundDown,
+  decimalRoundUp,
+  fromPermyriad,
+  intValueOf,
+  isNumeric,
+  toPermyriad,
+} from './number-util';
 
 describe('intValueOf', () => {
   it('should throw with incompatible input', () => {

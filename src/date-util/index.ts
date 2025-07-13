@@ -26,7 +26,13 @@ export {
   startOfDate,
   subtractOneDayIfLocalTimeIsMidnight,
 } from './date-util';
-export type { DatePropertyType, DateType, Iso8601FormatType, LocaleType, TimeZoneType } from './date-util-base.type';
+export type {
+  DatePropertyType,
+  DateType,
+  Iso8601FormatType,
+  LocaleType,
+  TimeZoneType,
+} from './date-util-base.type';
 export {
   DATE_FORMAT,
   DATE_FORMAT_DOT_TYPE,

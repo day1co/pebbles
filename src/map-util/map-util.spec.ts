@@ -55,7 +55,7 @@ describe('groupBy', () => {
       ['Mary', [{ id: 4, name: 'Mary' }]],
       [null, [{ id: 5, name: null }]],
     ]);
-    const result = groupBy(array, (item) => item.name);
+    const result = groupBy(array, item => item.name);
     expect(result).toEqual(expectedMap);
   });
 });
@@ -78,7 +78,7 @@ it('should skip if callback returns undefined', () => {
 
   const expectedMap = new Map([]);
 
-  const result = groupBy(array, (item) => {
+  const result = groupBy(array, item => {
     return (item as any).invalidKey;
   });
   expect(result).toEqual(expectedMap);

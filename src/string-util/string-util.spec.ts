@@ -134,12 +134,24 @@ describe('maskPrivacy', () => {
     const testAddress10 = '부산 해운대구 달맞이길117번가길 123-45';
 
     const expectedTestAddress1 = testAddress1.replace(' 12아파트', '*'.repeat(' 12아파트'.length));
-    const expectedTestAddress2 = testAddress2.replace(' 12번지 34빌딩', '*'.repeat(' 12번지 34빌딩'.length));
-    const expectedTestAddress3 = testAddress3.replace(' 12-3 456호', '*'.repeat(' 12-3 456호'.length));
-    const expectedTestAddress4 = testAddress4.replace(' 신곡리 산12-3', '*'.repeat(' 신곡리 산12-3'.length));
+    const expectedTestAddress2 = testAddress2.replace(
+      ' 12번지 34빌딩',
+      '*'.repeat(' 12번지 34빌딩'.length)
+    );
+    const expectedTestAddress3 = testAddress3.replace(
+      ' 12-3 456호',
+      '*'.repeat(' 12-3 456호'.length)
+    );
+    const expectedTestAddress4 = testAddress4.replace(
+      ' 신곡리 산12-3',
+      '*'.repeat(' 신곡리 산12-3'.length)
+    );
     const expectedTestAddress5 = testAddress5.replace(' 123 45호', '*'.repeat(' 123 45호'.length));
     const expectedTestAddress6 = testAddress6.replace(' 1234', '*'.repeat(' 1234'.length));
-    const expectedTestAddress7 = testAddress7.replace(' 123길 45 67빌딩', '*'.repeat(' 123길 45 67빌딩'.length));
+    const expectedTestAddress7 = testAddress7.replace(
+      ' 123길 45 67빌딩',
+      '*'.repeat(' 123길 45 67빌딩'.length)
+    );
     const expectedTestAddress8 = testAddress8.replace(' 12345', '*'.repeat(' 12345'.length));
     const expectedTestAddress9 = testAddress9.replace(' 1234', '*'.repeat(' 1234'.length));
     const expectedTestAddress10 = testAddress10.replace(' 123-45', '*'.repeat(' 123-45'.length));
@@ -470,7 +482,13 @@ describe('splitString', () => {
 
 describe('joinTags', () => {
   it('should return string of tags', () => {
-    const tags = [{ text: 'one ' }, { text: ' two' }, { text: ' three ' }, { text: 'four' }, { text: 'five six' }];
+    const tags = [
+      { text: 'one ' },
+      { text: ' two' },
+      { text: ' three ' },
+      { text: 'four' },
+      { text: 'five six' },
+    ];
     expect(joinTags(tags)).toEqual('one,two,three,four,five six');
   });
   it('should return empty string when tags are invalid', () => {

@@ -78,7 +78,7 @@ export function maskPrivacy(text: string, type: PrivacyType): string {
     const charList: string[] = [];
     let emoji = '';
 
-    splitNamesByEmoji.forEach((splitName) => {
+    splitNamesByEmoji.forEach(splitName => {
       if (EMOJI_ZERO_WIDTH_JOINER !== splitName && !EMOJI_REGEXP.test(splitName)) {
         //👩‍👩‍👧같은 다중 이모지는 ["👩‍👩‍👧"]로 인식하기 위해 배열에 한번에 push
         if (emoji) {
@@ -111,13 +111,15 @@ export function maskPrivacy(text: string, type: PrivacyType): string {
       const nextDistrictSort = districtsOfAddress[idx + 1]?.slice(-1);
 
       const breakCondition = KOREA_ROAD_NAME_ADDRESS_REGEXP.test(districtSort)
-        ? KOREA_ROAD_NAME_ADDRESS_REGEXP.test(nextDistrictSort) || !KOREA_ADDRESS_SORT_REGEXP.test(nextDistrictSort)
+        ? KOREA_ROAD_NAME_ADDRESS_REGEXP.test(nextDistrictSort) ||
+          !KOREA_ADDRESS_SORT_REGEXP.test(nextDistrictSort)
         : !KOREA_ADDRESS_SORT_REGEXP.test(nextDistrictSort);
       // OO시 OO구 OO로 OO길 123 ==> OO시 OO구 OO로 XXX XXX
       // OO시 OO동 OO로 123     ==> OO시 OO동 OO로 XXX
       // OO시 OO로 123         ==> OO시 OO로 XXX
 
-      const condition = districtSort && KOREA_ADDRESS_SORT_REGEXP.test(districtSort) && breakCondition;
+      const condition =
+        districtSort && KOREA_ADDRESS_SORT_REGEXP.test(districtSort) && breakCondition;
 
       if (condition) {
         returnIndex = districtsOfAddress.slice(0, idx + 1).join(' ').length;
@@ -163,15 +165,15 @@ export function normalizePhoneNumber(str: string, fallback?: unknown): string {
 
 export function isValidEmail(str: string): boolean {
   const EMAIL_REGEXP =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return EMAIL_REGEXP.test(str);
 }
 
 export function splitTags(str: string, separator: string | RegExp = ','): Tag[] {
   return str
     .split(separator)
-    .map((text) => ({ text: text.trim() }))
-    .filter((_) => _.text);
+    .map(text => ({ text: text.trim() }))
+    .filter(_ => _.text);
 }
 
 /** @deprecated do .split().map().filter() yourself */
@@ -187,8 +189,8 @@ export function splitString(str: string, separator = ','): string[] {
 
 export function joinTags(tags: Readonly<Tag[]>, separator = ','): string {
   return tags
-    .map((tag) => tag.text?.trim())
-    .filter((text) => text)
+    .map(tag => tag.text?.trim())
+    .filter(text => text)
     .join(separator);
 }
 
@@ -202,7 +204,11 @@ export function joinStrings(textList: string[], separator = ','): string {
   }, '');
 }
 
-export function compactTextMessage(fullText: string, textToBeTrimmed: string, maxByteLength = 90): string {
+export function compactTextMessage(
+  fullText: string,
+  textToBeTrimmed: string,
+  maxByteLength = 90
+): string {
   if (getStringByteInEUCKR(fullText) <= maxByteLength) {
     return fullText;
   }

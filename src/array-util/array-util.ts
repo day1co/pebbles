@@ -32,7 +32,12 @@ export function innerJoin<T, U, K>(
   return result;
 }
 
-export function leftJoin<T, U>(arr1: T[], arr2: U[], key1: keyof T, key2: keyof U): Array<T & Partial<U>>;
+export function leftJoin<T, U>(
+  arr1: T[],
+  arr2: U[],
+  key1: keyof T,
+  key2: keyof U
+): Array<T & Partial<U>>;
 export function leftJoin<T, U, K>(
   arr1: T[],
   arr2: U[],

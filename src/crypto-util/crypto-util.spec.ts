@@ -14,8 +14,8 @@ describe('sha256', () => {
     expect(result).toBeInstanceOf(Uint8Array);
     expect(result).toEqual(
       new Uint8Array([
-        185, 77, 39, 185, 147, 77, 62, 8, 165, 46, 82, 215, 218, 125, 171, 250, 196, 132, 239, 227, 122, 83, 128, 238,
-        144, 136, 247, 172, 226, 239, 205, 233,
+        185, 77, 39, 185, 147, 77, 62, 8, 165, 46, 82, 215, 218, 125, 171, 250, 196, 132, 239, 227,
+        122, 83, 128, 238, 144, 136, 247, 172, 226, 239, 205, 233,
       ])
     );
   });
@@ -58,7 +58,8 @@ describe('decodeBase64', () => {
 
   describe('ezwelSeed', () => {
     const decrypted = '{"code": "hello world", "message": "안녕하세요"}';
-    const encrypted = 'LUPvDxmJToRCZcl56a7j+b1X1NV+6PMiBLm7SkLALDqyIfqCsHla0jkDuzoIn60GV5BA1t22DaHs1L32r4uw+A==';
+    const encrypted =
+      'LUPvDxmJToRCZcl56a7j+b1X1NV+6PMiBLm7SkLALDqyIfqCsHla0jkDuzoIn60GV5BA1t22DaHs1L32r4uw+A==';
     const seedKey = 'string_x_sixteen';
 
     it('should return encrypted string', () => {

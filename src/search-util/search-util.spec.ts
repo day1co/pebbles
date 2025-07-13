@@ -52,12 +52,20 @@ describe('binarySearch', () => {
     ];
 
     it('should find an existing person by id', () => {
-      const result = binarySearch(people, { id: 3, name: '' }, (target, item) => target.id - item.id);
+      const result = binarySearch(
+        people,
+        { id: 3, name: '' },
+        (target, item) => target.id - item.id
+      );
       expect(result).toEqual({ id: 3, name: 'Course3' });
     });
 
     it('should return undefined for a non-existing person', () => {
-      const result = binarySearch(people, { id: 5, name: '' }, (target, item) => target.id - item.id);
+      const result = binarySearch(
+        people,
+        { id: 5, name: '' },
+        (target, item) => target.id - item.id
+      );
       expect(result).toBeUndefined();
     });
   });

@@ -3,9 +3,20 @@
     "outDir": "./lib",
     "allowJs": true,
     "checkJs": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "module": "CommonJS",
+    "lib": ["ES2022"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
-  "extends": "@day1co/tsconfig/backend.json",
+  "extends": "@tsconfig/node20/tsconfig.json",
   "include": ["./src"],
   "exclude": ["./lib", "./node_modules"]
 }

@@ -1,7 +1,10 @@
 import { LOCALES } from './money.const';
 import { ConvertLocalCurrencyFormatOpts } from './money.type';
 
-export function convertLocalCurrencyFormat(num: number, opts?: Readonly<ConvertLocalCurrencyFormatOpts>): string {
+export function convertLocalCurrencyFormat(
+  num: number,
+  opts?: Readonly<ConvertLocalCurrencyFormatOpts>
+): string {
   const { unit = '', currency, locale } = opts ?? {};
   if (Number.isFinite(num)) {
     if (currency) {

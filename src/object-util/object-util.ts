@@ -71,7 +71,7 @@ export function deepClone<Type extends ObjectType>(obj: Type): Type {
   }
 
   const clonedObj = initiator instanceof Function ? new initiator() : (new Object() as Type);
-  getAllPropertyKeys(obj).forEach((key) => {
+  getAllPropertyKeys(obj).forEach(key => {
     let value;
     if (obj[key] instanceof Object) {
       value = deepClone(obj[key]);
@@ -94,14 +94,14 @@ export function merge(obj: Readonly<ObjectType>, ...args: Readonly<ObjectType[]>
   const argKeysArray: ObjectKeyType[][] = [];
   const mergedObj = deepClone<ObjectType>(obj);
 
-  args.forEach((arg) => {
+  args.forEach(arg => {
     if (!(arg instanceof Function)) {
       argKeysArray.push(getAllPropertyKeys(arg));
     }
   });
 
   for (let ix = 0; ix < args.length; ix++) {
-    argKeysArray[ix].forEach((key) => {
+    argKeysArray[ix].forEach(key => {
       if (isObjectTypeExceptFunction(mergedObj[key]) && isObjectTypeExceptFunction(args[ix][key])) {
         mergedObj[key] = merge(mergedObj[key], args[ix][key]);
       } else {
@@ -116,7 +116,7 @@ export function merge(obj: Readonly<ObjectType>, ...args: Readonly<ObjectType[]>
 export function omit(obj: Readonly<ObjectType>, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
   function omitObject(obj: ObjectType, omitKeys: Readonly<ObjectKeyType[]>): ObjectType {
     const objKeys = getAllPropertyKeys(obj);
-    omitKeys.forEach((omitKey) => {
+    omitKeys.forEach(omitKey => {
       const nestedKeys: ObjectKeyType[] = [];
 
       if (typeof omitKey === 'string') {
@@ -198,9 +198,12 @@ export function getAllPropertyKeys(obj: Readonly<ObjectType>): ObjectKeyType[] {
   return [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)];
 }
 
-export function pick(obj: Readonly<ObjectType>, keyList: Readonly<ObjectKeyType[]>): Readonly<ObjectType> {
+export function pick(
+  obj: Readonly<ObjectType>,
+  keyList: Readonly<ObjectKeyType[]>
+): Readonly<ObjectType> {
   const ret: ObjectType = {};
-  keyList.forEach((key) => {
+  keyList.forEach(key => {
     if (obj[key] !== undefined) {
       ret[key] = obj[key];
     }
