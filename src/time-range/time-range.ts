@@ -57,7 +57,8 @@ export class TimeRange {
           if (prevSection.end >= v.start) {
             prevSection.end = v.end > prevSection.end ? v.end : prevSection.end;
             prevSection.interval = decimalRoundDown(
-              decimalRoundUp(prevSection.interval, this.decimalPlaces) + decimalRoundUp(v.interval, this.decimalPlaces),
+              decimalRoundUp(prevSection.interval ?? 0, this.decimalPlaces) +
+                decimalRoundUp(v.interval ?? 0, this.decimalPlaces),
               this.decimalPlaces
             );
           } else {
@@ -76,7 +77,7 @@ export class TimeRange {
 
   totalInterval() {
     const result = this.section.reduce((p, v) => {
-      const interval = decimalRoundUp(v.interval, this.decimalPlaces);
+      const interval = decimalRoundUp(v.interval ?? 0, this.decimalPlaces);
 
       //XXX: 반올림 때문에 interval이 end-start보다 작은 경우가 있음
       const end = decimalRoundUp(v.end, this.decimalPlaces);
