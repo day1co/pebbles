@@ -26,6 +26,7 @@ export {
   TooManyRequestsException,
   UnauthorizedException,
   UnknownException,
+  UnprocessableEntityException,
 } from './exception';
 
 export { HttpClient, HttpState } from './http-client';
